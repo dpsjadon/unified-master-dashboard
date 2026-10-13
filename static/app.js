@@ -109,26 +109,44 @@ async function selectCircleFilter(circle) {
 // --- THEME ---
 function setupTheme() {
   const toggleBtn = document.getElementById('btnThemeToggle');
-  const icon = document.getElementById('themeIcon');
-  const saved = localStorage.getItem('unified_dashboard_theme') || 'light';
-  document.documentElement.setAttribute('data-theme', saved);
-  updateThemeIcon(saved);
+  const mobileToggleBtn = document.getElementById('btnMobileThemeToggle');
 
-  toggleBtn.addEventListener('click', () => {
+  // Enforce Day Theme (Light Mode) as Default on initial load
+  let theme = 'light';
+  const saved = localStorage.getItem('unified_dashboard_theme');
+  if (saved === 'dark' && sessionStorage.getItem('theme_manually_toggled')) {
+    theme = 'dark';
+  } else {
+    // Default to clean Day Theme
+    theme = 'light';
+    localStorage.setItem('unified_dashboard_theme', 'light');
+  }
+
+  document.documentElement.setAttribute('data-theme', theme);
+  updateThemeIcon(theme);
+
+  function toggle() {
     const curr = document.documentElement.getAttribute('data-theme') || 'light';
     const next = curr === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', next);
     localStorage.setItem('unified_dashboard_theme', next);
+    sessionStorage.setItem('theme_manually_toggled', 'true');
     updateThemeIcon(next);
     resizeAllCharts();
-  });
+  }
+
+  if (toggleBtn) toggleBtn.addEventListener('click', toggle);
+  if (mobileToggleBtn) mobileToggleBtn.addEventListener('click', toggle);
 }
 
 function updateThemeIcon(theme) {
-  const icon = document.getElementById('themeIcon');
-  if (icon) {
-    icon.className = theme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-  }
+  const icons = [document.getElementById('themeIcon'), document.getElementById('mobileThemeIcon')];
+  icons.forEach(icon => {
+    if (icon) {
+      icon.className = theme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+      icon.style.color = theme === 'dark' ? '#f59e0b' : '#0284c7';
+    }
+  });
 }
 
 // --- NAVIGATION ---
@@ -146,8 +164,14 @@ function setupNavigation() {
       const targetPane = document.getElementById(targetId);
       if (targetPane) targetPane.classList.add('active');
 
-      // Dynamically update the 6 KPI cards for the active tab
-      updateKpiCardsForActiveTab();
+      if (targetId === 'tabSearch') {
+        // For Smart meter & MSN search: keep it simple, only search bar, no cards required
+        document.body.classList.add('search-tab-active');
+      } else {
+        document.body.classList.remove('search-tab-active');
+        // Dynamically update the 6 KPI cards for the active tab
+        updateKpiCardsForActiveTab();
+      }
 
       if (targetId === 'tabCumulative') {
         loadCumulativeTable();

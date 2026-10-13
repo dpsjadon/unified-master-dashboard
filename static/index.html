@@ -408,6 +408,31 @@
       --border-subtle: #e2e8f0;
     }
 
+    /* Global High-Contrast Table Styling */
+    .styled-table td strong {
+      color: #0284c7 !important; /* Bold Brand Blue for Circle & Division names */
+      font-weight: 700 !important;
+    }
+    .table-total-row td,
+    .table-total-row td strong {
+      color: #0284c7 !important;
+    }
+    [data-theme="dark"] .styled-table td strong {
+      color: #38bdf8 !important; /* Vibrant Sky Cyan in Dark Mode */
+    }
+    [data-theme="dark"] .table-total-row td,
+    [data-theme="dark"] .table-total-row td strong {
+      color: #38bdf8 !important;
+    }
+
+    /* Smart Meter & MSN Search Mode: Simple layout, no KPI cards or circle filter */
+    body.search-tab-active #kpiGridSection,
+    body.search-tab-active .kpi-grid,
+    body.search-tab-active #circleSlicerSection,
+    body.search-tab-active .circle-slicer-section {
+      display: none !important;
+    }
+
     .mobile-only { display: none !important; }
     .desktop-only { display: flex !important; }
 
@@ -461,11 +486,11 @@
         flex-direction: row !important;
         align-items: center !important;
         flex-wrap: nowrap !important;
-        gap: 5px !important;
+        gap: 6px !important;
       }
 
       .header-actions .btn {
-        padding: 5px 10px !important;
+        padding: 5px 9px !important;
         font-size: 0.72rem !important;
         height: 28px !important;
         border-radius: 16px !important;
@@ -487,15 +512,23 @@
         border: 1px solid #bfdbfe !important;
       }
 
-      .header-actions .btn-icon {
-        width: 28px !important;
-        height: 28px !important;
+      .header-actions .btn-icon,
+      .theme-toggle-btn {
+        width: 32px !important;
+        height: 32px !important;
+        min-width: 32px !important;
         border-radius: 50% !important;
-        background: #f1f5f9 !important;
-        border: 1px solid #e2e8f0 !important;
+        background: #f8fafc !important;
+        border: 1px solid #cbd5e1 !important;
+        color: #0284c7 !important;
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
+        font-size: 0.85rem !important;
+        cursor: pointer !important;
+        flex-shrink: 0 !important;
+        padding: 0 !important;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.06) !important;
       }
 
       .btn-text-desktop { display: none !important; }
@@ -510,6 +543,29 @@
         justify-content: space-between !important;
         align-items: center !important;
         font-size: 0.72rem !important;
+      }
+
+      .mobile-scope-right {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+      }
+
+      .mobile-theme-btn {
+        width: 26px !important;
+        height: 26px !important;
+        min-width: 26px !important;
+        border-radius: 50% !important;
+        background: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        color: #0284c7 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 0.72rem !important;
+        cursor: pointer !important;
+        padding: 0 !important;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
       }
 
       .scope-pill-tag {
@@ -790,16 +846,79 @@
         border: 1px solid #e2e8f0 !important;
       }
 
+      .styled-table {
+        min-width: 650px !important;
+        background: #ffffff !important;
+        color: #0f172a !important;
+      }
+
       .styled-table th {
-        background: #f1f5f9 !important;
-        color: #334155 !important;
+        background: #f8fafc !important;
+        color: #1e293b !important;
         font-size: 0.72rem !important;
-        padding: 6px 9px !important;
+        font-weight: 700 !important;
+        padding: 7px 10px !important;
+        border-bottom: 2px solid #e2e8f0 !important;
       }
 
       .styled-table td {
+        background: #ffffff !important;
+        color: #0f172a !important;
         font-size: 0.74rem !important;
-        padding: 6px 9px !important;
+        padding: 7px 10px !important;
+        border-bottom: 1px solid #f1f5f9 !important;
+      }
+
+      .styled-table td strong {
+        color: #0284c7 !important; /* Bold Brand Blue for Circle & Division names: 100% visible */
+        font-weight: 700 !important;
+      }
+
+      .table-total-row td {
+        background: #f8fafc !important;
+        color: #0284c7 !important;
+        border-top: 2px solid #cbd5e1 !important;
+      }
+      .table-total-row td strong {
+        color: #0284c7 !important;
+      }
+
+      /* Dark mode high-contrast table rules */
+      [data-theme="dark"] .table-card {
+        background: #0d1b2e !important;
+        border-color: rgba(255, 255, 255, 0.08) !important;
+      }
+      [data-theme="dark"] .styled-table {
+        background: #0d1b2e !important;
+        color: #f8fafc !important;
+      }
+      [data-theme="dark"] .styled-table th {
+        background: #13253e !important;
+        color: #cbd5e1 !important;
+        border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+      }
+      [data-theme="dark"] .styled-table td {
+        background: #0d1b2e !important;
+        color: #e2e8f0 !important;
+        border-bottom-color: rgba(255, 255, 255, 0.05) !important;
+      }
+      [data-theme="dark"] .styled-table td strong {
+        color: #38bdf8 !important; /* Bright sky cyan in dark mode */
+      }
+      [data-theme="dark"] .table-total-row td {
+        background: #13253e !important;
+        color: #38bdf8 !important;
+      }
+      [data-theme="dark"] .table-total-row td strong {
+        color: #38bdf8 !important;
+      }
+
+      /* When Search tab is active: simple layout, hide KPI cards & circle slicer */
+      body.search-tab-active #kpiGridSection,
+      body.search-tab-active .kpi-grid,
+      body.search-tab-active #circleSlicerSection,
+      body.search-tab-active .circle-slicer-section {
+        display: none !important;
       }
 
       /* 7. Collapsible Visual Charts Banner */
@@ -1175,6 +1294,7 @@
         </div>
       </div>
 
+      <div class="header-actions">
         <!-- Live Data Reporting Timestamp in Header -->
         <div class="header-reporting-badge desktop-only" id="headerReportingBadge" title="Timestamp of latest MDM data synchronization">
           <span class="pulse-dot"></span>
@@ -1192,9 +1312,9 @@
           <i class="fa-solid fa-database" id="iconSyncMaster"></i> <span class="btn-text-desktop">Sync Master (MDM)</span><span class="btn-text-mobile">Master</span>
         </button>
 
-        <!-- Theme Toggle -->
-        <button id="btnThemeToggle" class="btn-icon" title="Toggle Light / Dark Mode">
-          <i class="fa-solid fa-sun" id="themeIcon"></i>
+        <!-- Theme Toggle (Accessible Day/Night switcher) -->
+        <button id="btnThemeToggle" class="btn-icon theme-toggle-btn" title="Toggle Light / Dark Mode" aria-label="Toggle Theme">
+          <i class="fa-solid fa-moon" id="themeIcon"></i>
         </button>
       </div>
     </div>
@@ -1203,7 +1323,12 @@
   <!-- Minimalist Clean Mobile Scope Strip -->
   <div class="mobile-scope-strip mobile-only">
     <div class="scope-pill-tag"><i class="fa-solid fa-bolt"></i> <strong id="mobileScopeDiscomText">SBPDCL</strong> <span id="mobileScopeTotal">1.12M Meters</span></div>
-    <div class="scope-pill-tag date-tag"><i class="fa-solid fa-cloud-arrow-down"></i> <span id="mobileReportDownloadTime">Live IST</span></div>
+    <div class="mobile-scope-right">
+      <div class="scope-pill-tag date-tag"><i class="fa-solid fa-cloud-arrow-down"></i> <span id="mobileReportDownloadTime">Live IST</span></div>
+      <button id="btnMobileThemeToggle" class="mobile-theme-btn" title="Toggle Day / Night Mode" aria-label="Toggle Theme">
+        <i class="fa-solid fa-moon" id="mobileThemeIcon"></i>
+      </button>
+    </div>
   </div>
 
   <!-- Primary Multi-Tab Navigation (World-Class Executive Tab Bar) -->
@@ -1257,7 +1382,7 @@
   </section>
 
   <!-- Main Hero KPI Ribbon (Directly Below Circle Filter) -->
-  <section class="kpi-grid">
+  <section class="kpi-grid" id="kpiGridSection">
     <!-- KPI 1 -->
     <div class="kpi-card" id="kpiCard1" style="--card-accent: #0284c7;">
       <div class="kpi-header">
