@@ -26,6 +26,8 @@ BASE_DIR = os.path.dirname(WORKSPACE_DIR)
 MASTER_DB_PATH = os.path.join(WORKSPACE_DIR, "data", "smart_meters.duckdb")
 MASTER_PARQUET_PATH = os.path.join(WORKSPACE_DIR, "data", "smart_meters.parquet")
 MI_DB_PATH = os.path.join(WORKSPACE_DIR, "data", "dashboard.duckdb")
+COMPILED_PARQUET_PATH = os.path.join(WORKSPACE_DIR, "data", "compiled_installations.parquet")
+ULA_CACHE_PARQUET_PATH = os.path.join(WORKSPACE_DIR, "data", "ula_cache.parquet")
 
 PORT = int(os.environ.get("PORT", 8095))
 
@@ -38,23 +40,38 @@ if sys.stderr is None:
 def get_master_con():
     """Connect to Master Database (1.124M records)"""
     if os.path.exists(MASTER_DB_PATH):
-        return duckdb.connect(MASTER_DB_PATH, read_only=True)
-    elif os.path.exists(MASTER_PARQUET_PATH):
         try:
-            print("[*] Initializing smart_meters.duckdb from smart_meters.parquet...", flush=True)
-            db = duckdb.connect(MASTER_DB_PATH)
-            db.execute(f"CREATE TABLE meters AS SELECT * FROM '{MASTER_PARQUET_PATH.replace(chr(92), '/')}'")
-            db.close()
             return duckdb.connect(MASTER_DB_PATH, read_only=True)
-        except Exception as e:
-            print(f"[-] Parquet import error: {e}", flush=True)
-    return duckdb.connect(":memory:")
+        except Exception:
+            pass
+    con = duckdb.connect(":memory:")
+    if os.path.exists(MASTER_PARQUET_PATH):
+        p_path = MASTER_PARQUET_PATH.replace(chr(92), '/')
+        con.execute(f"CREATE OR REPLACE VIEW meters AS SELECT * FROM '{p_path}'")
+    return con
 
 def get_mi_con():
-    """Connect to Daily MI & ULA Database"""
-    if os.path.exists(MI_DB_PATH):
-        return duckdb.connect(MI_DB_PATH, read_only=True)
-    return duckdb.connect(":memory:")
+    """Connect to Daily MI & ULA Database using Parquet Views (ultra-fast & always fresh)"""
+    con = duckdb.connect(":memory:")
+    if os.path.exists(COMPILED_PARQUET_PATH):
+        p_path = COMPILED_PARQUET_PATH.replace(chr(92), '/')
+        con.execute(f"CREATE OR REPLACE VIEW installations AS SELECT * FROM '{p_path}'")
+    if os.path.exists(ULA_CACHE_PARQUET_PATH):
+        u_path = ULA_CACHE_PARQUET_PATH.replace(chr(92), '/')
+        con.execute(f"CREATE OR REPLACE VIEW ula_scope AS SELECT * FROM '{u_path}'")
+
+    # Attach or create master.meters view for ULA cross-referencing
+    if os.path.exists(MASTER_PARQUET_PATH):
+        m_path = MASTER_PARQUET_PATH.replace(chr(92), '/')
+        con.execute("CREATE SCHEMA IF NOT EXISTS master;")
+        con.execute(f"CREATE OR REPLACE VIEW master.meters AS SELECT * FROM '{m_path}'")
+        con.execute(f"CREATE OR REPLACE VIEW meters AS SELECT * FROM '{m_path}'")
+    elif os.path.exists(MASTER_DB_PATH):
+        try:
+            con.execute(f"ATTACH '{MASTER_DB_PATH}' AS master (READ_ONLY);")
+        except Exception:
+            pass
+    return con
 
 # In-memory sync status tracking
 sync_status = {
@@ -816,7 +833,10 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
         c_where = f"WHERE {c_cond}" if c_cond else ""
         c_today_where = f"WHERE {get_circle_sql(circle, 'circle', 'u')}" if circle else ""
         try:
-            con.execute(f"ATTACH '{MASTER_DB_PATH}' AS master (READ_ONLY);")
+            try:
+                con.execute(f"ATTACH '{MASTER_DB_PATH}' AS master (READ_ONLY);")
+            except Exception:
+                pass
             ur = con.execute(f"""
                 SELECT 
                     count(*) as scope,
@@ -847,7 +867,10 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
         c_cond = get_circle_sql(circle, "circle", "u")
         c_where = f"WHERE {c_cond}" if c_cond else ""
         try:
-            con.execute(f"ATTACH '{MASTER_DB_PATH}' AS master (READ_ONLY);")
+            try:
+                con.execute(f"ATTACH '{MASTER_DB_PATH}' AS master (READ_ONLY);")
+            except Exception:
+                pass
             if table_type == "circle":
                 sql = f"""
                     SELECT 
