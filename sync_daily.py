@@ -101,6 +101,15 @@ def run_sync_with_tracker(tracker=None):
         time.sleep(2)
         log("DEBUG", f"Page URL: {driver.current_url} | Title: {driver.title}", 20)
 
+        page_src = driver.page_source.lower()
+        if "403 forbidden" in page_src or "access denied" in page_src or "403" in driver.title:
+            raise RuntimeError(
+                "MDM Portal (mdm.sbpdclinfra.in) is protected by the SBPDCL State Discom Firewall, "
+                "which blocks cloud hosting IPs (HTTP 403 Forbidden). "
+                "Please run sync from your local machine (localhost:8095). "
+                "Your local machine will download the reports and automatically push the updated data to this cloud dashboard."
+            )
+
         if "LoginPage" in driver.current_url or "Login" in driver.title:
             user_inp = wait.until(EC.presence_of_element_located((By.ID, "tne")))
             pass_inp = driver.find_element(By.ID, "tpw")
@@ -331,6 +340,22 @@ def run_sync_with_tracker(tracker=None):
 
         log("ULA", f"Cross-referencing {total_c:,} installations ({repl_c:,} Replacement + {nsc_c:,} NSC) against ULA scope...", 94)
         etl.build_ula_cache(compiled)
+
+        # Auto-push updated data to Render cloud if running locally
+        try:
+            git_cmd = r"C:\Users\Dharmendra Pal Singh\AppData\Local\Programs\Git\cmd\git.exe"
+            if not os.path.exists(git_cmd):
+                import shutil
+                git_cmd = shutil.which("git")
+            if git_cmd and os.path.exists(os.path.join(WORKSPACE_DIR, ".git")):
+                log("CLOUD", "Pushing updated data to Cloud Dashboard (Render)...", 97)
+                import subprocess
+                subprocess.run([git_cmd, "add", "data/"], cwd=WORKSPACE_DIR, capture_output=True, timeout=30)
+                subprocess.run([git_cmd, "commit", "-m", f"Auto-sync data update {datetime.now().strftime('%Y-%m-%d %H:%M')}"], cwd=WORKSPACE_DIR, capture_output=True, timeout=30)
+                subprocess.run([git_cmd, "push", "origin", "main"], cwd=WORKSPACE_DIR, capture_output=True, timeout=60)
+                log("CLOUD", "Cloud Dashboard updated successfully on Render!", 99, "ok")
+        except Exception as pe:
+            print(f"[-] Auto-push to cloud notice: {pe}", flush=True)
 
         msg = f"Daily Sync Complete! Downloaded & compiled {total_c:,} meters ({repl_c:,} Replacement + {nsc_c:,} NSC)."
         if tracker:

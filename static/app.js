@@ -1588,12 +1588,25 @@ function setupSync() {
     liveIndicator.innerHTML = '<i class="fa-solid fa-circle fa-fade"></i> LIVE STREAM';
     liveIndicator.style.color = '#10b981';
 
+    const isCloud = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+    let cloudNotice = '';
+    if (isCloud) {
+      cloudNotice = `
+        <div class="terminal-line" style="color: #38bdf8;">
+          <span class="terminal-time">[INFO]</span>
+          <span class="terminal-tag active">CLOUD</span>
+          <span class="terminal-text">Notice: SBPDCL MDMS security firewalls cloud datacenters (403 Forbidden). For automated downloads, click Sync on your laptop (localhost:8095), which will auto-push the latest data here.</span>
+        </div>
+      `;
+    }
+
     consoleBox.innerHTML = `
       <div class="terminal-line">
         <span class="terminal-time">[${new Date().toLocaleTimeString()}]</span>
         <span class="terminal-tag active">START</span>
         <span class="terminal-text">Initiated automated download request for ${syncType.toUpperCase()} reports...</span>
       </div>
+      ${cloudNotice}
     `;
 
     try {
