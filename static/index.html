@@ -1258,76 +1258,76 @@
 
   <!-- Main Hero KPI Ribbon (Directly Below Circle Filter) -->
   <section class="kpi-grid">
-    <!-- KPI 1: Cumulative Installed -->
-    <div class="kpi-card" style="--card-accent: #0284c7;">
+    <!-- KPI 1 -->
+    <div class="kpi-card" id="kpiCard1" style="--card-accent: #0284c7;">
       <div class="kpi-header">
-        <span class="kpi-title">Cumulative Installed</span>
-        <i class="fa-solid fa-gauge-high kpi-icon"></i>
+        <span class="kpi-title" id="kpiCard1Title">Cumulative Installed</span>
+        <i class="fa-solid fa-gauge-high kpi-icon" id="kpiCard1Icon"></i>
       </div>
-      <div class="kpi-value" id="kpiCumulativeTotal">1,124,022</div>
-      <div class="kpi-sub">
+      <div class="kpi-value" id="kpiCumulativeTotal">1,128,834</div>
+      <div class="kpi-sub" id="kpiCard1Sub">
         <span class="badge badge-cyan"><i class="fa-solid fa-circle-check"></i> Project Master Total</span>
         <span>7 Circles</span>
       </div>
     </div>
 
-    <!-- KPI 2: 1-Phase Meters -->
-    <div class="kpi-card" style="--card-accent: #10b981;">
+    <!-- KPI 2 -->
+    <div class="kpi-card" id="kpiCard2" style="--card-accent: #10b981;">
       <div class="kpi-header">
-        <span class="kpi-title">Single Phase (1 PH)</span>
-        <i class="fa-solid fa-bolt kpi-icon"></i>
+        <span class="kpi-title" id="kpiCard2Title">Single Phase (1 PH)</span>
+        <i class="fa-solid fa-bolt kpi-icon" id="kpiCard2Icon"></i>
       </div>
-      <div class="kpi-value" id="kpiPhase1Total">1,080,325</div>
-      <div class="kpi-sub">
+      <div class="kpi-value" id="kpiPhase1Total">1,085,100</div>
+      <div class="kpi-sub" id="kpiCard2Sub">
         <span class="badge badge-emerald">96.11% Discom Share</span>
       </div>
     </div>
 
-    <!-- KPI 3: 3-Phase Meters -->
-    <div class="kpi-card" style="--card-accent: #f59e0b;">
+    <!-- KPI 3 -->
+    <div class="kpi-card" id="kpiCard3" style="--card-accent: #f59e0b;">
       <div class="kpi-header">
-        <span class="kpi-title">Three Phase (WC & 4CT)</span>
-        <i class="fa-solid fa-network-wired kpi-icon"></i>
+        <span class="kpi-title" id="kpiCard3Title">Three Phase (WC & 4CT)</span>
+        <i class="fa-solid fa-network-wired kpi-icon" id="kpiCard3Icon"></i>
       </div>
-      <div class="kpi-value" id="kpiPhase3Total">43,697</div>
-      <div class="kpi-sub">
+      <div class="kpi-value" id="kpiPhase3Total">43,734</div>
+      <div class="kpi-sub" id="kpiCard3Sub">
         <span class="badge badge-amber">3PH WC: 41,982 | 4CT: 1,715</span>
       </div>
     </div>
 
-    <!-- KPI 4: Replacement (Old to Smart Meter) -->
-    <div class="kpi-card" style="--card-accent: #6366f1;">
+    <!-- KPI 4 -->
+    <div class="kpi-card" id="kpiCard4" style="--card-accent: #6366f1;">
       <div class="kpi-header">
-        <span class="kpi-title">Replacement (OldToSM)</span>
-        <i class="fa-solid fa-arrows-rotate kpi-icon"></i>
+        <span class="kpi-title" id="kpiCard4Title">Replacement (OldToSM)</span>
+        <i class="fa-solid fa-arrows-rotate kpi-icon" id="kpiCard4Icon"></i>
       </div>
-      <div class="kpi-value" id="kpiOldToSmTotal">682,691</div>
-      <div class="kpi-sub">
+      <div class="kpi-value" id="kpiOldToSmTotal">685,620</div>
+      <div class="kpi-sub" id="kpiCard4Sub">
         <span class="badge badge-indigo">60.74% Discom Share</span>
-        </div>
+      </div>
     </div>
 
-    <!-- KPI 5: New Service Connection (NSC) -->
-    <div class="kpi-card" style="--card-accent: #8b5cf6;">
+    <!-- KPI 5 -->
+    <div class="kpi-card" id="kpiCard5" style="--card-accent: #8b5cf6;">
       <div class="kpi-header">
-        <span class="kpi-title">New Connection (NSC)</span>
-        <i class="fa-solid fa-circle-plus kpi-icon"></i>
+        <span class="kpi-title" id="kpiCard5Title">New Connection (NSC)</span>
+        <i class="fa-solid fa-circle-plus kpi-icon" id="kpiCard5Icon"></i>
       </div>
-      <div class="kpi-value" id="kpiNscTotal">441,331</div>
-      <div class="kpi-sub">
+      <div class="kpi-value" id="kpiNscTotal">443,214</div>
+      <div class="kpi-sub" id="kpiCard5Sub">
         <span class="badge badge-purple">39.26% Discom Share</span>
-        </div>
+      </div>
     </div>
 
-    <!-- KPI 6: Daily Installation Type Breakdown -->
-    <div class="kpi-card" style="--card-accent: #f43f5e;">
+    <!-- KPI 6 -->
+    <div class="kpi-card" id="kpiCard6" style="--card-accent: #f43f5e;">
       <div class="kpi-header">
-        <span class="kpi-title">Daily Installation Type</span>
-        <i class="fa-solid fa-layer-group kpi-icon"></i>
+        <span class="kpi-title" id="kpiCard6Title">Daily Installation Type</span>
+        <i class="fa-solid fa-layer-group kpi-icon" id="kpiCard6Icon"></i>
       </div>
-      <div class="kpi-value" id="kpiDailyTypeTotal" style="font-size: 1.55rem; letter-spacing: -0.5px;">2,585 / 1,463</div>
-      <div class="kpi-sub">
-        <span class="badge badge-rose" id="kpiDailyTypeSub">2,256 Today's Total</span>
+      <div class="kpi-value" id="kpiDailyTypeTotal" style="font-size: 1.55rem; letter-spacing: -0.5px;">805 / 515</div>
+      <div class="kpi-sub" id="kpiCard6Sub">
+        <span class="badge badge-rose" id="kpiDailyTypeSub">1,320 Today's Total</span>
       </div>
     </div>
   </section>

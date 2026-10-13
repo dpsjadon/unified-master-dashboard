@@ -146,6 +146,9 @@ function setupNavigation() {
       const targetPane = document.getElementById(targetId);
       if (targetPane) targetPane.classList.add('active');
 
+      // Dynamically update the 6 KPI cards for the active tab
+      updateKpiCardsForActiveTab();
+
       if (targetId === 'tabCumulative') {
         loadCumulativeTable();
         loadCumulativeTrends();
@@ -383,46 +386,269 @@ async function loadInitialData() {
   loadCumulativeTrends();
 }
 
-function populateSummaryKpis(json) {
+function setKpiCard(cardNum, { accent, icon, title, value, subHtml }) {
+  const card = document.getElementById(`kpiCard${cardNum}`);
+  if (card && accent) {
+    card.style.setProperty('--card-accent', accent);
+  }
+  const titleEl = document.getElementById(`kpiCard${cardNum}Title`);
+  if (titleEl) titleEl.textContent = title;
+
+  const iconEl = document.getElementById(`kpiCard${cardNum}Icon`);
+  if (iconEl && icon) {
+    iconEl.className = `${icon} kpi-icon`;
+  }
+
+  const valIds = ['', 'kpiCumulativeTotal', 'kpiPhase1Total', 'kpiPhase3Total', 'kpiOldToSmTotal', 'kpiNscTotal', 'kpiDailyTypeTotal'];
+  const valEl = document.getElementById(valIds[cardNum]);
+  if (valEl) valEl.innerHTML = value;
+
+  const subEl = document.getElementById(`kpiCard${cardNum}Sub`);
+  if (subEl) subEl.innerHTML = subHtml;
+}
+
+function updateKpiCardsForActiveTab() {
+  if (!state.data.summary) return;
+  const json = state.data.summary;
   const m = json.master || {};
   const d = json.daily || {};
   const u = json.ula || {};
 
-  if (document.getElementById('kpiCumulativeTotal')) {
-    document.getElementById('kpiCumulativeTotal').textContent = Number(m.total || 0).toLocaleString();
+  const totalMaster = Number(m.total || 0);
+  const p1 = Number(m.phase_1ph || 0);
+  const p3 = Number((m.phase_3ph_wc || 0) + (m.phase_3ph_4ct || 0));
+  const oldToSm = Number(m.old_to_sm || 0);
+  const nsc = Number(m.nsc || 0);
+
+  const replDaily = Number(d.replacement || 0);
+  const nscDaily = Number(d.nsc || 0);
+  const sumDaily = Number(d.total_daily != null ? d.total_daily : (replDaily + nscDaily));
+  const activeTeams = Number(d.active_teams || 0);
+  const avgTeam = d.avg_per_team || (activeTeams > 0 ? (sumDaily / activeTeams).toFixed(1) : '0');
+  const targetPct = d.achievement_pct || (sumDaily > 0 ? ((sumDaily / 2285) * 100).toFixed(1) : '0');
+
+  const uScope = Number(u.scope || 91033);
+  const uInstalled = Number(u.installed || 0);
+  const uPending = Number(u.pending || (uScope - uInstalled));
+  const uPct = Number(u.completion_pct || (uScope > 0 ? (uInstalled * 100 / uScope).toFixed(2) : 0));
+  const uToday = Number(u.today_installed || 0);
+
+  const isCircleFiltered = state.activeCircle && state.activeCircle !== 'ALL';
+  const circleLabel = isCircleFiltered ? `${state.activeCircle} Circle` : 'SBPDCL Discom Total';
+
+  if (state.activeTab === 'tabDaily') {
+    // --- DAILY INSTALLATION TAB CARDS ---
+    setKpiCard(1, {
+      accent: '#10b981',
+      icon: 'fa-solid fa-bolt-lightning',
+      title: "Today's Daily Installed",
+      value: sumDaily.toLocaleString(),
+      subHtml: `<span class="badge badge-emerald"><i class="fa-solid fa-calendar-day"></i> ${d.date || 'Today'} Batch</span> <span>${circleLabel}</span>`
+    });
+
+    setKpiCard(2, {
+      accent: '#0284c7',
+      icon: 'fa-solid fa-arrows-rotate',
+      title: 'Daily Replacement (OldToSM)',
+      value: replDaily.toLocaleString(),
+      subHtml: `<span class="badge badge-cyan">${sumDaily > 0 ? ((replDaily / sumDaily) * 100).toFixed(1) : '0'}% Today's Share</span>`
+    });
+
+    setKpiCard(3, {
+      accent: '#8b5cf6',
+      icon: 'fa-solid fa-circle-plus',
+      title: 'Daily New Connection (NSC)',
+      value: nscDaily.toLocaleString(),
+      subHtml: `<span class="badge badge-purple">${sumDaily > 0 ? ((nscDaily / sumDaily) * 100).toFixed(1) : '0'}% Today's Share</span>`
+    });
+
+    setKpiCard(4, {
+      accent: '#f59e0b',
+      icon: 'fa-solid fa-users-gear',
+      title: 'Active Field Teams',
+      value: `${activeTeams.toLocaleString()} Teams`,
+      subHtml: `<span class="badge badge-amber"><i class="fa-solid fa-person-digging"></i> Field Deployments</span>`
+    });
+
+    setKpiCard(5, {
+      accent: '#06b6d4',
+      icon: 'fa-solid fa-gauge-simple-high',
+      title: 'Team Output Velocity',
+      value: `${avgTeam} <small style="font-size:0.75rem; font-weight:500;">/ Team</small>`,
+      subHtml: `<span class="badge badge-cyan"><i class="fa-solid fa-bolt"></i> Avg Meters / Team</span>`
+    });
+
+    setKpiCard(6, {
+      accent: '#f43f5e',
+      icon: 'fa-solid fa-bullseye',
+      title: 'Daily Target Run Rate',
+      value: `${targetPct}%`,
+      subHtml: `<span class="badge badge-rose"><i class="fa-solid fa-flag-checkered"></i> Target: 2,285 / Day</span>`
+    });
+
+  } else if (state.activeTab === 'tabUla') {
+    // --- ULA METERING TAB CARDS ---
+    setKpiCard(1, {
+      accent: '#6366f1',
+      icon: 'fa-solid fa-arrows-to-dot',
+      title: 'Total ULA Identified Scope',
+      value: uScope.toLocaleString(),
+      subHtml: `<span class="badge badge-indigo"><i class="fa-solid fa-bullseye"></i> Unmetered Consumer Base</span> <span>${circleLabel}</span>`
+    });
+
+    setKpiCard(2, {
+      accent: '#10b981',
+      icon: 'fa-solid fa-circle-check',
+      title: 'ULA Replaced / Metered',
+      value: uInstalled.toLocaleString(),
+      subHtml: `<span class="badge badge-emerald"><i class="fa-solid fa-check-double"></i> ${uPct}% Achieved</span>`
+    });
+
+    setKpiCard(3, {
+      accent: '#f59e0b',
+      icon: 'fa-solid fa-clock-rotate-left',
+      title: 'Pending ULA Replacement',
+      value: uPending.toLocaleString(),
+      subHtml: `<span class="badge badge-amber">${(100 - uPct).toFixed(1)}% Remaining</span>`
+    });
+
+    setKpiCard(4, {
+      accent: '#0284c7',
+      icon: 'fa-solid fa-chart-line',
+      title: 'Overall ULA Conversion Rate',
+      value: `${uPct}%`,
+      subHtml: `<span class="badge badge-cyan"><i class="fa-solid fa-flag-checkered"></i> Scope Converted</span>`
+    });
+
+    setKpiCard(5, {
+      accent: '#ec4899',
+      icon: 'fa-solid fa-bolt',
+      title: "Today's ULA Converted",
+      value: uToday.toLocaleString(),
+      subHtml: `<span class="badge badge-rose"><i class="fa-solid fa-calendar-day"></i> Latest Batch Progress</span>`
+    });
+
+    setKpiCard(6, {
+      accent: '#8b5cf6',
+      icon: 'fa-solid fa-sitemap',
+      title: 'ULA Operational Coverage',
+      value: isCircleFiltered ? '1 Circle' : '7 Circles',
+      subHtml: `<span class="badge badge-purple">26 Divisions • 77 Sub-Divs</span>`
+    });
+
+  } else if (state.activeTab === 'tabSearch') {
+    // --- SMART METER SEARCH TAB CARDS ---
+    setKpiCard(1, {
+      accent: '#0284c7',
+      icon: 'fa-solid fa-magnifying-glass',
+      title: 'Searchable Master Database',
+      value: totalMaster.toLocaleString(),
+      subHtml: `<span class="badge badge-cyan"><i class="fa-solid fa-database"></i> Live Query Engine</span>`
+    });
+
+    setKpiCard(2, {
+      accent: '#10b981',
+      icon: 'fa-solid fa-fingerprint',
+      title: 'Indexed Query Keys',
+      value: 'MSN & CA Number',
+      subHtml: `<span class="badge badge-emerald">Instant Record Match</span>`
+    });
+
+    setKpiCard(3, {
+      accent: '#f59e0b',
+      icon: 'fa-solid fa-tags',
+      title: 'Consumer Tariffs Indexed',
+      value: 'DS1D, DS2D, NDS...',
+      subHtml: `<span class="badge badge-amber">Domestic, Com., Ind., Ag.</span>`
+    });
+
+    setKpiCard(4, {
+      accent: '#6366f1',
+      icon: 'fa-solid fa-network-wired',
+      title: 'Phase Specifications',
+      value: '1-PH / 3-PH WC / 4CT',
+      subHtml: `<span class="badge badge-indigo">Full Technical Match</span>`
+    });
+
+    setKpiCard(5, {
+      accent: '#8b5cf6',
+      icon: 'fa-solid fa-arrows-rotate',
+      title: 'Installation Nature',
+      value: 'Replacement & NSC',
+      subHtml: `<span class="badge badge-purple">Old Meter vs New Conn</span>`
+    });
+
+    setKpiCard(6, {
+      accent: '#ec4899',
+      icon: 'fa-solid fa-map-location-dot',
+      title: 'Hierarchy Coverage',
+      value: isCircleFiltered ? '1 Circle' : '7 Circles',
+      subHtml: `<span class="badge badge-rose">26 Div &bull; 77 SubDiv &bull; 241 Sec</span>`
+    });
+
+  } else {
+    // --- CUMULATIVE MASTER ANALYTICS (DEFAULT) ---
+    setKpiCard(1, {
+      accent: '#0284c7',
+      icon: 'fa-solid fa-gauge-high',
+      title: 'Cumulative Installed',
+      value: totalMaster.toLocaleString(),
+      subHtml: `<span class="badge badge-cyan"><i class="fa-solid fa-circle-check"></i> Project Master Total</span> <span>${m.circles || (isCircleFiltered ? 1 : 7)} Circles</span>`
+    });
+
+    setKpiCard(2, {
+      accent: '#10b981',
+      icon: 'fa-solid fa-bolt',
+      title: 'Single Phase (1 PH)',
+      value: p1.toLocaleString(),
+      subHtml: `<span class="badge badge-emerald">${totalMaster > 0 ? ((p1 / totalMaster) * 100).toFixed(2) : '0'}% Discom Share</span>`
+    });
+
+    setKpiCard(3, {
+      accent: '#f59e0b',
+      icon: 'fa-solid fa-network-wired',
+      title: 'Three Phase (WC & 4CT)',
+      value: p3.toLocaleString(),
+      subHtml: `<span class="badge badge-amber">3PH WC: ${Number(m.phase_3ph_wc || 0).toLocaleString()} | 4CT: ${Number(m.phase_3ph_4ct || 0).toLocaleString()}</span>`
+    });
+
+    setKpiCard(4, {
+      accent: '#6366f1',
+      icon: 'fa-solid fa-arrows-rotate',
+      title: 'Replacement (OldToSM)',
+      value: oldToSm.toLocaleString(),
+      subHtml: `<span class="badge badge-indigo">${totalMaster > 0 ? ((oldToSm / totalMaster) * 100).toFixed(2) : '0'}% Discom Share</span>`
+    });
+
+    setKpiCard(5, {
+      accent: '#8b5cf6',
+      icon: 'fa-solid fa-circle-plus',
+      title: 'New Connection (NSC)',
+      value: nsc.toLocaleString(),
+      subHtml: `<span class="badge badge-purple">${totalMaster > 0 ? ((nsc / totalMaster) * 100).toFixed(2) : '0'}% Discom Share</span>`
+    });
+
+    setKpiCard(6, {
+      accent: '#f43f5e',
+      icon: 'fa-solid fa-layer-group',
+      title: 'Daily Installation Type',
+      value: `${replDaily.toLocaleString()} / ${nscDaily.toLocaleString()}`,
+      subHtml: `<span class="badge badge-rose" id="kpiDailyTypeSub">${sumDaily.toLocaleString()} Today's Total</span>`
+    });
   }
-  if (document.getElementById('kpiPhase1Total')) {
-    document.getElementById('kpiPhase1Total').textContent = Number(m.phase_1ph || 0).toLocaleString();
-  }
-  if (document.getElementById('kpiPhase3Total')) {
-    document.getElementById('kpiPhase3Total').textContent = Number((m.phase_3ph_wc || 0) + (m.phase_3ph_4ct || 0)).toLocaleString();
-  }
-  
-  // Installation Type KPIs
-  if (document.getElementById('kpiOldToSmTotal')) {
-    document.getElementById('kpiOldToSmTotal').textContent = Number(m.old_to_sm || 0).toLocaleString();
-  }
-  if (document.getElementById('kpiNscTotal')) {
-    document.getElementById('kpiNscTotal').textContent = Number(m.nsc || 0).toLocaleString();
-  }
-  
-  // Daily Installation Type: sum of Replacement and NSC
+}
+
+function populateSummaryKpis(json) {
+  state.data.summary = json;
+  updateKpiCardsForActiveTab();
+
+  // Also update global header pills, badges and timestamps
+  const m = json.master || {};
+  const d = json.daily || {};
   const replDaily = Number(d.replacement || 0);
   const nscDaily = Number(d.nsc || 0);
   const sumDaily = Number(d.total_daily != null ? d.total_daily : (replDaily + nscDaily));
 
-  if (document.getElementById('kpiDailyTypeTotal')) {
-    document.getElementById('kpiDailyTypeTotal').textContent = `${replDaily.toLocaleString()} / ${nscDaily.toLocaleString()}`;
-  }
-  if (document.getElementById('kpiDailyTypePill')) {
-    document.getElementById('kpiDailyTypePill').textContent = `${replDaily.toLocaleString()} Repl • ${nscDaily.toLocaleString()} NSC`;
-  }
-  if (document.getElementById('kpiDailyTypeSub')) {
-    document.getElementById('kpiDailyTypeSub').textContent = `${sumDaily.toLocaleString()} Today's Total`;
-  }
-  if (document.getElementById('kpiDailyTotal')) {
-    document.getElementById('kpiDailyTotal').textContent = sumDaily.toLocaleString();
-  }
   if (document.getElementById('scopeDailyCount')) {
     document.getElementById('scopeDailyCount').textContent = `${sumDaily.toLocaleString()} Meters (${d.date || 'Today'})`;
   }
