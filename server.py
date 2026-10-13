@@ -170,6 +170,27 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
                 except Exception:
                     pass
             return self.send_json({"success": True, "url": cf_url})
+        elif path == "/api/debug/mdm-check":
+            import urllib.request, ssl
+            ctx = ssl.create_default_context()
+            ctx.check_hostname = False
+            ctx.verify_mode = ssl.CERT_NONE
+            req = urllib.request.Request("https://mdm.sbpdclinfra.in/SSO/LoginPage", headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
+            try:
+                with urllib.request.urlopen(req, context=ctx, timeout=12) as r:
+                    content = r.read().decode("utf-8", errors="ignore")
+                    title = ""
+                    if "<title>" in content and "</title>" in content:
+                        title = content[content.find("<title>")+7:content.find("</title>")].strip()
+                    return self.send_json({
+                        "success": True,
+                        "status": r.status,
+                        "length": len(content),
+                        "has_tne": "tne" in content,
+                        "title": title
+                    })
+            except Exception as e:
+                return self.send_json({"success": False, "error": str(e)}, 500)
 
         # 7. Mobile APK Download
         elif path in ("/download-apk", "/api/download-apk"):

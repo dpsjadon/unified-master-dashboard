@@ -99,6 +99,7 @@ def run_sync_with_tracker(tracker=None):
         log("AUTH", f"Connecting to MDM Portal & authenticating as {user}...", 18)
         driver.get("https://mdm.sbpdclinfra.in/SSO/LoginPage")
         time.sleep(2)
+        log("DEBUG", f"Page URL: {driver.current_url} | Title: {driver.title}", 20)
 
         if "LoginPage" in driver.current_url or "Login" in driver.title:
             user_inp = wait.until(EC.presence_of_element_located((By.ID, "tne")))

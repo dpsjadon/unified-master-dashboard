@@ -68,6 +68,11 @@ def run_master_sync_with_tracker(tracker=None):
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--window-size=1920,1080")
         options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+        if os.path.exists("/usr/bin/chromium"):
+            options.binary_location = "/usr/bin/chromium"
+        elif os.path.exists("/usr/bin/google-chrome"):
+            options.binary_location = "/usr/bin/google-chrome"
+
         options.add_experimental_option("prefs", {
             "download.default_directory": DOWNLOAD_DIR,
             "download.prompt_for_download": False,
@@ -76,7 +81,12 @@ def run_master_sync_with_tracker(tracker=None):
             "safebrowsing.disable_download_protection": True
         })
 
-        driver = webdriver.Chrome(options=options)
+        from selenium.webdriver.chrome.service import Service
+        service = None
+        if os.path.exists("/usr/bin/chromedriver"):
+            service = Service(executable_path="/usr/bin/chromedriver")
+
+        driver = webdriver.Chrome(service=service, options=options) if service else webdriver.Chrome(options=options)
         driver.execute_cdp_cmd("Browser.setDownloadBehavior", {
             "behavior": "allow",
             "downloadPath": DOWNLOAD_DIR,
@@ -86,14 +96,16 @@ def run_master_sync_with_tracker(tracker=None):
             "behavior": "allow",
             "downloadPath": DOWNLOAD_DIR
         })
+        wait = WebDriverWait(driver, 25)
 
         user, pwd = load_credentials()
         log("AUTH", f"Connecting to MDM Portal & authenticating as {user}...", 18)
         driver.get("https://mdm.sbpdclinfra.in/SSO/LoginPage")
         time.sleep(2)
+        log("DEBUG", f"Page URL: {driver.current_url} | Title: {driver.title}", 20)
 
         if "LoginPage" in driver.current_url or "Login" in driver.title:
-            user_inp = driver.find_element(By.ID, "tne")
+            user_inp = wait.until(EC.presence_of_element_located((By.ID, "tne")))
             pass_inp = driver.find_element(By.ID, "tpw")
             user_inp.clear()
             user_inp.send_keys(user)
