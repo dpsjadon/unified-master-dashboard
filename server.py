@@ -880,9 +880,10 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
                 return self.send_json({"success": False, "error": "Invalid ULA table type"}, 400)
 
             df = con.execute(sql).fetchdf()
-            total_records = con.execute(f"SELECT count(*) FROM installations {f'WHERE {get_circle_sql(circle, "Circle")}' if circle else ''}").fetchone()[0]
-            repl_total = con.execute(f"SELECT count(*) FILTER (WHERE Installation_Type = 'Replacement') FROM installations {f'WHERE {get_circle_sql(circle, "Circle")}' if circle else ''}").fetchone()[0]
-            nsc_total = con.execute(f"SELECT count(*) FILTER (WHERE Installation_Type = 'NSC') FROM installations {f'WHERE {get_circle_sql(circle, "Circle")}' if circle else ''}").fetchone()[0]
+            inst_filter = f"WHERE {get_circle_sql(circle, 'Circle')}" if circle else ""
+            total_records = con.execute(f"SELECT count(*) FROM installations {inst_filter}").fetchone()[0]
+            repl_total = con.execute(f"SELECT count(*) FILTER (WHERE Installation_Type = 'Replacement') FROM installations {inst_filter}").fetchone()[0]
+            nsc_total = con.execute(f"SELECT count(*) FILTER (WHERE Installation_Type = 'NSC') FROM installations {inst_filter}").fetchone()[0]
             con.close()
             return self.send_json({
                 "success": True, 
