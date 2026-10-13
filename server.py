@@ -11,6 +11,8 @@ import json
 import time
 from datetime import datetime
 import urllib.parse
+import urllib.request
+import ssl
 import threading
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 import duckdb
@@ -171,7 +173,6 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
                     pass
             return self.send_json({"success": True, "url": cf_url})
         elif path == "/api/debug/mdm-check":
-            import urllib.request, ssl
             ctx = ssl.create_default_context()
             ctx.check_hostname = False
             ctx.verify_mode = ssl.CERT_NONE
