@@ -1,0 +1,213 @@
+{
+  "divisions": [
+    {
+      "circle": "ARRAH",
+      "division": "ARRAH",
+      "responsible": "DK Gupta",
+      "deployment_head": "Praveen Mishra",
+      "plan_team": 14,
+      "plan_mi": 80
+    },
+    {
+      "circle": "ARRAH",
+      "division": "BUXAR",
+      "responsible": "DK Gupta",
+      "deployment_head": "Praveen Mishra",
+      "plan_team": 15,
+      "plan_mi": 150
+    },
+    {
+      "circle": "ARRAH",
+      "division": "JAGDISHPUR",
+      "responsible": "DK Gupta",
+      "deployment_head": "Praveen Mishra",
+      "plan_team": 14,
+      "plan_mi": 120
+    },
+    {
+      "circle": "AURANGABAD",
+      "division": "ARWAL",
+      "responsible": "Kaushal Kr. Singh",
+      "deployment_head": "Praveen Mishra",
+      "plan_team": 15,
+      "plan_mi": 65
+    },
+    {
+      "circle": "AURANGABAD",
+      "division": "AURANGABAD",
+      "responsible": "Kaushal Kr. Singh",
+      "deployment_head": "Praveen Mishra",
+      "plan_team": 14,
+      "plan_mi": 120
+    },
+    {
+      "circle": "AURANGABAD",
+      "division": "DAUDNAGAR",
+      "responsible": "Kaushal Kr. Singh",
+      "deployment_head": "Praveen Mishra",
+      "plan_team": 15,
+      "plan_mi": 125
+    },
+    {
+      "circle": "BIHARSARIF",
+      "division": "Biharshariff Rural",
+      "responsible": "Md Dilnawaz",
+      "deployment_head": "D.P.Singh",
+      "plan_team": 18,
+      "plan_mi": 100
+    },
+    {
+      "circle": "BIHARSARIF",
+      "division": "EKANGARSARAI",
+      "responsible": "Md Dilnawaz",
+      "deployment_head": "D.P.Singh",
+      "plan_team": 8,
+      "plan_mi": 70
+    },
+    {
+      "circle": "BIHARSARIF",
+      "division": "NAWADA",
+      "responsible": "Md Dilnawaz",
+      "deployment_head": "D.P.Singh",
+      "plan_team": 11,
+      "plan_mi": 70
+    },
+    {
+      "circle": "BIHARSARIF",
+      "division": "RAJAULI",
+      "responsible": "Md Dilnawaz",
+      "deployment_head": "D.P.Singh",
+      "plan_team": 13,
+      "plan_mi": 60
+    },
+    {
+      "circle": "BIHARSARIF",
+      "division": "RAJGIR",
+      "responsible": "Md Dilnawaz",
+      "deployment_head": "D.P.Singh",
+      "plan_team": 6,
+      "plan_mi": 55
+    },
+    {
+      "circle": "GAYA",
+      "division": "GAYAU",
+      "responsible": "Mitravanu Nayak",
+      "deployment_head": "D.P.Singh",
+      "plan_team": 16,
+      "plan_mi": 80
+    },
+    {
+      "circle": "GAYA",
+      "division": "GAYA RURAL",
+      "responsible": "Mitravanu Nayak",
+      "deployment_head": "D.P.Singh",
+      "plan_team": 22,
+      "plan_mi": 80
+    },
+    {
+      "circle": "GAYA",
+      "division": "JAHANABAD",
+      "responsible": "Saurav Kumar",
+      "deployment_head": "D.P.Singh",
+      "plan_team": 16,
+      "plan_mi": 100
+    },
+    {
+      "circle": "GAYA",
+      "division": "MANPUR",
+      "responsible": "Saurav Kumar",
+      "deployment_head": "D.P.Singh",
+      "plan_team": 15,
+      "plan_mi": 80
+    },
+    {
+      "circle": "GAYA",
+      "division": "SHERGHATI",
+      "responsible": "Mitravanu Nayak",
+      "deployment_head": "D.P.Singh",
+      "plan_team": 20,
+      "plan_mi": 125
+    },
+    {
+      "circle": "MUNGER",
+      "division": "LAKHISARAI",
+      "responsible": "Rohit Sinha",
+      "deployment_head": "D.P.Singh",
+      "plan_team": 19,
+      "plan_mi": 80
+    },
+    {
+      "circle": "MUNGER",
+      "division": "MUNGER",
+      "responsible": "Rohit Sinha",
+      "deployment_head": "D.P.Singh",
+      "plan_team": 22,
+      "plan_mi": 90
+    },
+    {
+      "circle": "Patna",
+      "division": "Barh",
+      "responsible": "Santosh Kumar",
+      "deployment_head": "Praveen Mishra",
+      "plan_team": 15,
+      "plan_mi": 70
+    },
+    {
+      "circle": "Patna",
+      "division": "BIHTA",
+      "responsible": "Santosh Kumar",
+      "deployment_head": "Praveen Mishra",
+      "plan_team": 12,
+      "plan_mi": 45
+    },
+    {
+      "circle": "Patna",
+      "division": "FATUHA",
+      "responsible": "Santosh Kumar",
+      "deployment_head": "Praveen Mishra",
+      "plan_team": 7,
+      "plan_mi": 40
+    },
+    {
+      "circle": "Patna",
+      "division": "MASAURHI",
+      "responsible": "Santosh Kumar",
+      "deployment_head": "Praveen Mishra",
+      "plan_team": 15,
+      "plan_mi": 50
+    },
+    {
+      "circle": "Patna",
+      "division": "PATNA",
+      "responsible": "Santosh Kumar",
+      "deployment_head": "Praveen Mishra",
+      "plan_team": 8,
+      "plan_mi": 40
+    },
+    {
+      "circle": "SASARAM",
+      "division": "Bhabhua",
+      "responsible": "Mukesh Kumar",
+      "deployment_head": "Praveen Mishra",
+      "plan_team": 12,
+      "plan_mi": 170
+    },
+    {
+      "circle": "SASARAM",
+      "division": "DEHARI",
+      "responsible": "Mukesh Kumar",
+      "deployment_head": "Praveen Mishra",
+      "plan_team": 10,
+      "plan_mi": 70
+    },
+    {
+      "circle": "SASARAM",
+      "division": "SASARAM",
+      "responsible": "Mukesh Kumar",
+      "deployment_head": "Praveen Mishra",
+      "plan_team": 13,
+      "plan_mi": 150
+    }
+  ],
+  "last_updated": "2026-10-09T14:06:52"
+}

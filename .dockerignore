@@ -1,0 +1,11 @@
+# Ignore local databases and raw batches
+*.duckdb
+*.duckdb.wal
+data/*.duckdb
+data/*.duckdb.wal
+downloads_temp/
+extracted_smart_meters/
+bin/
+__pycache__/
+*.git
+*.log

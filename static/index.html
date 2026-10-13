@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>IntelliSmart SBPDCL - Unified Smart Meter Intelligence & Executive Platform</title>
+  <meta name="description" content="Unified Executive Dashboard combining Master Meter Analysis (1.124M records), Daily MI Velocity, and ULA Metering Tracker for SBPDCL.">
+  <meta name="theme-color" content="#0284c7">
+
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <script src="chart.umd.min.js"></script>
+  <script src="jszip.min.js"></script>
+  <link rel="stylesheet" href="style.css?v=20261012_v4">
+
+  <style id="minimalist-mobile-core">
+
+    /* =======================================================
+       EXECUTIVE CIRCLE-WISE SLICER BAR (UNIVERSAL)
+       ======================================================= */
+    .circle-slicer-section {
+      background: #ffffff !important;
+      border-bottom: 1px solid #e2e8f0 !important;
+      padding: 7px 14px !important;
+      position: sticky !important;
+      top: 48px !important;
+      z-index: 95 !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+    }
+    [data-theme="dark"] .circle-slicer-section {
+      background: #0d1b2e !important;
+      border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+    }
+
+    .slicer-container {
+      max-width: 1440px !important;
+      margin: 0 auto !important;
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      justify-content: flex-start !important;
+      gap: 10px !important;
+      overflow-x: auto !important;
+      flex-wrap: nowrap !important;
+      white-space: nowrap !important;
+      scrollbar-width: none !important;
+      -webkit-overflow-scrolling: touch !important;
+    }
+    .slicer-container::-webkit-scrollbar {
+      display: none !important;
+    }
+
+    .slicer-header-box {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      font-size: 0.78rem !important;
+      font-weight: 700 !important;
+      color: #0f172a !important;
+      flex-shrink: 0 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.4px !important;
+    }
+    [data-theme="dark"] .slicer-header-box {
+      color: #f8fafc !important;
+    }
+    .slicer-header-box i {
+      color: #0284c7 !important;
+      font-size: 0.85rem !important;
+    }
+
+    .slicer-chips {
+      display: inline-flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      gap: 6px !important;
+      overflow-x: auto !important;
+      flex-wrap: nowrap !important;
+      flex-grow: 1 !important;
+      scrollbar-width: none !important;
+      padding: 2px 0 !important;
+    }
+    .slicer-chips::-webkit-scrollbar {
+      display: none !important;
+    }
+
+    .slicer-chip {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 5px !important;
+      padding: 4px 11px !important;
+      background: #f1f5f9 !important;
+      color: #334155 !important;
+      border: 1px solid #cbd5e1 !important;
+      border-radius: 20px !important;
+      font-size: 0.74rem !important;
+      font-weight: 600 !important;
+      cursor: pointer !important;
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
+      outline: none !important;
+      transition: all 0.15s ease !important;
+      user-select: none !important;
+    }
+    [data-theme="dark"] .slicer-chip {
+      background: #13253e !important;
+      color: #94a3b8 !important;
+      border-color: rgba(255, 255, 255, 0.12) !important;
+    }
+
+    .slicer-chip:hover {
+      background: #e0f2fe !important;
+      color: #0284c7 !important;
+      border-color: #38bdf8 !important;
+      transform: translateY(-1px) !important;
+    }
+
+    .slicer-chip.active {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border-color: #0284c7 !important;
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.35) !important;
+    }
+
+    .slicer-chip .chip-count {
+      font-size: 0.65rem !important;
+      padding: 1px 5px !important;
+      border-radius: 10px !important;
+      background: rgba(0, 0, 0, 0.08) !important;
+      color: inherit !important;
+    }
+    .slicer-chip.active .chip-count {
+      background: rgba(255, 255, 255, 0.28) !important;
+      color: #ffffff !important;
+    }
+
+    .slicer-clear-btn {
+      display: inline-flex;
+      align-items: center !important;
+      gap: 4px !important;
+      padding: 4px 10px !important;
+      font-size: 0.72rem !important;
+      font-weight: 600 !important;
+      color: #f43f5e !important;
+      background: rgba(244, 63, 94, 0.08) !important;
+      border: 1px solid rgba(244, 63, 94, 0.25) !important;
+      border-radius: 20px !important;
+      cursor: pointer !important;
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
+      outline: none !important;
+      transition: all 0.15s ease !important;
+    }
+    .slicer-clear-btn:hover {
+      background: rgba(244, 63, 94, 0.18) !important;
+    }
+
+
+    /* =======================================================
+       EXPERT MINIMALIST MOBILE & DAY THEME ARCHITECTURE
+       ======================================================= */
+    :root {
+      --bg-primary: #f8fafc;
+      --bg-secondary: #ffffff;
+      --bg-tertiary: #f1f5f9;
+      --card-bg: #ffffff;
+      --card-border: #e2e8f0;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --brand-blue: #0284c7;
+      --border-subtle: #e2e8f0;
+    }
+
+    .mobile-only { display: none !important; }
+    .desktop-only { display: flex !important; }
+
+    @media (max-width: 768px) {
+      .desktop-only { display: none !important; }
+      .mobile-only { display: flex !important; }
+
+      /* 1. Header: Single Clean Row */
+      .app-header {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 999 !important;
+        background: #ffffff !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+      }
+
+      .header-container {
+        padding: 8px 12px !important;
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        flex-wrap: nowrap !important;
+        gap: 6px !important;
+      }
+
+      .brand {
+        gap: 8px !important;
+      }
+
+      .brand-logo {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 1rem !important;
+        border-radius: 8px !important;
+      }
+
+      .brand-info h1 {
+        font-size: 0.95rem !important;
+        font-weight: 700 !important;
+        white-space: nowrap !important;
+        color: #0f172a !important;
+      }
+
+      .brand-info p {
+        display: none !important;
+      }
+
+      .header-actions {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        flex-wrap: nowrap !important;
+        gap: 5px !important;
+      }
+
+      .header-actions .btn {
+        padding: 5px 10px !important;
+        font-size: 0.72rem !important;
+        height: 28px !important;
+        border-radius: 16px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 4px !important;
+        font-weight: 600 !important;
+      }
+
+      .header-actions #btnSyncDaily {
+        background: #f0fdf4 !important;
+        color: #16a34a !important;
+        border: 1px solid #bbf7d0 !important;
+      }
+
+      .header-actions #btnSyncMaster {
+        background: #eff6ff !important;
+        color: #2563eb !important;
+        border: 1px solid #bfdbfe !important;
+      }
+
+      .header-actions .btn-icon {
+        width: 28px !important;
+        height: 28px !important;
+        border-radius: 50% !important;
+        background: #f1f5f9 !important;
+        border: 1px solid #e2e8f0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+
+      .btn-text-desktop { display: none !important; }
+      .btn-text-mobile { display: inline !important; }
+
+      /* 2. Mobile Scope Strip */
+      .mobile-scope-strip {
+        padding: 6px 12px !important;
+        background: #f1f5f9 !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        font-size: 0.72rem !important;
+      }
+
+      .scope-pill-tag {
+        color: #0284c7 !important;
+        font-weight: 600 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 4px !important;
+      }
+
+      .scope-pill-tag.date-tag {
+        color: #64748b !important;
+      }
+
+      /* 3. Clean Hero Banner & 2-Col KPI Grid */
+      .kpi-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 6px !important;
+        padding: 8px 12px 0 !important;
+        margin-top: 0 !important;
+      }
+
+      .kpi-card:first-child {
+        grid-column: 1 / -1 !important;
+        background: linear-gradient(135deg, #f0f9ff, #e0f2fe) !important;
+        border: 1px solid #bae6fd !important;
+        padding: 12px 14px !important;
+        border-radius: 12px !important;
+      }
+
+      .kpi-card:first-child .kpi-title {
+        color: #0369a1 !important;
+        font-size: 0.68rem !important;
+      }
+
+      .kpi-card:first-child .kpi-value {
+        color: #0c4a6e !important;
+        font-size: 1.85rem !important;
+        margin-bottom: 2px !important;
+      }
+
+      .kpi-card {
+        padding: 9px 11px !important;
+        border-radius: 10px !important;
+        background: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.03) !important;
+      }
+
+      .kpi-title {
+        font-size: 0.62rem !important;
+      }
+
+      .kpi-value {
+        font-size: 1.25rem !important;
+        margin-bottom: 2px !important;
+      }
+
+      .kpi-sub {
+        font-size: 0.62rem !important;
+        gap: 2px !important;
+      }
+
+      /* 4. Segmented Control Main Tabs */
+      .main-nav-tabs {
+        margin: 8px 12px 0 !important;
+        padding: 3px !important;
+        background: #e2e8f0 !important;
+        border-radius: 10px !important;
+        border-bottom: none !important;
+        display: flex !important;
+        gap: 3px !important;
+        overflow-x: auto !important;
+        scrollbar-width: none !important;
+      }
+
+      .main-tab-btn {
+        flex: 1 !important;
+        padding: 6px 8px !important;
+        font-size: 0.74rem !important;
+        border-radius: 8px !important;
+        justify-content: center !important;
+        color: #475569 !important;
+        white-space: nowrap !important;
+        gap: 4px !important;
+      }
+
+      .main-tab-btn.active {
+        background: #ffffff !important;
+        color: #0284c7 !important;
+        font-weight: 700 !important;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
+      }
+
+      .main-tab-btn.active::after {
+        display: none !important;
+      }
+
+      .tab-badge {
+        display: none !important;
+      }
+
+      /* 5. Sub-Navigation Chips: Single Horizontal Swipe Row */
+      .tab-content {
+        padding: 8px 12px 24px !important;
+      }
+
+      .sub-nav-bar {
+        margin-bottom: 8px !important;
+        gap: 6px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+      }
+
+      .sub-nav-pills {
+        display: flex !important;
+        gap: 5px !important;
+        overflow-x: auto !important;
+        flex-wrap: nowrap !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none !important;
+        padding: 2px 0 !important;
+      }
+
+      .sub-pill-btn {
+        padding: 5px 12px !important;
+        font-size: 0.72rem !important;
+        border-radius: 16px !important;
+        flex-shrink: 0 !important;
+        background: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        color: #334155 !important;
+      }
+
+      .sub-pill-btn.active {
+        background: #0284c7 !important;
+        color: #ffffff !important;
+        border-color: #0284c7 !important;
+      }
+
+      #btnExportCumulativeCsv {
+        align-self: flex-end !important;
+        padding: 4px 10px !important;
+        font-size: 0.68rem !important;
+        border-radius: 14px !important;
+        background: #f1f5f9 !important;
+      }
+
+      /* 6. Clean Table Card */
+      .data-card {
+        padding: 10px !important;
+        border-radius: 12px !important;
+        border: 1px solid #e2e8f0 !important;
+        background: #ffffff !important;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.03) !important;
+      }
+
+      .data-card-header {
+        margin-bottom: 8px !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+      }
+
+      .data-card-header h3 {
+        font-size: 0.88rem !important;
+        color: #0f172a !important;
+      }
+
+      .table-wrapper {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        border-radius: 8px !important;
+        border: 1px solid #e2e8f0 !important;
+      }
+
+      .styled-table th {
+        background: #f1f5f9 !important;
+        color: #334155 !important;
+        font-size: 0.72rem !important;
+        padding: 6px 9px !important;
+      }
+
+      .styled-table td {
+        font-size: 0.74rem !important;
+        padding: 6px 9px !important;
+      }
+
+      /* 7. Collapsible Visual Charts Banner */
+      .charts-toggle-banner {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        margin-top: 10px;
+        padding: 8px 12px;
+        background: #f1f5f9;
+        border: 1px dashed #cbd5e1;
+        border-radius: 8px;
+        color: #0284c7;
+        font-size: 0.74rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .charts-grid {
+        display: none !important;
+      }
+
+      .charts-grid.charts-revealed {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
+        margin-top: 8px !important;
+      }
+
+      .chart-card {
+        padding: 10px !important;
+        border-radius: 10px !important;
+      }
+
+      .chart-wrapper {
+        height: 180px !important;
+      }
+
+      .donut-wrapper {
+        height: 170px !important;
+      }
+
+      /* Modal */
+      .modal-card {
+        width: 92vw !important;
+        max-width: 390px !important;
+        padding: 1rem !important;
+        border-radius: 12px !important;
+      }
+    }
+  
+
+    /* Single-Row KPI Grid for 6 Cards */
+    @media (min-width: 1024px) {
+      .kpi-grid {
+        display: grid !important;
+        grid-template-columns: repeat(6, 1fr) !important;
+        gap: 0.75rem !important;
+        max-width: 1680px !important;
+        margin: 0.85rem auto 0 !important;
+        padding: 0 1.25rem !important;
+      }
+      .kpi-card {
+        padding: 0.85rem 0.95rem !important;
+        min-width: 0 !important;
+      }
+      .kpi-card .kpi-value {
+        font-size: 1.45rem !important;
+        white-space: nowrap !important;
+        letter-spacing: -0.5px !important;
+      }
+      #kpiDailyTypeTotal {
+        font-size: 1.30rem !important;
+      }
+      .kpi-card .kpi-title {
+        font-size: 0.68rem !important;
+        font-weight: 700 !important;
+        letter-spacing: -0.15px !important;
+        white-space: nowrap !important;
+      }
+    }
+
+    /* Circle Slicer below cards */
+    .circle-slicer-section {
+      background: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
+      border-radius: 12px !important;
+      padding: 8px 14px !important;
+      margin: 0.85rem auto 0 !important;
+      max-width: 1680px !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+    }
+    [data-theme="dark"] .circle-slicer-section {
+      background: #0d1b2e !important;
+      border-color: rgba(255, 255, 255, 0.08) !important;
+    }
+    .main-nav-tabs {
+      max-width: 1680px !important;
+      margin: 0.85rem auto 0 !important;
+    }
+
+    /* Live MDM Downloader Modal (Short & Scrollable) */
+    .modal-overlay {
+      position: fixed !important;
+      inset: 0 !important;
+      background: rgba(15, 23, 42, 0.65) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      z-index: 2000 !important;
+      backdrop-filter: blur(6px) !important;
+      padding: 1.25rem !important;
+      overflow-y: auto !important;
+    }
+    .modal-overlay.hidden { display: none !important; }
+
+    .modal-card.sync-dialog {
+      max-width: 640px !important;
+      width: 95% !important;
+      max-height: min(85vh, 560px) !important;
+      display: flex !important;
+      flex-direction: column !important;
+      box-sizing: border-box !important;
+      overflow: hidden !important;
+      border-radius: 16px !important;
+      padding: 1.25rem 1.4rem !important;
+      background: var(--bg-secondary, #ffffff) !important;
+      border: 1px solid var(--card-border, #e2e8f0) !important;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35), 0 0 0 1px var(--card-border, #e2e8f0) !important;
+    }
+
+    .modal-card.sync-dialog .modal-header {
+      flex-shrink: 0 !important;
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      margin-bottom: 0.85rem !important;
+      padding-bottom: 0.75rem !important;
+      border-bottom: 1px solid var(--border-subtle, #e2e8f0) !important;
+    }
+
+    .modal-card.sync-dialog .sync-modal-body,
+    .modal-card.sync-dialog .modal-body {
+      padding: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      min-height: 0 !important;
+      flex: 1 1 auto !important;
+      overflow: hidden !important;
+    }
+
+    .modal-card.sync-dialog .sync-progress-section {
+      flex-shrink: 0 !important;
+    }
+
+    .modal-card.sync-dialog .sync-console-section {
+      flex: 1 1 auto !important;
+      min-height: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+
+    /* Scrollable, Sleek Terminal Console */
+    .sync-terminal-box {
+      height: 220px !important;
+      max-height: 230px !important;
+      min-height: 160px !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      background: #090e17 !important;
+      border: 1px solid #1e293b !important;
+      border-radius: 10px !important;
+      padding: 0.75rem 0.85rem !important;
+      font-family: 'Consolas', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', 'Courier New', monospace !important;
+      font-size: 0.76rem !important;
+      line-height: 1.55 !important;
+      color: #cbd5e1 !important;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5) !important;
+      scroll-behavior: smooth !important;
+    }
+
+    .sync-terminal-box::-webkit-scrollbar {
+      width: 7px !important;
+    }
+    .sync-terminal-box::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.04) !important;
+      border-radius: 4px !important;
+    }
+    .sync-terminal-box::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.22) !important;
+      border-radius: 4px !important;
+    }
+    .sync-terminal-box::-webkit-scrollbar-thumb:hover {
+      background: #0284c7 !important;
+    }
+
+    .sync-terminal-box .terminal-line {
+      display: flex !important;
+      align-items: baseline !important;
+      gap: 8px !important;
+      padding: 3px 0 !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
+    }
+    .sync-terminal-box .terminal-line:last-child {
+      border-bottom: none !important;
+    }
+
+    .sync-terminal-box .terminal-time {
+      color: #64748b !important;
+      font-size: 0.70rem !important;
+      font-weight: 500 !important;
+      flex-shrink: 0 !important;
+      user-select: none !important;
+    }
+
+    .sync-terminal-box .terminal-tag {
+      display: inline-block !important;
+      font-size: 0.62rem !important;
+      font-weight: 700 !important;
+      padding: 1px 6px !important;
+      border-radius: 4px !important;
+      letter-spacing: 0.4px !important;
+      text-transform: uppercase !important;
+      flex-shrink: 0 !important;
+      user-select: none !important;
+    }
+
+    .sync-terminal-box .terminal-tag.active {
+      background: rgba(2, 132, 199, 0.25) !important;
+      color: #38bdf8 !important;
+      border: 1px solid rgba(56, 189, 248, 0.4) !important;
+    }
+
+    .sync-terminal-box .terminal-tag.ok {
+      background: rgba(16, 185, 129, 0.2) !important;
+      color: #34d399 !important;
+      border: 1px solid rgba(52, 211, 153, 0.35) !important;
+    }
+
+    .sync-terminal-box .terminal-tag.error {
+      background: rgba(244, 63, 94, 0.2) !important;
+      color: #fb7185 !important;
+      border: 1px solid rgba(251, 113, 133, 0.35) !important;
+    }
+
+    .sync-terminal-box .terminal-text {
+      color: #e2e8f0 !important;
+      word-break: break-word !important;
+      flex: 1 1 auto !important;
+    }
+
+    .modal-card.sync-dialog .sync-modal-footer {
+      margin-top: 0.85rem !important;
+      padding-top: 0.75rem !important;
+      border-top: 1px solid var(--border-subtle, #e2e8f0) !important;
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      flex-shrink: 0 !important;
+    }
+
+    @media (max-width: 768px) {
+      .modal-card.sync-dialog {
+        max-width: 95vw !important;
+        width: 95vw !important;
+        max-height: 90vh !important;
+        padding: 1rem !important;
+      }
+      .sync-terminal-box {
+        height: 180px !important;
+        max-height: 200px !important;
+        font-size: 0.72rem !important;
+        padding: 0.6rem !important;
+      }
+      .sync-terminal-box .terminal-line {
+        gap: 6px !important;
+      }
+      .sync-terminal-box .terminal-time {
+        font-size: 0.66rem !important;
+      }
+      .sync-terminal-box .terminal-tag {
+        font-size: 0.58rem !important;
+        padding: 0 4px !important;
+      }
+      .modal-card.sync-dialog .sync-modal-footer {
+        flex-direction: column !important;
+        gap: 10px !important;
+        align-items: stretch !important;
+        text-align: center !important;
+      }
+    }
+
+</style>
+
+</head>
+<body>
+  <!-- Header Bar -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-logo">
+          <i class="fa-solid fa-bolt-lightning"></i>
+        </div>
+        <div class="brand-info">
+          <h1>IntelliSmart SBPDCL <span class="mobile-live-dot" title="Live MDM Connected"></span></h1>
+          <p>Unified Smart Meter Intelligence & Executive Platform</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Live Status Pill -->
+        <div class="status-pill desktop-only" id="headerStatusPill">
+          <span class="pulse-dot"></span>
+          <span id="statusPillText">1,124,022 Total Installed &bull; <span id="statusPillDaily">1,788 Daily Velocity</span></span>
+        </div>
+
+        <!-- Separate MDM Sync Buttons as requested -->
+        
+        <button id="btnSyncDaily" class="btn btn-outline" title="Trigger Automated Download of Daily Reports from SBPDCL MDM">
+          <i class="fa-solid fa-calendar-day" id="iconSyncDaily"></i> <span class="btn-text-desktop">Sync Daily (MDM)</span><span class="btn-text-mobile">Daily</span>
+          
+        </button>
+
+        <button id="btnSyncMaster" class="btn btn-primary" title="Trigger Automated Download & Compilation of Total Smart Meters Master Database">
+          <i class="fa-solid fa-database" id="iconSyncMaster"></i> <span class="btn-text-desktop">Sync Master (MDM)</span><span class="btn-text-mobile">Master</span>
+          
+        </button>
+
+        <!-- Theme Toggle -->
+        <button id="btnThemeToggle" class="btn-icon" title="Toggle Light / Dark Mode">
+          <i class="fa-solid fa-sun" id="themeIcon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Minimalist Clean Mobile Scope Strip -->
+  <div class="mobile-scope-strip mobile-only">
+    <div class="scope-pill-tag"><i class="fa-solid fa-bolt"></i> <strong id="mobileScopeDiscomText">SBPDCL</strong> <span id="mobileScopeTotal">1.12M Meters</span></div>
+    <div class="scope-pill-tag date-tag"><i class="fa-solid fa-cloud-arrow-down"></i> <span id="mobileReportDownloadTime">Live IST</span></div>
+  </div>
+
+
+  <!-- Scope & Hierarchy Bar -->
+  <section class="scope-bar desktop-only">
+    <div class="scope-container" style="justify-content: space-between; align-items: center;">
+      <div class="scope-item" style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); padding: 3px 10px; border-radius: 6px;">
+        <span style="color: #f59e0b; font-weight: 600;"><i class="fa-solid fa-cloud-arrow-down"></i> Report Downloaded:</span>
+        <strong id="scopeReportDownloadTime" style="color: #f59e0b; font-weight: 700;">2026-10-12 13:47:24 IST</strong>
+      </div>
+      <div class="scope-item">
+        <span>Hierarchy:</span>
+        <strong>7 Circles &bull; 26 Divisions &bull; 77 Sub-Divs &bull; 241 Sections</strong>
+      </div>
+    </div>
+  </section>
+
+  
+
+  <!-- Main Hero KPI Ribbon -->
+  <section class="kpi-grid">
+    <!-- KPI 1: Cumulative Installed -->
+    <div class="kpi-card" style="--card-accent: #0284c7;">
+      <div class="kpi-header">
+        <span class="kpi-title">Cumulative Installed</span>
+        <i class="fa-solid fa-gauge-high kpi-icon"></i>
+      </div>
+      <div class="kpi-value" id="kpiCumulativeTotal">1,124,022</div>
+      <div class="kpi-sub">
+        <span class="badge badge-cyan"><i class="fa-solid fa-circle-check"></i> Project Master Total</span>
+        <span>7 Circles</span>
+      </div>
+    </div>
+
+    <!-- KPI 2: 1-Phase Meters -->
+    <div class="kpi-card" style="--card-accent: #10b981;">
+      <div class="kpi-header">
+        <span class="kpi-title">Single Phase (1 PH)</span>
+        <i class="fa-solid fa-bolt kpi-icon"></i>
+      </div>
+      <div class="kpi-value" id="kpiPhase1Total">1,080,325</div>
+      <div class="kpi-sub">
+        <span class="badge badge-emerald">96.11% Discom Share</span>
+      </div>
+    </div>
+
+    <!-- KPI 3: 3-Phase Meters -->
+    <div class="kpi-card" style="--card-accent: #f59e0b;">
+      <div class="kpi-header">
+        <span class="kpi-title">Three Phase (WC & 4CT)</span>
+        <i class="fa-solid fa-network-wired kpi-icon"></i>
+      </div>
+      <div class="kpi-value" id="kpiPhase3Total">43,697</div>
+      <div class="kpi-sub">
+        <span class="badge badge-amber">3PH WC: 41,982 | 4CT: 1,715</span>
+      </div>
+    </div>
+
+    <!-- KPI 4: Replacement (Old to Smart Meter) -->
+    <div class="kpi-card" style="--card-accent: #6366f1;">
+      <div class="kpi-header">
+        <span class="kpi-title">Replacement (OldToSM)</span>
+        <i class="fa-solid fa-arrows-rotate kpi-icon"></i>
+      </div>
+      <div class="kpi-value" id="kpiOldToSmTotal">682,691</div>
+      <div class="kpi-sub">
+        <span class="badge badge-indigo">60.74% Discom Share</span>
+        </div>
+    </div>
+
+    <!-- KPI 5: New Service Connection (NSC) -->
+    <div class="kpi-card" style="--card-accent: #8b5cf6;">
+      <div class="kpi-header">
+        <span class="kpi-title">New Connection (NSC)</span>
+        <i class="fa-solid fa-circle-plus kpi-icon"></i>
+      </div>
+      <div class="kpi-value" id="kpiNscTotal">441,331</div>
+      <div class="kpi-sub">
+        <span class="badge badge-purple">39.26% Discom Share</span>
+        </div>
+    </div>
+
+    <!-- KPI 6: Daily Installation Type Breakdown -->
+    <div class="kpi-card" style="--card-accent: #f43f5e;">
+      <div class="kpi-header">
+        <span class="kpi-title">Daily Installation Type</span>
+        <i class="fa-solid fa-layer-group kpi-icon"></i>
+      </div>
+      <div class="kpi-value" id="kpiDailyTypeTotal" style="font-size: 1.55rem; letter-spacing: -0.5px;">2,585 / 1,463</div>
+      <div class="kpi-sub">
+        <span class="badge badge-rose" id="kpiDailyTypeSub">2,256 Today's Total</span>
+      </div>
+    </div>
+  </section>
+
+  
+  <!-- Universal Circle Wise Slicer Bar (Applies to All Reports & KPIs) -->
+  <section class="circle-slicer-section" id="circleSlicerSection">
+    <div class="slicer-container">
+      <div class="slicer-header-box">
+        <i class="fa-solid fa-filter"></i>
+        <span>Circle Slicer:</span>
+      </div>
+      <div class="slicer-chips" id="circleSlicerContainer">
+        <button type="button" class="slicer-chip active" data-circle="ALL">
+          <i class="fa-solid fa-globe"></i>
+          <span>All Circles</span>
+          <span class="chip-count">7 Circles</span>
+        </button>
+        <button type="button" class="slicer-chip" data-circle="BIHARSARIF">
+          <span>BIHARSARIF</span>
+        </button>
+        <button type="button" class="slicer-chip" data-circle="SASARAM">
+          <span>SASARAM</span>
+        </button>
+        <button type="button" class="slicer-chip" data-circle="ARRAH">
+          <span>ARRAH</span>
+        </button>
+        <button type="button" class="slicer-chip" data-circle="GAYA">
+          <span>GAYA</span>
+        </button>
+        <button type="button" class="slicer-chip" data-circle="AURANGABAD">
+          <span>AURANGABAD</span>
+        </button>
+        <button type="button" class="slicer-chip" data-circle="PATNA">
+          <span>PATNA</span>
+        </button>
+        <button type="button" class="slicer-chip" data-circle="MUNGER">
+          <span>MUNGER</span>
+        </button>
+      </div>
+      <button type="button" class="slicer-clear-btn" id="slicerClearBtn" style="display: none;" title="Reset filter to all circles">
+        <i class="fa-solid fa-xmark"></i> Clear Filter
+      </button>
+    </div>
+  </section>
+
+  <!-- Primary Multi-Tab Navigation -->
+  <nav class="main-nav-tabs">
+    <button class="main-tab-btn active" data-tab="tabCumulative">
+      <i class="fa-solid fa-chart-pie"></i> Cumulative Master Analytics
+      <span class="tab-badge">1.12M Records</span>
+    </button>
+    <button class="main-tab-btn" data-tab="tabDaily">
+      <i class="fa-solid fa-bolt-lightning"></i> Daily Installation & Field Status
+      <span class="tab-badge" id="tabDailyBadge">1,788 Daily</span>
+    </button>
+    <button class="main-tab-btn" data-tab="tabUla">
+      <i class="fa-solid fa-arrows-to-dot"></i> ULA Metering Tracker
+      <span class="tab-badge">91.0K Scope</span>
+    </button>
+    <button class="main-tab-btn" data-tab="tabSearch">
+      <i class="fa-solid fa-magnifying-glass"></i> Smart Meter & MSN Search
+    </button>
+  </nav>
+
+  <!-- TAB 1: CUMULATIVE MASTER ANALYTICS -->
+  <main id="tabCumulative" class="tab-content active">
+    <!-- Date Range & Time Aggregation Selector -->
+    <div class="date-filter-bar desktop-only">
+      <div class="date-filter-group">
+        <span style="font-weight: 600; font-size: 0.8rem; color: var(--text-secondary);"><i class="fa-solid fa-calendar-days"></i> Aggregation Range:</span>
+        <button class="btn btn-primary date-mode-btn" data-mode="all">All Time Cumulative</button>
+        <button class="btn btn-secondary date-mode-btn" data-mode="monthly">Monthly Breakdown</button>
+        <button class="btn btn-secondary date-mode-btn" data-mode="weekly">Last 7 Days (Weekly)</button>
+        <button class="btn btn-secondary date-mode-btn" data-mode="daily">Custom Date Range</button>
+      </div>
+
+      <!-- Monthly Selector Dropdown (Hidden unless Monthly selected) -->
+      <div class="date-filter-group" id="monthSelectGroup" style="display: none;">
+        <label for="selectMonth" style="font-size: 0.775rem; color: var(--text-muted);">Select Month:</label>
+        <select id="selectMonth" class="styled-select">
+          <option value="">Latest Month</option>
+        </select>
+      </div>
+
+      <!-- Custom Date Inputs (Hidden unless Custom Date selected) -->
+      <div class="date-filter-group" id="customDateGroup" style="display: none;">
+        <input type="date" id="inputStartDate" class="styled-input">
+        <span style="color: var(--text-muted);">&rarr;</span>
+        <input type="date" id="inputEndDate" class="styled-input">
+        <button id="btnApplyCustomDate" class="btn btn-primary" style="padding: 0.35rem 0.7rem;">Apply</button>
+      </div>
+
+      <div style="margin-left: auto;">
+        <span class="badge badge-cyan" id="activeFilterBadge">All Time Cumulative (1,124,022 Meters)</span>
+      </div>
+    </div>
+
+    <!-- Summary Tables Sub-Navigation Pills -->
+    <div class="sub-nav-bar">
+      <div class="sub-nav-pills">
+        <button class="sub-pill-btn active" data-cum-type="circle">
+          <i class="fa-solid fa-circle-nodes"></i> Circle Wise Summary
+        </button>
+        <button class="sub-pill-btn" data-cum-type="division">
+          <i class="fa-solid fa-sitemap"></i> Division Wise (26)
+        </button>
+        <button class="sub-pill-btn" data-cum-type="subdivision">
+          <i class="fa-solid fa-diagram-project"></i> Sub-Division Wise (77)
+        </button>
+        <button class="sub-pill-btn" data-cum-type="section">
+          <i class="fa-solid fa-building"></i> Section Wise (241)
+        </button>
+        <button class="sub-pill-btn" data-cum-type="agency">
+          <i class="fa-solid fa-building-shield"></i> Agency Wise (74)
+        </button>
+        <button class="sub-pill-btn" data-cum-type="phase">
+          <i class="fa-solid fa-bolt"></i> Phase Wise
+        </button>
+        <button class="sub-pill-btn" data-cum-type="tariff">
+          <i class="fa-solid fa-tags"></i> Tariff Wise
+        </button>
+        <button class="sub-pill-btn" data-cum-type="installation_type">
+          <i class="fa-solid fa-layer-group"></i> Installation Type Wise
+        </button>
+      </div>
+
+      <div class="header-actions">
+        <button id="btnExportCumulativeCsv" class="btn btn-secondary">
+          <i class="fa-solid fa-file-excel"></i> Export Active Table to CSV
+        </button>
+      </div>
+    </div>
+
+    <!-- Active Summary Table Card -->
+    <div class="table-card">
+      <div class="table-header-row">
+        <div class="table-title">
+          <i class="fa-solid fa-table-list" style="color: var(--brand-cyan);"></i>
+          <h3 id="cumulativeTableTitle">Circle Wise Summary Table</h3>
+          <span class="badge badge-cyan" id="cumulativeTableRowCount">7 Rows</span>
+        </div>
+        <div>
+          <input type="text" id="searchCumulative" class="styled-input" placeholder="Search table..." style="width: 260px;">
+        </div>
+      </div>
+
+      <div class="table-responsive" id="cumulativeTableContainer">
+        <!-- Rendered dynamically via JavaScript -->
+      </div>
+    </div>
+
+    <!-- Cumulative Visual Charts Grid -->
+    <div class="charts-grid">
+      <!-- Chart 1: Monthly Installation Pace Trend -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h4>Monthly Installation Pace Trend (2024 - Present)</h4>
+          <span class="badge badge-cyan">Velocity</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chartCumulativeTrend"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 2: Circle Distribution Share -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h4>Circle Installation Distribution Share</h4>
+          <span class="badge badge-indigo">7 Circles</span>
+        </div>
+        <div class="chart-wrapper donut-wrapper">
+          <canvas id="chartCumulativeCircle"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 3: Phase Split -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h4>Discom Phase Composition (1PH vs 3PH)</h4>
+          <span class="badge badge-emerald">Phase Ratio</span>
+        </div>
+        <div class="chart-wrapper donut-wrapper">
+          <canvas id="chartCumulativePhase"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 4: Top Tariffs -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h4>Top Consumer Tariff Categories</h4>
+          <span class="badge badge-purple">Tariff Mix</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chartCumulativeTariff"></canvas>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- TAB 2: DAILY INSTALLATION & FIELD STATUS -->
+  <main id="tabDaily" class="tab-content">
+    <!-- Daily Sub-Navigation Pills -->
+    <div class="sub-nav-bar">
+      <div class="sub-nav-pills">
+        <button class="sub-pill-btn active" data-daily-type="circle">
+          <i class="fa-solid fa-circle-nodes"></i> Circle Wise Daily (7)
+        </button>
+        <button class="sub-pill-btn" data-daily-type="division">
+          <i class="fa-solid fa-sitemap"></i> Division Wise Daily (26)
+        </button>
+        <button class="sub-pill-btn" data-daily-type="section">
+          <i class="fa-solid fa-building"></i> Section Wise Daily (222)
+        </button>
+        <button class="sub-pill-btn" data-daily-type="agency">
+          <i class="fa-solid fa-building-shield"></i> Agency Wise Daily
+        </button>
+        <button class="sub-pill-btn" data-daily-type="phase">
+          <i class="fa-solid fa-bolt"></i> Phase Wise Daily
+        </button>
+        <button class="sub-pill-btn" data-daily-type="tariff">
+          <i class="fa-solid fa-tags"></i> Tariff Wise Daily
+        </button>
+        <button class="sub-pill-btn" data-daily-type="teams">
+          <i class="fa-solid fa-users-gear"></i> Field Teams Availability & Output (448)
+        </button>
+      </div>
+
+      <div class="header-actions">
+        <button id="btnExportDailyCsv" class="btn btn-secondary">
+          <i class="fa-solid fa-file-excel"></i> Export Daily Table to CSV
+        </button>
+      </div>
+    </div>
+
+    <!-- Active Daily Table Card -->
+    <div class="table-card">
+      <div class="table-header-row">
+        <div class="table-title">
+          <i class="fa-solid fa-bolt-lightning" style="color: #10b981;"></i>
+          <h3 id="dailyTableTitle">Division Wise Daily Installation Table</h3>
+          <span class="badge badge-emerald" id="dailyTableRowCount">26 Divisions</span>
+        </div>
+        <div>
+          <input type="text" id="searchDaily" class="styled-input" placeholder="Search daily table..." style="width: 260px;">
+        </div>
+      </div>
+
+      <div class="table-responsive" id="dailyTableContainer">
+        <!-- Rendered dynamically via JavaScript -->
+      </div>
+    </div>
+
+    <!-- Daily Visual Charts Grid -->
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h4>Top Divisions Output (Daily Batch)</h4>
+          <span class="badge badge-emerald">Daily Installs</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chartDailyDivisions"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h4>Daily Agency Deployment & Output</h4>
+          <span class="badge badge-cyan">Agencies</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chartDailyAgencies"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h4>Installation Type Ratio (Replacement vs NSC)</h4>
+          <span class="badge badge-indigo">Ratio</span>
+        </div>
+        <div class="chart-wrapper donut-wrapper">
+          <canvas id="chartDailyType"></canvas>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- TAB 3: ULA METERING TRACKER -->
+  <main id="tabUla" class="tab-content">
+    <!-- ULA Sub-Navigation Pills -->
+    <div class="sub-nav-bar">
+      <div class="sub-nav-pills">
+        <button class="sub-pill-btn active" data-ula-type="circle">
+          <i class="fa-solid fa-circle-nodes"></i> Circle Wise ULA Progress
+        </button>
+        <button class="sub-pill-btn" data-ula-type="division">
+          <i class="fa-solid fa-sitemap"></i> Division Wise ULA Progress
+        </button>
+        <button class="sub-pill-btn" data-ula-type="agency">
+          <i class="fa-solid fa-building-shield"></i> Agency Wise ULA Progress
+        </button>
+      </div>
+
+      <div class="header-actions">
+        <button id="btnExportUlaCsv" class="btn btn-secondary">
+          <i class="fa-solid fa-file-excel"></i> Export ULA Table to CSV
+        </button>
+      </div>
+    </div>
+
+    <!-- Active ULA Table Card -->
+    <div class="table-card">
+      <div class="table-header-row">
+        <div class="table-title">
+          <i class="fa-solid fa-arrows-to-dot" style="color: #8b5cf6;"></i>
+          <h3 id="ulaTableTitle">Circle Wise ULA Progress Table</h3>
+          <span class="badge badge-purple" id="ulaTableRowCount">7 Circles</span>
+        </div>
+        <div>
+          <input type="text" id="searchUla" class="styled-input" placeholder="Search ULA table..." style="width: 260px;">
+        </div>
+      </div>
+
+      <div class="table-responsive" id="ulaTableContainer">
+        <!-- Rendered dynamically via JavaScript -->
+      </div>
+    </div>
+
+    <!-- ULA Visual Charts Grid -->
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h4>Circle-wise ULA Scope vs Completed vs Pending</h4>
+          <span class="badge badge-purple">Scope Distribution</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chartUlaProgress"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h4>ULA Scope Completion Share Across Circles</h4>
+          <span class="badge badge-indigo">Share</span>
+        </div>
+        <div class="chart-wrapper donut-wrapper">
+          <canvas id="chartUlaShare"></canvas>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- TAB 4: METER & CONSUMER SEARCH -->
+  <main id="tabSearch" class="tab-content">
+    <div class="table-card">
+      <div class="table-header-row">
+        <div class="table-title">
+          <i class="fa-solid fa-magnifying-glass" style="color: var(--brand-cyan);"></i>
+          <h3>Smart Meter Consumer & MSN Direct Lookup</h3>
+        </div>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+        Query any meter among the 1,124,022 master records by Consumer Number, Old Meter No, New Meter MSN, or Installer ID.
+      </p>
+
+      <div style="display: flex; gap: 0.75rem; max-width: 650px; margin-bottom: 1.5rem;">
+        <input type="text" id="inputGlobalSearch" class="styled-input" placeholder="Enter Consumer ID (e.g. 22910001740) or MSN (e.g. F1000041)..." style="flex: 1; font-size: 0.9rem; padding: 0.6rem 1rem;">
+        <button id="btnExecuteSearch" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+      </div>
+
+      <div class="table-responsive" id="searchResultsContainer">
+        <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+          Enter a search query above to inspect meter details.
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Sync Status Modal with Live Executed Steps Console -->
+  <div id="syncModal" class="modal-overlay hidden">
+    <div class="modal-card sync-dialog">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <i id="syncModalIcon" class="fa-solid fa-arrows-rotate fa-spin" style="color: var(--brand-cyan); font-size: 1.25rem;"></i>
+          <div>
+            <h3 id="modalSyncTitle" style="margin: 0; font-size: 1.1rem; font-weight: 700;">MDM Portal Synchronization Engine</h3>
+            <p id="modalSyncSubtitle" style="font-size: 0.75rem; color: var(--text-muted); margin: 2px 0 0 0;">Automated Headless Chrome Pipeline &bull; SBPDCL Infrastructure</p>
+          </div>
+        </div>
+        <button id="btnCloseSyncModal" class="btn-icon" style="font-size: 1.3rem;" title="Close Modal">&times;</button>
+      </div>
+
+      <div class="modal-body sync-modal-body">
+        <!-- Live Progress Status Bar -->
+        <div class="sync-progress-section" style="margin-bottom: 0.85rem;">
+          <div style="display: flex; justify-content: space-between; font-size: 0.825rem; margin-bottom: 0.4rem;">
+            <span id="syncCurrentStage" style="font-weight: 600; color: var(--text-primary);"><i class="fa-solid fa-gear fa-spin" style="color: var(--brand-cyan);"></i> Connecting to portal...</span>
+            <span id="syncPercentText" style="font-weight: 700; color: var(--brand-cyan);">0%</span>
+          </div>
+          <div style="width: 100%; height: 10px; background: rgba(255,255,255,0.08); border-radius: 5px; overflow: hidden; position: relative;">
+            <div id="syncProgressBar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #0284c7, #00d2ff); border-radius: 5px; transition: width 0.3s ease;"></div>
+          </div>
+        </div>
+
+        <!-- Live Executed Steps Console Box -->
+        <div class="sync-console-section" style="margin-bottom: 0.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+            <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.6px;">
+              <i class="fa-solid fa-terminal" style="color: var(--brand-cyan);"></i> Executed Steps Console
+            </span>
+            <span id="syncLiveIndicator" style="color: #10b981; font-size: 0.72rem; font-weight: 600;">
+              <i class="fa-solid fa-circle fa-fade"></i> LIVE STREAM
+            </span>
+          </div>
+          <div id="syncStepsConsole" class="sync-terminal-box">
+            <!-- Dynamic step logs append here -->
+          </div>
+        </div>
+
+        <!-- Action Buttons / Footer -->
+        <div class="sync-modal-footer">
+          <div style="font-size: 0.75rem; color: var(--text-muted);">
+            Credentials: <strong>MNG_DHARMENDRA</strong> &bull; Portal: <a href="https://mdm.sbpdclinfra.in" target="_blank" style="color: var(--brand-cyan); text-decoration: none;">mdm.sbpdclinfra.in</a>
+          </div>
+          <button id="btnModalCloseAction" class="btn btn-primary" style="display: none; padding: 0.45rem 1.2rem; font-size: 0.85rem;">
+            <i class="fa-solid fa-check"></i> View Updated Dashboard
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="app-footer" style="padding: 1.5rem 1rem; text-align: center; border-top: 1px solid rgba(226, 232, 240, 0.8); margin-top: 2rem; background: var(--bg-card, #ffffff);">
+    <p style="margin: 0; font-size: 0.95rem; font-weight: 600; color: var(--text-primary, #334155); letter-spacing: 0.2px;">
+      Analytics Dashboard Prepared by <span style="color: #0284c7; font-weight: 700;">Dharmendra Singh, DGM-Operations</span>
+    </p>
+  </footer>
+
+  <script src="app.js?v=20261012_v4"></script>
+</body>
+</html>

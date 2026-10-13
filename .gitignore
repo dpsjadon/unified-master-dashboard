@@ -1,0 +1,42 @@
+# Database & DuckDB
+*.duckdb
+*.duckdb.wal
+data/*.duckdb
+data/*.duckdb.wal
+
+# Old and raw downloaded batches (saves ~2GB locally/cloud)
+downloads/
+downloads_temp/
+extracted_smart_meters/
+
+# Binaries & executables
+bin/
+*.exe
+*.apk
+
+# Unused duplicate/large reference files (only ULA Metering.xlsx is needed)
+references/Referance.xlsx
+references/Reference.xlsx
+references/Meter Check.xlsx
+references/InstallerWiseMeterInstallation.xlsx
+
+# Backups and temporary files
+*.bak*
+*.tmp
+*.log
+*.png
+data/*.csv
+
+# Secrets and local environment
+config.env
+.env
+
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+env/
+venv/
+.venv/
+scratch/

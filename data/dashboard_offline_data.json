@@ -1,0 +1,5400 @@
+{
+  "generated_at": "2026-10-12 12:28:40",
+  "version": "1.2.0",
+  "platform": "IntelliSmart SBPDCL Field Intelligence",
+  "executive_summary": {
+    "total_installed": 1124103,
+    "phase_1ph": 1080406,
+    "phase_3ph_wc": 41982,
+    "phase_3ph_4ct": 1715,
+    "replacement_old_to_sm": 682713,
+    "nsc": 441390,
+    "circles_count": 7,
+    "divisions_count": 26,
+    "subdivisions_count": 77,
+    "sections_count": 241,
+    "agencies_count": 74
+  },
+  "daily_summary": {
+    "total_daily": 1949,
+    "replacement_daily": 1066,
+    "nsc_daily": 883,
+    "circles_daily": 7,
+    "divisions_daily": 26,
+    "agencies_daily": 9
+  },
+  "ula_summary": {
+    "total_scope": 91033,
+    "installed_master": 20978,
+    "pending": 70055,
+    "installed_today": 538,
+    "pct_complete": 23.04
+  },
+  "cumulative": {
+    "circles": [
+      {
+        "circle": "GAYA",
+        "total": 236413,
+        "phase_1ph": 227300,
+        "phase_3ph_wc": 8585,
+        "phase_3ph_4ct": 528,
+        "replacement": 128811,
+        "nsc": 107602,
+        "divisions": 5,
+        "subdivisions": 14,
+        "agencies": 27,
+        "pct_share": 21.03
+      },
+      {
+        "circle": "PATNA",
+        "total": 199584,
+        "phase_1ph": 192408,
+        "phase_3ph_wc": 6900,
+        "phase_3ph_4ct": 276,
+        "replacement": 138113,
+        "nsc": 61471,
+        "divisions": 5,
+        "subdivisions": 14,
+        "agencies": 35,
+        "pct_share": 17.75
+      },
+      {
+        "circle": "BIHARSARIF",
+        "total": 171881,
+        "phase_1ph": 162040,
+        "phase_3ph_wc": 9641,
+        "phase_3ph_4ct": 200,
+        "replacement": 109414,
+        "nsc": 62467,
+        "divisions": 5,
+        "subdivisions": 14,
+        "agencies": 20,
+        "pct_share": 15.29
+      },
+      {
+        "circle": "ARRAH",
+        "total": 159448,
+        "phase_1ph": 153854,
+        "phase_3ph_wc": 5300,
+        "phase_3ph_4ct": 294,
+        "replacement": 99588,
+        "nsc": 59860,
+        "divisions": 3,
+        "subdivisions": 9,
+        "agencies": 26,
+        "pct_share": 14.18
+      },
+      {
+        "circle": "SASARAM",
+        "total": 140323,
+        "phase_1ph": 134880,
+        "phase_3ph_wc": 5262,
+        "phase_3ph_4ct": 181,
+        "replacement": 74118,
+        "nsc": 66205,
+        "divisions": 3,
+        "subdivisions": 11,
+        "agencies": 28,
+        "pct_share": 12.48
+      },
+      {
+        "circle": "AURANGABAD",
+        "total": 115198,
+        "phase_1ph": 111801,
+        "phase_3ph_wc": 3270,
+        "phase_3ph_4ct": 127,
+        "replacement": 60282,
+        "nsc": 54916,
+        "divisions": 3,
+        "subdivisions": 8,
+        "agencies": 18,
+        "pct_share": 10.25
+      },
+      {
+        "circle": "MUNGER",
+        "total": 101256,
+        "phase_1ph": 98123,
+        "phase_3ph_wc": 3024,
+        "phase_3ph_4ct": 109,
+        "replacement": 72387,
+        "nsc": 28869,
+        "divisions": 2,
+        "subdivisions": 7,
+        "agencies": 16,
+        "pct_share": 9.01
+      }
+    ],
+    "divisions": [
+      {
+        "circle": "GAYA",
+        "division": "MANPUR",
+        "total": 67956,
+        "phase_1ph": 66200,
+        "phase_3ph_wc": 1696,
+        "phase_3ph_4ct": 60,
+        "replacement": 39474,
+        "nsc": 28482,
+        "subdivisions": 3,
+        "sections": 11,
+        "pct_share": 6.05
+      },
+      {
+        "circle": "ARRAH",
+        "division": "BUXAR",
+        "total": 67339,
+        "phase_1ph": 65028,
+        "phase_3ph_wc": 2204,
+        "phase_3ph_4ct": 107,
+        "replacement": 40874,
+        "nsc": 26465,
+        "subdivisions": 4,
+        "sections": 15,
+        "pct_share": 5.99
+      },
+      {
+        "circle": "GAYA",
+        "division": "SHERGHATI",
+        "total": 62482,
+        "phase_1ph": 60556,
+        "phase_3ph_wc": 1883,
+        "phase_3ph_4ct": 43,
+        "replacement": 41413,
+        "nsc": 21069,
+        "subdivisions": 3,
+        "sections": 11,
+        "pct_share": 5.56
+      },
+      {
+        "circle": "SASARAM",
+        "division": "SASARAM",
+        "total": 62434,
+        "phase_1ph": 60309,
+        "phase_3ph_wc": 2037,
+        "phase_3ph_4ct": 88,
+        "replacement": 36016,
+        "nsc": 26418,
+        "subdivisions": 3,
+        "sections": 11,
+        "pct_share": 5.55
+      },
+      {
+        "circle": "PATNA",
+        "division": "MASAURHI",
+        "total": 57314,
+        "phase_1ph": 55598,
+        "phase_3ph_wc": 1663,
+        "phase_3ph_4ct": 53,
+        "replacement": 40789,
+        "nsc": 16525,
+        "subdivisions": 2,
+        "sections": 6,
+        "pct_share": 5.1
+      },
+      {
+        "circle": "BIHARSARIF",
+        "division": "Biharshariff Rural",
+        "total": 55641,
+        "phase_1ph": 51539,
+        "phase_3ph_wc": 4037,
+        "phase_3ph_4ct": 65,
+        "replacement": 34799,
+        "nsc": 20842,
+        "subdivisions": 4,
+        "sections": 14,
+        "pct_share": 4.95
+      },
+      {
+        "circle": "MUNGER",
+        "division": "MUNGER",
+        "total": 54783,
+        "phase_1ph": 53149,
+        "phase_3ph_wc": 1568,
+        "phase_3ph_4ct": 66,
+        "replacement": 40340,
+        "nsc": 14443,
+        "subdivisions": 4,
+        "sections": 12,
+        "pct_share": 4.87
+      },
+      {
+        "circle": "ARRAH",
+        "division": "JAGDISHPUR",
+        "total": 53127,
+        "phase_1ph": 51448,
+        "phase_3ph_wc": 1592,
+        "phase_3ph_4ct": 87,
+        "replacement": 35102,
+        "nsc": 18025,
+        "subdivisions": 3,
+        "sections": 12,
+        "pct_share": 4.73
+      },
+      {
+        "circle": "PATNA",
+        "division": "FATUHA",
+        "total": 47351,
+        "phase_1ph": 45370,
+        "phase_3ph_wc": 1843,
+        "phase_3ph_4ct": 138,
+        "replacement": 36948,
+        "nsc": 10403,
+        "subdivisions": 2,
+        "sections": 6,
+        "pct_share": 4.21
+      },
+      {
+        "circle": "MUNGER",
+        "division": "LAKHISARAI",
+        "total": 46473,
+        "phase_1ph": 44974,
+        "phase_3ph_wc": 1456,
+        "phase_3ph_4ct": 43,
+        "replacement": 32047,
+        "nsc": 14426,
+        "subdivisions": 3,
+        "sections": 9,
+        "pct_share": 4.13
+      },
+      {
+        "circle": "SASARAM",
+        "division": "Bhabhua",
+        "total": 45498,
+        "phase_1ph": 43512,
+        "phase_3ph_wc": 1912,
+        "phase_3ph_4ct": 74,
+        "replacement": 22458,
+        "nsc": 23040,
+        "subdivisions": 5,
+        "sections": 13,
+        "pct_share": 4.05
+      },
+      {
+        "circle": "AURANGABAD",
+        "division": "AURANGABAD",
+        "total": 45148,
+        "phase_1ph": 43519,
+        "phase_3ph_wc": 1538,
+        "phase_3ph_4ct": 91,
+        "replacement": 19315,
+        "nsc": 25833,
+        "subdivisions": 4,
+        "sections": 7,
+        "pct_share": 4.02
+      },
+      {
+        "circle": "GAYA",
+        "division": "GAYAU",
+        "total": 43398,
+        "phase_1ph": 40354,
+        "phase_3ph_wc": 2725,
+        "phase_3ph_4ct": 319,
+        "replacement": 22922,
+        "nsc": 20476,
+        "subdivisions": 4,
+        "sections": 13,
+        "pct_share": 3.86
+      },
+      {
+        "circle": "ARRAH",
+        "division": "ARRAH",
+        "total": 38982,
+        "phase_1ph": 37378,
+        "phase_3ph_wc": 1504,
+        "phase_3ph_4ct": 100,
+        "replacement": 23612,
+        "nsc": 15370,
+        "subdivisions": 2,
+        "sections": 7,
+        "pct_share": 3.47
+      },
+      {
+        "circle": "BIHARSARIF",
+        "division": "NAWADA",
+        "total": 37672,
+        "phase_1ph": 35878,
+        "phase_3ph_wc": 1745,
+        "phase_3ph_4ct": 49,
+        "replacement": 25900,
+        "nsc": 11772,
+        "subdivisions": 3,
+        "sections": 9,
+        "pct_share": 3.35
+      },
+      {
+        "circle": "AURANGABAD",
+        "division": "DAUDNAGAR",
+        "total": 37605,
+        "phase_1ph": 36579,
+        "phase_3ph_wc": 1006,
+        "phase_3ph_4ct": 20,
+        "replacement": 22684,
+        "nsc": 14921,
+        "subdivisions": 3,
+        "sections": 7,
+        "pct_share": 3.35
+      },
+      {
+        "circle": "GAYA",
+        "division": "GAYA RURAL",
+        "total": 35164,
+        "phase_1ph": 34191,
+        "phase_3ph_wc": 906,
+        "phase_3ph_4ct": 67,
+        "replacement": 15226,
+        "nsc": 19938,
+        "subdivisions": 2,
+        "sections": 8,
+        "pct_share": 3.13
+      },
+      {
+        "circle": "BIHARSARIF",
+        "division": "RAJAULI",
+        "total": 34573,
+        "phase_1ph": 32910,
+        "phase_3ph_wc": 1626,
+        "phase_3ph_4ct": 37,
+        "replacement": 21069,
+        "nsc": 13504,
+        "subdivisions": 2,
+        "sections": 9,
+        "pct_share": 3.08
+      },
+      {
+        "circle": "PATNA",
+        "division": "BIHTA",
+        "total": 32558,
+        "phase_1ph": 31083,
+        "phase_3ph_wc": 1441,
+        "phase_3ph_4ct": 34,
+        "replacement": 16973,
+        "nsc": 15585,
+        "subdivisions": 4,
+        "sections": 9,
+        "pct_share": 2.9
+      },
+      {
+        "circle": "AURANGABAD",
+        "division": "ARWAL",
+        "total": 32445,
+        "phase_1ph": 31703,
+        "phase_3ph_wc": 726,
+        "phase_3ph_4ct": 16,
+        "replacement": 18283,
+        "nsc": 14162,
+        "subdivisions": 1,
+        "sections": 5,
+        "pct_share": 2.89
+      },
+      {
+        "circle": "SASARAM",
+        "division": "DEHARI",
+        "total": 32391,
+        "phase_1ph": 31059,
+        "phase_3ph_wc": 1313,
+        "phase_3ph_4ct": 19,
+        "replacement": 15644,
+        "nsc": 16747,
+        "subdivisions": 3,
+        "sections": 10,
+        "pct_share": 2.88
+      },
+      {
+        "circle": "PATNA",
+        "division": "PATNA",
+        "total": 32183,
+        "phase_1ph": 31367,
+        "phase_3ph_wc": 777,
+        "phase_3ph_4ct": 39,
+        "replacement": 25138,
+        "nsc": 7045,
+        "subdivisions": 2,
+        "sections": 4,
+        "pct_share": 2.86
+      },
+      {
+        "circle": "PATNA",
+        "division": "Barh",
+        "total": 30178,
+        "phase_1ph": 28990,
+        "phase_3ph_wc": 1176,
+        "phase_3ph_4ct": 12,
+        "replacement": 18265,
+        "nsc": 11913,
+        "subdivisions": 4,
+        "sections": 9,
+        "pct_share": 2.68
+      },
+      {
+        "circle": "GAYA",
+        "division": "JAHANABAD",
+        "total": 27413,
+        "phase_1ph": 25999,
+        "phase_3ph_wc": 1375,
+        "phase_3ph_4ct": 39,
+        "replacement": 9776,
+        "nsc": 17637,
+        "subdivisions": 2,
+        "sections": 8,
+        "pct_share": 2.44
+      },
+      {
+        "circle": "BIHARSARIF",
+        "division": "EKANGARSARAI",
+        "total": 26019,
+        "phase_1ph": 24938,
+        "phase_3ph_wc": 1071,
+        "phase_3ph_4ct": 10,
+        "replacement": 17504,
+        "nsc": 8515,
+        "subdivisions": 3,
+        "sections": 9,
+        "pct_share": 2.31
+      },
+      {
+        "circle": "BIHARSARIF",
+        "division": "RAJGIR",
+        "total": 17976,
+        "phase_1ph": 16775,
+        "phase_3ph_wc": 1162,
+        "phase_3ph_4ct": 39,
+        "replacement": 10142,
+        "nsc": 7834,
+        "subdivisions": 2,
+        "sections": 7,
+        "pct_share": 1.6
+      }
+    ],
+    "agencies": [
+      {
+        "agency": "PCI",
+        "total": 184348,
+        "installers": 758,
+        "circles": 7,
+        "divisions": 25,
+        "replacement": 103551,
+        "nsc": 80797,
+        "pct_share": 16.4
+      },
+      {
+        "agency": "AEWS",
+        "total": 169230,
+        "installers": 527,
+        "circles": 7,
+        "divisions": 26,
+        "replacement": 74326,
+        "nsc": 94904,
+        "pct_share": 15.05
+      },
+      {
+        "agency": "SMRT",
+        "total": 84096,
+        "installers": 350,
+        "circles": 7,
+        "divisions": 26,
+        "replacement": 66887,
+        "nsc": 17209,
+        "pct_share": 7.48
+      },
+      {
+        "agency": "AEW",
+        "total": 81798,
+        "installers": 433,
+        "circles": 7,
+        "divisions": 14,
+        "replacement": 70207,
+        "nsc": 11591,
+        "pct_share": 7.28
+      },
+      {
+        "agency": "SSNF",
+        "total": 45900,
+        "installers": 266,
+        "circles": 6,
+        "divisions": 14,
+        "replacement": 31073,
+        "nsc": 14827,
+        "pct_share": 4.08
+      },
+      {
+        "agency": "ST",
+        "total": 39106,
+        "installers": 210,
+        "circles": 4,
+        "divisions": 8,
+        "replacement": 19936,
+        "nsc": 19170,
+        "pct_share": 3.48
+      },
+      {
+        "agency": "SAWNA",
+        "total": 36624,
+        "installers": 103,
+        "circles": 5,
+        "divisions": 12,
+        "replacement": 12532,
+        "nsc": 24092,
+        "pct_share": 3.26
+      },
+      {
+        "agency": "ATT",
+        "total": 35534,
+        "installers": 85,
+        "circles": 3,
+        "divisions": 6,
+        "replacement": 14158,
+        "nsc": 21376,
+        "pct_share": 3.16
+      },
+      {
+        "agency": "FLGR",
+        "total": 34527,
+        "installers": 250,
+        "circles": 2,
+        "divisions": 6,
+        "replacement": 25153,
+        "nsc": 9374,
+        "pct_share": 3.07
+      },
+      {
+        "agency": "DWS",
+        "total": 33957,
+        "installers": 235,
+        "circles": 4,
+        "divisions": 7,
+        "replacement": 27448,
+        "nsc": 6509,
+        "pct_share": 3.02
+      },
+      {
+        "agency": "JMT",
+        "total": 31725,
+        "installers": 92,
+        "circles": 1,
+        "divisions": 4,
+        "replacement": 17424,
+        "nsc": 14301,
+        "pct_share": 2.82
+      },
+      {
+        "agency": "HIRE",
+        "total": 31647,
+        "installers": 211,
+        "circles": 6,
+        "divisions": 13,
+        "replacement": 20412,
+        "nsc": 11235,
+        "pct_share": 2.82
+      },
+      {
+        "agency": "BMD",
+        "total": 25664,
+        "installers": 187,
+        "circles": 4,
+        "divisions": 6,
+        "replacement": 18249,
+        "nsc": 7415,
+        "pct_share": 2.28
+      },
+      {
+        "agency": "IIPL",
+        "total": 21852,
+        "installers": 178,
+        "circles": 7,
+        "divisions": 24,
+        "replacement": 9464,
+        "nsc": 12388,
+        "pct_share": 1.94
+      },
+      {
+        "agency": "SIV",
+        "total": 21410,
+        "installers": 69,
+        "circles": 1,
+        "divisions": 4,
+        "replacement": 12492,
+        "nsc": 8918,
+        "pct_share": 1.9
+      },
+      {
+        "agency": "MZN",
+        "total": 20207,
+        "installers": 144,
+        "circles": 5,
+        "divisions": 7,
+        "replacement": 17358,
+        "nsc": 2849,
+        "pct_share": 1.8
+      },
+      {
+        "agency": "CP",
+        "total": 19661,
+        "installers": 56,
+        "circles": 2,
+        "divisions": 4,
+        "replacement": 10028,
+        "nsc": 9633,
+        "pct_share": 1.75
+      },
+      {
+        "agency": "AMR",
+        "total": 18501,
+        "installers": 79,
+        "circles": 3,
+        "divisions": 7,
+        "replacement": 10826,
+        "nsc": 7675,
+        "pct_share": 1.65
+      },
+      {
+        "agency": "NOTQ",
+        "total": 18476,
+        "installers": 108,
+        "circles": 5,
+        "divisions": 11,
+        "replacement": 12693,
+        "nsc": 5783,
+        "pct_share": 1.64
+      },
+      {
+        "agency": "BIP",
+        "total": 13704,
+        "installers": 35,
+        "circles": 1,
+        "divisions": 1,
+        "replacement": 7150,
+        "nsc": 6554,
+        "pct_share": 1.22
+      },
+      {
+        "agency": "MAA",
+        "total": 11806,
+        "installers": 161,
+        "circles": 2,
+        "divisions": 4,
+        "replacement": 9127,
+        "nsc": 2679,
+        "pct_share": 1.05
+      },
+      {
+        "agency": "SAI",
+        "total": 11543,
+        "installers": 115,
+        "circles": 2,
+        "divisions": 3,
+        "replacement": 7041,
+        "nsc": 4502,
+        "pct_share": 1.03
+      },
+      {
+        "agency": "TGS",
+        "total": 10494,
+        "installers": 76,
+        "circles": 2,
+        "divisions": 4,
+        "replacement": 8403,
+        "nsc": 2091,
+        "pct_share": 0.93
+      },
+      {
+        "agency": "SPP",
+        "total": 9339,
+        "installers": 69,
+        "circles": 2,
+        "divisions": 4,
+        "replacement": 3684,
+        "nsc": 5655,
+        "pct_share": 0.83
+      },
+      {
+        "agency": "NVE",
+        "total": 9295,
+        "installers": 118,
+        "circles": 3,
+        "divisions": 6,
+        "replacement": 7199,
+        "nsc": 2096,
+        "pct_share": 0.83
+      },
+      {
+        "agency": "ALTH",
+        "total": 8048,
+        "installers": 72,
+        "circles": 2,
+        "divisions": 4,
+        "replacement": 5885,
+        "nsc": 2163,
+        "pct_share": 0.72
+      },
+      {
+        "agency": "UMA",
+        "total": 7550,
+        "installers": 44,
+        "circles": 2,
+        "divisions": 4,
+        "replacement": 2808,
+        "nsc": 4742,
+        "pct_share": 0.67
+      },
+      {
+        "agency": "SSC",
+        "total": 6882,
+        "installers": 36,
+        "circles": 1,
+        "divisions": 2,
+        "replacement": 792,
+        "nsc": 6090,
+        "pct_share": 0.61
+      },
+      {
+        "agency": "MNDL",
+        "total": 6654,
+        "installers": 92,
+        "circles": 1,
+        "divisions": 4,
+        "replacement": 3996,
+        "nsc": 2658,
+        "pct_share": 0.59
+      },
+      {
+        "agency": "TCMT",
+        "total": 6454,
+        "installers": 83,
+        "circles": 4,
+        "divisions": 6,
+        "replacement": 5814,
+        "nsc": 640,
+        "pct_share": 0.57
+      },
+      {
+        "agency": "TRIC",
+        "total": 6356,
+        "installers": 27,
+        "circles": 2,
+        "divisions": 3,
+        "replacement": 3611,
+        "nsc": 2745,
+        "pct_share": 0.57
+      },
+      {
+        "agency": "RAJ",
+        "total": 5767,
+        "installers": 39,
+        "circles": 1,
+        "divisions": 3,
+        "replacement": 22,
+        "nsc": 5745,
+        "pct_share": 0.51
+      },
+      {
+        "agency": "KOSI",
+        "total": 5197,
+        "installers": 67,
+        "circles": 1,
+        "divisions": 3,
+        "replacement": 5166,
+        "nsc": 31,
+        "pct_share": 0.46
+      },
+      {
+        "agency": "QTS",
+        "total": 4998,
+        "installers": 44,
+        "circles": 1,
+        "divisions": 3,
+        "replacement": 4445,
+        "nsc": 553,
+        "pct_share": 0.44
+      },
+      {
+        "agency": "CYAN",
+        "total": 4615,
+        "installers": 15,
+        "circles": 3,
+        "divisions": 4,
+        "replacement": 4435,
+        "nsc": 180,
+        "pct_share": 0.41
+      },
+      {
+        "agency": "MANGO",
+        "total": 3802,
+        "installers": 18,
+        "circles": 2,
+        "divisions": 2,
+        "replacement": 2456,
+        "nsc": 1346,
+        "pct_share": 0.34
+      },
+      {
+        "agency": "INFO",
+        "total": 3205,
+        "installers": 33,
+        "circles": 2,
+        "divisions": 4,
+        "replacement": 2767,
+        "nsc": 438,
+        "pct_share": 0.29
+      },
+      {
+        "agency": "CHAI",
+        "total": 3187,
+        "installers": 25,
+        "circles": 1,
+        "divisions": 2,
+        "replacement": 2977,
+        "nsc": 210,
+        "pct_share": 0.28
+      },
+      {
+        "agency": "AGS",
+        "total": 3137,
+        "installers": 33,
+        "circles": 1,
+        "divisions": 1,
+        "replacement": 3089,
+        "nsc": 48,
+        "pct_share": 0.28
+      },
+      {
+        "agency": "AI",
+        "total": 2862,
+        "installers": 32,
+        "circles": 2,
+        "divisions": 3,
+        "replacement": 2487,
+        "nsc": 375,
+        "pct_share": 0.25
+      },
+      {
+        "agency": "PELC",
+        "total": 2770,
+        "installers": 19,
+        "circles": 1,
+        "divisions": 2,
+        "replacement": 208,
+        "nsc": 2562,
+        "pct_share": 0.25
+      },
+      {
+        "agency": "AVE",
+        "total": 2688,
+        "installers": 44,
+        "circles": 2,
+        "divisions": 7,
+        "replacement": 990,
+        "nsc": 1698,
+        "pct_share": 0.24
+      },
+      {
+        "agency": "RSENT",
+        "total": 2279,
+        "installers": 19,
+        "circles": 1,
+        "divisions": 3,
+        "replacement": 1214,
+        "nsc": 1065,
+        "pct_share": 0.2
+      },
+      {
+        "agency": "SRM",
+        "total": 2248,
+        "installers": 21,
+        "circles": 1,
+        "divisions": 1,
+        "replacement": 2006,
+        "nsc": 242,
+        "pct_share": 0.2
+      },
+      {
+        "agency": "PNS",
+        "total": 1993,
+        "installers": 14,
+        "circles": 1,
+        "divisions": 2,
+        "replacement": 1308,
+        "nsc": 685,
+        "pct_share": 0.18
+      },
+      {
+        "agency": "MVCS",
+        "total": 1909,
+        "installers": 23,
+        "circles": 1,
+        "divisions": 2,
+        "replacement": 1691,
+        "nsc": 218,
+        "pct_share": 0.17
+      },
+      {
+        "agency": "SVCS",
+        "total": 1403,
+        "installers": 20,
+        "circles": 1,
+        "divisions": 1,
+        "replacement": 851,
+        "nsc": 552,
+        "pct_share": 0.12
+      },
+      {
+        "agency": "KHUS",
+        "total": 1193,
+        "installers": 13,
+        "circles": 2,
+        "divisions": 2,
+        "replacement": 1161,
+        "nsc": 32,
+        "pct_share": 0.11
+      },
+      {
+        "agency": "ANP",
+        "total": 1130,
+        "installers": 17,
+        "circles": 1,
+        "divisions": 1,
+        "replacement": 372,
+        "nsc": 758,
+        "pct_share": 0.1
+      },
+      {
+        "agency": "AVNI",
+        "total": 1025,
+        "installers": 19,
+        "circles": 3,
+        "divisions": 3,
+        "replacement": 708,
+        "nsc": 317,
+        "pct_share": 0.09
+      },
+      {
+        "agency": "FEED",
+        "total": 1013,
+        "installers": 17,
+        "circles": 1,
+        "divisions": 2,
+        "replacement": 1009,
+        "nsc": 4,
+        "pct_share": 0.09
+      },
+      {
+        "agency": "OSMO",
+        "total": 919,
+        "installers": 10,
+        "circles": 1,
+        "divisions": 5,
+        "replacement": 80,
+        "nsc": 839,
+        "pct_share": 0.08
+      },
+      {
+        "agency": "JPL",
+        "total": 890,
+        "installers": 12,
+        "circles": 1,
+        "divisions": 1,
+        "replacement": 696,
+        "nsc": 194,
+        "pct_share": 0.08
+      },
+      {
+        "agency": "INS",
+        "total": 521,
+        "installers": 93,
+        "circles": 7,
+        "divisions": 22,
+        "replacement": 472,
+        "nsc": 49,
+        "pct_share": 0.05
+      },
+      {
+        "agency": "ARYA",
+        "total": 495,
+        "installers": 4,
+        "circles": 1,
+        "divisions": 1,
+        "replacement": 180,
+        "nsc": 315,
+        "pct_share": 0.04
+      },
+      {
+        "agency": "SKMH",
+        "total": 312,
+        "installers": 1,
+        "circles": 1,
+        "divisions": 1,
+        "replacement": 308,
+        "nsc": 4,
+        "pct_share": 0.03
+      },
+      {
+        "agency": "AEW43",
+        "total": 307,
+        "installers": 1,
+        "circles": 1,
+        "divisions": 1,
+        "replacement": 303,
+        "nsc": 4,
+        "pct_share": 0.03
+      },
+      {
+        "agency": "RIDS",
+        "total": 270,
+        "installers": 7,
+        "circles": 2,
+        "divisions": 2,
+        "replacement": 200,
+        "nsc": 70,
+        "pct_share": 0.02
+      },
+      {
+        "agency": "HPL",
+        "total": 256,
+        "installers": 9,
+        "circles": 1,
+        "divisions": 1,
+        "replacement": 249,
+        "nsc": 7,
+        "pct_share": 0.02
+      },
+      {
+        "agency": "SHPL",
+        "total": 233,
+        "installers": 10,
+        "circles": 1,
+        "divisions": 2,
+        "replacement": 233,
+        "nsc": 0,
+        "pct_share": 0.02
+      },
+      {
+        "agency": "KOSI82",
+        "total": 226,
+        "installers": 1,
+        "circles": 1,
+        "divisions": 1,
+        "replacement": 226,
+        "nsc": 0,
+        "pct_share": 0.02
+      },
+      {
+        "agency": "PS",
+        "total": 225,
+        "installers": 7,
+        "circles": 1,
+        "divisions": 1,
+        "replacement": 54,
+        "nsc": 171,
+        "pct_share": 0.02
+      },
+      {
+        "agency": "KOSI20",
+        "total": 164,
+        "installers": 1,
+        "circles": 1,
+        "divisions": 1,
+        "replacement": 164,
+        "nsc": 0,
+        "pct_share": 0.01
+      },
+      {
+        "agency": "GS",
+        "total": 146,
+        "installers": 5,
+        "circles": 1,
+        "divisions": 1,
+        "replacement": 142,
+        "nsc": 4,
+        "pct_share": 0.01
+      },
+      {
+        "agency": "MZN12",
+        "total": 101,
+        "installers": 1,
+        "circles": 1,
+        "divisions": 1,
+        "replacement": 101,
+        "nsc": 0,
+        "pct_share": 0.01
+      },
+      {
+        "agency": "MZN06",
+        "total": 63,
+        "installers": 1,
+        "circles": 1,
+        "divisions": 1,
+        "replacement": 62,
+        "nsc": 1,
+        "pct_share": 0.01
+      },
+      {
+        "agency": "GESIL",
+        "total": 49,
+        "installers": 3,
+        "circles": 1,
+        "divisions": 1,
+        "replacement": 49,
+        "nsc": 0,
+        "pct_share": 0.0
+      },
+      {
+        "agency": "FSC",
+        "total": 31,
+        "installers": 3,
+        "circles": 1,
+        "divisions": 1,
+        "replacement": 21,
+        "nsc": 10,
+        "pct_share": 0.0
+      },
+      {
+        "agency": "ERI",
+        "total": 27,
+        "installers": 2,
+        "circles": 1,
+        "divisions": 1,
+        "replacement": 27,
+        "nsc": 0,
+        "pct_share": 0.0
+      },
+      {
+        "agency": "TGS00",
+        "total": 15,
+        "installers": 1,
+        "circles": 1,
+        "divisions": 1,
+        "replacement": 15,
+        "nsc": 0,
+        "pct_share": 0.0
+      },
+      {
+        "agency": "KNN",
+        "total": 14,
+        "installers": 2,
+        "circles": 1,
+        "divisions": 1,
+        "replacement": 14,
+        "nsc": 0,
+        "pct_share": 0.0
+      },
+      {
+        "agency": "D",
+        "total": 14,
+        "installers": 2,
+        "circles": 2,
+        "divisions": 2,
+        "replacement": 12,
+        "nsc": 2,
+        "pct_share": 0.0
+      },
+      {
+        "agency": "AEW20",
+        "total": 12,
+        "installers": 1,
+        "circles": 1,
+        "divisions": 1,
+        "replacement": 12,
+        "nsc": 0,
+        "pct_share": 0.0
+      },
+      {
+        "agency": "AEW46",
+        "total": 4,
+        "installers": 1,
+        "circles": 1,
+        "divisions": 1,
+        "replacement": 4,
+        "nsc": 0,
+        "pct_share": 0.0
+      }
+    ],
+    "agency_by_circle": [
+      {
+        "circle": "GAYA",
+        "agency": "PCI",
+        "total": 92181,
+        "installers": 353,
+        "replacement": 50054,
+        "nsc": 42127,
+        "pct_share": 8.2
+      },
+      {
+        "circle": "PATNA",
+        "agency": "AEWS",
+        "total": 48837,
+        "installers": 134,
+        "replacement": 22350,
+        "nsc": 26487,
+        "pct_share": 4.34
+      },
+      {
+        "circle": "ARRAH",
+        "agency": "AEWS",
+        "total": 47287,
+        "installers": 106,
+        "replacement": 18791,
+        "nsc": 28496,
+        "pct_share": 4.21
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "PCI",
+        "total": 41914,
+        "installers": 103,
+        "replacement": 17532,
+        "nsc": 24382,
+        "pct_share": 3.73
+      },
+      {
+        "circle": "BIHARSARIF",
+        "agency": "ST",
+        "total": 33853,
+        "installers": 128,
+        "replacement": 17440,
+        "nsc": 16413,
+        "pct_share": 3.01
+      },
+      {
+        "circle": "BIHARSARIF",
+        "agency": "JMT",
+        "total": 31725,
+        "installers": 92,
+        "replacement": 17424,
+        "nsc": 14301,
+        "pct_share": 2.82
+      },
+      {
+        "circle": "ARRAH",
+        "agency": "PCI",
+        "total": 30212,
+        "installers": 158,
+        "replacement": 22347,
+        "nsc": 7865,
+        "pct_share": 2.69
+      },
+      {
+        "circle": "PATNA",
+        "agency": "AEW",
+        "total": 29293,
+        "installers": 141,
+        "replacement": 27284,
+        "nsc": 2009,
+        "pct_share": 2.61
+      },
+      {
+        "circle": "AURANGABAD",
+        "agency": "ATT",
+        "total": 24387,
+        "installers": 38,
+        "replacement": 7305,
+        "nsc": 17082,
+        "pct_share": 2.17
+      },
+      {
+        "circle": "GAYA",
+        "agency": "SMRT",
+        "total": 23862,
+        "installers": 116,
+        "replacement": 14343,
+        "nsc": 9519,
+        "pct_share": 2.12
+      },
+      {
+        "circle": "MUNGER",
+        "agency": "BMD",
+        "total": 23284,
+        "installers": 155,
+        "replacement": 17854,
+        "nsc": 5430,
+        "pct_share": 2.07
+      },
+      {
+        "circle": "GAYA",
+        "agency": "AEWS",
+        "total": 21450,
+        "installers": 110,
+        "replacement": 7263,
+        "nsc": 14187,
+        "pct_share": 1.91
+      },
+      {
+        "circle": "BIHARSARIF",
+        "agency": "SIV",
+        "total": 21410,
+        "installers": 69,
+        "replacement": 12492,
+        "nsc": 8918,
+        "pct_share": 1.9
+      },
+      {
+        "circle": "ARRAH",
+        "agency": "AEW",
+        "total": 21034,
+        "installers": 97,
+        "replacement": 20478,
+        "nsc": 556,
+        "pct_share": 1.87
+      },
+      {
+        "circle": "BIHARSARIF",
+        "agency": "FLGR",
+        "total": 18121,
+        "installers": 160,
+        "replacement": 11505,
+        "nsc": 6616,
+        "pct_share": 1.61
+      },
+      {
+        "circle": "PATNA",
+        "agency": "MZN",
+        "total": 17952,
+        "installers": 121,
+        "replacement": 15978,
+        "nsc": 1974,
+        "pct_share": 1.6
+      },
+      {
+        "circle": "GAYA",
+        "agency": "SSNF",
+        "total": 17037,
+        "installers": 75,
+        "replacement": 8716,
+        "nsc": 8321,
+        "pct_share": 1.52
+      },
+      {
+        "circle": "PATNA",
+        "agency": "DWS",
+        "total": 16852,
+        "installers": 107,
+        "replacement": 14739,
+        "nsc": 2113,
+        "pct_share": 1.5
+      },
+      {
+        "circle": "MUNGER",
+        "agency": "FLGR",
+        "total": 16406,
+        "installers": 90,
+        "replacement": 13648,
+        "nsc": 2758,
+        "pct_share": 1.46
+      },
+      {
+        "circle": "MUNGER",
+        "agency": "AEWS",
+        "total": 16357,
+        "installers": 59,
+        "replacement": 8802,
+        "nsc": 7555,
+        "pct_share": 1.46
+      },
+      {
+        "circle": "PATNA",
+        "agency": "SMRT",
+        "total": 16287,
+        "installers": 50,
+        "replacement": 14118,
+        "nsc": 2169,
+        "pct_share": 1.45
+      },
+      {
+        "circle": "PATNA",
+        "agency": "HIRE",
+        "total": 16091,
+        "installers": 126,
+        "replacement": 12655,
+        "nsc": 3436,
+        "pct_share": 1.43
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "SAWNA",
+        "total": 15921,
+        "installers": 31,
+        "replacement": 4388,
+        "nsc": 11533,
+        "pct_share": 1.42
+      },
+      {
+        "circle": "AURANGABAD",
+        "agency": "SAWNA",
+        "total": 14978,
+        "installers": 36,
+        "replacement": 5001,
+        "nsc": 9977,
+        "pct_share": 1.33
+      },
+      {
+        "circle": "AURANGABAD",
+        "agency": "BIP",
+        "total": 13704,
+        "installers": 35,
+        "replacement": 7150,
+        "nsc": 6554,
+        "pct_share": 1.22
+      },
+      {
+        "circle": "MUNGER",
+        "agency": "CP",
+        "total": 13548,
+        "installers": 37,
+        "replacement": 8935,
+        "nsc": 4613,
+        "pct_share": 1.21
+      },
+      {
+        "circle": "BIHARSARIF",
+        "agency": "AEWS",
+        "total": 12707,
+        "installers": 41,
+        "replacement": 7614,
+        "nsc": 5093,
+        "pct_share": 1.13
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "SMRT",
+        "total": 12703,
+        "installers": 47,
+        "replacement": 9249,
+        "nsc": 3454,
+        "pct_share": 1.13
+      },
+      {
+        "circle": "GAYA",
+        "agency": "AEW",
+        "total": 12570,
+        "installers": 64,
+        "replacement": 6232,
+        "nsc": 6338,
+        "pct_share": 1.12
+      },
+      {
+        "circle": "GAYA",
+        "agency": "DWS",
+        "total": 12518,
+        "installers": 105,
+        "replacement": 8955,
+        "nsc": 3563,
+        "pct_share": 1.11
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "AEWS",
+        "total": 12108,
+        "installers": 53,
+        "replacement": 4848,
+        "nsc": 7260,
+        "pct_share": 1.08
+      },
+      {
+        "circle": "MUNGER",
+        "agency": "SSNF",
+        "total": 11458,
+        "installers": 40,
+        "replacement": 9216,
+        "nsc": 2242,
+        "pct_share": 1.02
+      },
+      {
+        "circle": "AURANGABAD",
+        "agency": "SMRT",
+        "total": 11431,
+        "installers": 50,
+        "replacement": 9979,
+        "nsc": 1452,
+        "pct_share": 1.02
+      },
+      {
+        "circle": "BIHARSARIF",
+        "agency": "SMRT",
+        "total": 11344,
+        "installers": 41,
+        "replacement": 11306,
+        "nsc": 38,
+        "pct_share": 1.01
+      },
+      {
+        "circle": "ARRAH",
+        "agency": "SAI",
+        "total": 11249,
+        "installers": 113,
+        "replacement": 6747,
+        "nsc": 4502,
+        "pct_share": 1.0
+      },
+      {
+        "circle": "PATNA",
+        "agency": "NOTQ",
+        "total": 10544,
+        "installers": 55,
+        "replacement": 8906,
+        "nsc": 1638,
+        "pct_share": 0.94
+      },
+      {
+        "circle": "AURANGABAD",
+        "agency": "AEWS",
+        "total": 10484,
+        "installers": 25,
+        "replacement": 4658,
+        "nsc": 5826,
+        "pct_share": 0.93
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "TGS",
+        "total": 9709,
+        "installers": 68,
+        "replacement": 7792,
+        "nsc": 1917,
+        "pct_share": 0.86
+      },
+      {
+        "circle": "BIHARSARIF",
+        "agency": "AEW",
+        "total": 9365,
+        "installers": 48,
+        "replacement": 8749,
+        "nsc": 616,
+        "pct_share": 0.83
+      },
+      {
+        "circle": "BIHARSARIF",
+        "agency": "PCI",
+        "total": 9156,
+        "installers": 75,
+        "replacement": 8341,
+        "nsc": 815,
+        "pct_share": 0.81
+      },
+      {
+        "circle": "GAYA",
+        "agency": "IIPL",
+        "total": 9016,
+        "installers": 61,
+        "replacement": 3185,
+        "nsc": 5831,
+        "pct_share": 0.8
+      },
+      {
+        "circle": "BIHARSARIF",
+        "agency": "SPP",
+        "total": 8799,
+        "installers": 63,
+        "replacement": 3292,
+        "nsc": 5507,
+        "pct_share": 0.78
+      },
+      {
+        "circle": "GAYA",
+        "agency": "ATT",
+        "total": 8770,
+        "installers": 37,
+        "replacement": 6683,
+        "nsc": 2087,
+        "pct_share": 0.78
+      },
+      {
+        "circle": "AURANGABAD",
+        "agency": "MAA",
+        "total": 8548,
+        "installers": 95,
+        "replacement": 7339,
+        "nsc": 1209,
+        "pct_share": 0.76
+      },
+      {
+        "circle": "ARRAH",
+        "agency": "AMR",
+        "total": 8242,
+        "installers": 28,
+        "replacement": 4576,
+        "nsc": 3666,
+        "pct_share": 0.73
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "AMR",
+        "total": 8034,
+        "installers": 33,
+        "replacement": 4945,
+        "nsc": 3089,
+        "pct_share": 0.71
+      },
+      {
+        "circle": "ARRAH",
+        "agency": "UMA",
+        "total": 7424,
+        "installers": 41,
+        "replacement": 2682,
+        "nsc": 4742,
+        "pct_share": 0.66
+      },
+      {
+        "circle": "GAYA",
+        "agency": "ALTH",
+        "total": 7379,
+        "installers": 64,
+        "replacement": 5216,
+        "nsc": 2163,
+        "pct_share": 0.66
+      },
+      {
+        "circle": "PATNA",
+        "agency": "SSC",
+        "total": 6882,
+        "installers": 36,
+        "replacement": 792,
+        "nsc": 6090,
+        "pct_share": 0.61
+      },
+      {
+        "circle": "GAYA",
+        "agency": "MNDL",
+        "total": 6654,
+        "installers": 92,
+        "replacement": 3996,
+        "nsc": 2658,
+        "pct_share": 0.59
+      },
+      {
+        "circle": "PATNA",
+        "agency": "CP",
+        "total": 6113,
+        "installers": 22,
+        "replacement": 1093,
+        "nsc": 5020,
+        "pct_share": 0.54
+      },
+      {
+        "circle": "AURANGABAD",
+        "agency": "TRIC",
+        "total": 5915,
+        "installers": 19,
+        "replacement": 3350,
+        "nsc": 2565,
+        "pct_share": 0.53
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "AEW",
+        "total": 5869,
+        "installers": 54,
+        "replacement": 5324,
+        "nsc": 545,
+        "pct_share": 0.52
+      },
+      {
+        "circle": "PATNA",
+        "agency": "SSNF",
+        "total": 5841,
+        "installers": 54,
+        "replacement": 5260,
+        "nsc": 581,
+        "pct_share": 0.52
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "RAJ",
+        "total": 5767,
+        "installers": 39,
+        "replacement": 22,
+        "nsc": 5745,
+        "pct_share": 0.51
+      },
+      {
+        "circle": "ARRAH",
+        "agency": "NVE",
+        "total": 5504,
+        "installers": 74,
+        "replacement": 3897,
+        "nsc": 1607,
+        "pct_share": 0.49
+      },
+      {
+        "circle": "ARRAH",
+        "agency": "SSNF",
+        "total": 5290,
+        "installers": 60,
+        "replacement": 3498,
+        "nsc": 1792,
+        "pct_share": 0.47
+      },
+      {
+        "circle": "GAYA",
+        "agency": "KOSI",
+        "total": 5197,
+        "installers": 67,
+        "replacement": 5166,
+        "nsc": 31,
+        "pct_share": 0.46
+      },
+      {
+        "circle": "ARRAH",
+        "agency": "SMRT",
+        "total": 5099,
+        "installers": 28,
+        "replacement": 4567,
+        "nsc": 532,
+        "pct_share": 0.45
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "QTS",
+        "total": 4998,
+        "installers": 44,
+        "replacement": 4445,
+        "nsc": 553,
+        "pct_share": 0.44
+      },
+      {
+        "circle": "AURANGABAD",
+        "agency": "HIRE",
+        "total": 4982,
+        "installers": 28,
+        "replacement": 2218,
+        "nsc": 2764,
+        "pct_share": 0.44
+      },
+      {
+        "circle": "AURANGABAD",
+        "agency": "PCI",
+        "total": 4895,
+        "installers": 31,
+        "replacement": 3189,
+        "nsc": 1706,
+        "pct_share": 0.44
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "HIRE",
+        "total": 4754,
+        "installers": 8,
+        "replacement": 2806,
+        "nsc": 1948,
+        "pct_share": 0.42
+      },
+      {
+        "circle": "MUNGER",
+        "agency": "SAWNA",
+        "total": 4476,
+        "installers": 28,
+        "replacement": 2349,
+        "nsc": 2127,
+        "pct_share": 0.4
+      },
+      {
+        "circle": "MUNGER",
+        "agency": "PCI",
+        "total": 4386,
+        "installers": 32,
+        "replacement": 1801,
+        "nsc": 2585,
+        "pct_share": 0.39
+      },
+      {
+        "circle": "BIHARSARIF",
+        "agency": "DWS",
+        "total": 4293,
+        "installers": 37,
+        "replacement": 3475,
+        "nsc": 818,
+        "pct_share": 0.38
+      },
+      {
+        "circle": "AURANGABAD",
+        "agency": "TCMT",
+        "total": 3891,
+        "installers": 40,
+        "replacement": 3657,
+        "nsc": 234,
+        "pct_share": 0.35
+      },
+      {
+        "circle": "GAYA",
+        "agency": "ST",
+        "total": 3866,
+        "installers": 51,
+        "replacement": 1624,
+        "nsc": 2242,
+        "pct_share": 0.34
+      },
+      {
+        "circle": "BIHARSARIF",
+        "agency": "SSNF",
+        "total": 3776,
+        "installers": 17,
+        "replacement": 2525,
+        "nsc": 1251,
+        "pct_share": 0.34
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "CYAN",
+        "total": 3739,
+        "installers": 10,
+        "replacement": 3701,
+        "nsc": 38,
+        "pct_share": 0.33
+      },
+      {
+        "circle": "PATNA",
+        "agency": "MANGO",
+        "total": 3636,
+        "installers": 16,
+        "replacement": 2290,
+        "nsc": 1346,
+        "pct_share": 0.32
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "NVE",
+        "total": 3499,
+        "installers": 35,
+        "replacement": 3116,
+        "nsc": 383,
+        "pct_share": 0.31
+      },
+      {
+        "circle": "MUNGER",
+        "agency": "SMRT",
+        "total": 3370,
+        "installers": 18,
+        "replacement": 3325,
+        "nsc": 45,
+        "pct_share": 0.3
+      },
+      {
+        "circle": "GAYA",
+        "agency": "MAA",
+        "total": 3258,
+        "installers": 66,
+        "replacement": 1788,
+        "nsc": 1470,
+        "pct_share": 0.29
+      },
+      {
+        "circle": "MUNGER",
+        "agency": "CHAI",
+        "total": 3187,
+        "installers": 25,
+        "replacement": 2977,
+        "nsc": 210,
+        "pct_share": 0.28
+      },
+      {
+        "circle": "ARRAH",
+        "agency": "AGS",
+        "total": 3137,
+        "installers": 33,
+        "replacement": 3089,
+        "nsc": 48,
+        "pct_share": 0.28
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "NOTQ",
+        "total": 3136,
+        "installers": 10,
+        "replacement": 1736,
+        "nsc": 1400,
+        "pct_share": 0.28
+      },
+      {
+        "circle": "AURANGABAD",
+        "agency": "AEW",
+        "total": 3135,
+        "installers": 16,
+        "replacement": 1888,
+        "nsc": 1247,
+        "pct_share": 0.28
+      },
+      {
+        "circle": "PATNA",
+        "agency": "IIPL",
+        "total": 3130,
+        "installers": 20,
+        "replacement": 1825,
+        "nsc": 1305,
+        "pct_share": 0.28
+      },
+      {
+        "circle": "BIHARSARIF",
+        "agency": "IIPL",
+        "total": 3096,
+        "installers": 27,
+        "replacement": 1660,
+        "nsc": 1436,
+        "pct_share": 0.28
+      },
+      {
+        "circle": "AURANGABAD",
+        "agency": "IIPL",
+        "total": 2994,
+        "installers": 33,
+        "replacement": 838,
+        "nsc": 2156,
+        "pct_share": 0.27
+      },
+      {
+        "circle": "PATNA",
+        "agency": "INFO",
+        "total": 2841,
+        "installers": 28,
+        "replacement": 2466,
+        "nsc": 375,
+        "pct_share": 0.25
+      },
+      {
+        "circle": "GAYA",
+        "agency": "AI",
+        "total": 2785,
+        "installers": 27,
+        "replacement": 2410,
+        "nsc": 375,
+        "pct_share": 0.25
+      },
+      {
+        "circle": "PATNA",
+        "agency": "PELC",
+        "total": 2770,
+        "installers": 19,
+        "replacement": 208,
+        "nsc": 2562,
+        "pct_share": 0.25
+      },
+      {
+        "circle": "ARRAH",
+        "agency": "HIRE",
+        "total": 2634,
+        "installers": 20,
+        "replacement": 1153,
+        "nsc": 1481,
+        "pct_share": 0.23
+      },
+      {
+        "circle": "AURANGABAD",
+        "agency": "NOTQ",
+        "total": 2603,
+        "installers": 18,
+        "replacement": 1343,
+        "nsc": 1260,
+        "pct_share": 0.23
+      },
+      {
+        "circle": "AURANGABAD",
+        "agency": "SSNF",
+        "total": 2498,
+        "installers": 25,
+        "replacement": 1858,
+        "nsc": 640,
+        "pct_share": 0.22
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "ATT",
+        "total": 2377,
+        "installers": 11,
+        "replacement": 170,
+        "nsc": 2207,
+        "pct_share": 0.21
+      },
+      {
+        "circle": "ARRAH",
+        "agency": "RSENT",
+        "total": 2279,
+        "installers": 19,
+        "replacement": 1214,
+        "nsc": 1065,
+        "pct_share": 0.2
+      },
+      {
+        "circle": "BIHARSARIF",
+        "agency": "SRM",
+        "total": 2248,
+        "installers": 21,
+        "replacement": 2006,
+        "nsc": 242,
+        "pct_share": 0.2
+      },
+      {
+        "circle": "PATNA",
+        "agency": "AMR",
+        "total": 2225,
+        "installers": 18,
+        "replacement": 1305,
+        "nsc": 920,
+        "pct_share": 0.2
+      },
+      {
+        "circle": "GAYA",
+        "agency": "BMD",
+        "total": 2104,
+        "installers": 17,
+        "replacement": 147,
+        "nsc": 1957,
+        "pct_share": 0.19
+      },
+      {
+        "circle": "GAYA",
+        "agency": "HIRE",
+        "total": 2021,
+        "installers": 22,
+        "replacement": 424,
+        "nsc": 1597,
+        "pct_share": 0.18
+      },
+      {
+        "circle": "ARRAH",
+        "agency": "PNS",
+        "total": 1993,
+        "installers": 14,
+        "replacement": 1308,
+        "nsc": 685,
+        "pct_share": 0.18
+      },
+      {
+        "circle": "MUNGER",
+        "agency": "IIPL",
+        "total": 1952,
+        "installers": 18,
+        "replacement": 1286,
+        "nsc": 666,
+        "pct_share": 0.17
+      },
+      {
+        "circle": "ARRAH",
+        "agency": "MVCS",
+        "total": 1909,
+        "installers": 23,
+        "replacement": 1691,
+        "nsc": 218,
+        "pct_share": 0.17
+      },
+      {
+        "circle": "GAYA",
+        "agency": "AVE",
+        "total": 1741,
+        "installers": 34,
+        "replacement": 513,
+        "nsc": 1228,
+        "pct_share": 0.15
+      },
+      {
+        "circle": "PATNA",
+        "agency": "TCMT",
+        "total": 1693,
+        "installers": 28,
+        "replacement": 1326,
+        "nsc": 367,
+        "pct_share": 0.15
+      },
+      {
+        "circle": "PATNA",
+        "agency": "PCI",
+        "total": 1604,
+        "installers": 19,
+        "replacement": 287,
+        "nsc": 1317,
+        "pct_share": 0.14
+      },
+      {
+        "circle": "GAYA",
+        "agency": "SVCS",
+        "total": 1403,
+        "installers": 20,
+        "replacement": 851,
+        "nsc": 552,
+        "pct_share": 0.12
+      },
+      {
+        "circle": "GAYA",
+        "agency": "NOTQ",
+        "total": 1302,
+        "installers": 16,
+        "replacement": 218,
+        "nsc": 1084,
+        "pct_share": 0.12
+      },
+      {
+        "circle": "PATNA",
+        "agency": "KHUS",
+        "total": 1176,
+        "installers": 11,
+        "replacement": 1144,
+        "nsc": 32,
+        "pct_share": 0.1
+      },
+      {
+        "circle": "MUNGER",
+        "agency": "HIRE",
+        "total": 1165,
+        "installers": 7,
+        "replacement": 1156,
+        "nsc": 9,
+        "pct_share": 0.1
+      },
+      {
+        "circle": "ARRAH",
+        "agency": "ANP",
+        "total": 1130,
+        "installers": 17,
+        "replacement": 372,
+        "nsc": 758,
+        "pct_share": 0.1
+      },
+      {
+        "circle": "ARRAH",
+        "agency": "SAWNA",
+        "total": 1116,
+        "installers": 10,
+        "replacement": 661,
+        "nsc": 455,
+        "pct_share": 0.1
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "IIPL",
+        "total": 1026,
+        "installers": 5,
+        "replacement": 452,
+        "nsc": 574,
+        "pct_share": 0.09
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "FEED",
+        "total": 1013,
+        "installers": 17,
+        "replacement": 1009,
+        "nsc": 4,
+        "pct_share": 0.09
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "AVE",
+        "total": 947,
+        "installers": 10,
+        "replacement": 477,
+        "nsc": 470,
+        "pct_share": 0.08
+      },
+      {
+        "circle": "PATNA",
+        "agency": "OSMO",
+        "total": 919,
+        "installers": 10,
+        "replacement": 80,
+        "nsc": 839,
+        "pct_share": 0.08
+      },
+      {
+        "circle": "PATNA",
+        "agency": "ST",
+        "total": 892,
+        "installers": 25,
+        "replacement": 593,
+        "nsc": 299,
+        "pct_share": 0.08
+      },
+      {
+        "circle": "BIHARSARIF",
+        "agency": "NOTQ",
+        "total": 891,
+        "installers": 11,
+        "replacement": 490,
+        "nsc": 401,
+        "pct_share": 0.08
+      },
+      {
+        "circle": "PATNA",
+        "agency": "JPL",
+        "total": 890,
+        "installers": 12,
+        "replacement": 696,
+        "nsc": 194,
+        "pct_share": 0.08
+      },
+      {
+        "circle": "ARRAH",
+        "agency": "TCMT",
+        "total": 868,
+        "installers": 14,
+        "replacement": 829,
+        "nsc": 39,
+        "pct_share": 0.08
+      },
+      {
+        "circle": "PATNA",
+        "agency": "CYAN",
+        "total": 825,
+        "installers": 7,
+        "replacement": 707,
+        "nsc": 118,
+        "pct_share": 0.07
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "MZN",
+        "total": 823,
+        "installers": 8,
+        "replacement": 812,
+        "nsc": 11,
+        "pct_share": 0.07
+      },
+      {
+        "circle": "ARRAH",
+        "agency": "MZN",
+        "total": 819,
+        "installers": 9,
+        "replacement": 195,
+        "nsc": 624,
+        "pct_share": 0.07
+      },
+      {
+        "circle": "ARRAH",
+        "agency": "TGS",
+        "total": 785,
+        "installers": 8,
+        "replacement": 611,
+        "nsc": 174,
+        "pct_share": 0.07
+      },
+      {
+        "circle": "BIHARSARIF",
+        "agency": "ALTH",
+        "total": 669,
+        "installers": 10,
+        "replacement": 669,
+        "nsc": 0,
+        "pct_share": 0.06
+      },
+      {
+        "circle": "ARRAH",
+        "agency": "IIPL",
+        "total": 638,
+        "installers": 14,
+        "replacement": 218,
+        "nsc": 420,
+        "pct_share": 0.06
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "AVNI",
+        "total": 575,
+        "installers": 6,
+        "replacement": 386,
+        "nsc": 189,
+        "pct_share": 0.05
+      },
+      {
+        "circle": "AURANGABAD",
+        "agency": "MZN",
+        "total": 555,
+        "installers": 5,
+        "replacement": 315,
+        "nsc": 240,
+        "pct_share": 0.05
+      },
+      {
+        "circle": "PATNA",
+        "agency": "SPP",
+        "total": 540,
+        "installers": 7,
+        "replacement": 392,
+        "nsc": 148,
+        "pct_share": 0.05
+      },
+      {
+        "circle": "MUNGER",
+        "agency": "AEW",
+        "total": 532,
+        "installers": 13,
+        "replacement": 252,
+        "nsc": 280,
+        "pct_share": 0.05
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "ARYA",
+        "total": 495,
+        "installers": 4,
+        "replacement": 180,
+        "nsc": 315,
+        "pct_share": 0.04
+      },
+      {
+        "circle": "MUNGER",
+        "agency": "ST",
+        "total": 495,
+        "installers": 11,
+        "replacement": 279,
+        "nsc": 216,
+        "pct_share": 0.04
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "TRIC",
+        "total": 441,
+        "installers": 8,
+        "replacement": 261,
+        "nsc": 180,
+        "pct_share": 0.04
+      },
+      {
+        "circle": "MUNGER",
+        "agency": "INFO",
+        "total": 364,
+        "installers": 5,
+        "replacement": 301,
+        "nsc": 63,
+        "pct_share": 0.03
+      },
+      {
+        "circle": "PATNA",
+        "agency": "SKMH",
+        "total": 312,
+        "installers": 1,
+        "replacement": 308,
+        "nsc": 4,
+        "pct_share": 0.03
+      },
+      {
+        "circle": "PATNA",
+        "agency": "AEW43",
+        "total": 307,
+        "installers": 1,
+        "replacement": 303,
+        "nsc": 4,
+        "pct_share": 0.03
+      },
+      {
+        "circle": "PATNA",
+        "agency": "SAI",
+        "total": 294,
+        "installers": 2,
+        "replacement": 294,
+        "nsc": 0,
+        "pct_share": 0.03
+      },
+      {
+        "circle": "ARRAH",
+        "agency": "DWS",
+        "total": 294,
+        "installers": 2,
+        "replacement": 279,
+        "nsc": 15,
+        "pct_share": 0.03
+      },
+      {
+        "circle": "PATNA",
+        "agency": "NVE",
+        "total": 292,
+        "installers": 9,
+        "replacement": 186,
+        "nsc": 106,
+        "pct_share": 0.03
+      },
+      {
+        "circle": "GAYA",
+        "agency": "INS",
+        "total": 282,
+        "installers": 22,
+        "replacement": 251,
+        "nsc": 31,
+        "pct_share": 0.03
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "HPL",
+        "total": 256,
+        "installers": 9,
+        "replacement": 249,
+        "nsc": 7,
+        "pct_share": 0.02
+      },
+      {
+        "circle": "GAYA",
+        "agency": "AVNI",
+        "total": 244,
+        "installers": 7,
+        "replacement": 198,
+        "nsc": 46,
+        "pct_share": 0.02
+      },
+      {
+        "circle": "MUNGER",
+        "agency": "RIDS",
+        "total": 242,
+        "installers": 3,
+        "replacement": 172,
+        "nsc": 70,
+        "pct_share": 0.02
+      },
+      {
+        "circle": "PATNA",
+        "agency": "SHPL",
+        "total": 233,
+        "installers": 10,
+        "replacement": 233,
+        "nsc": 0,
+        "pct_share": 0.02
+      },
+      {
+        "circle": "GAYA",
+        "agency": "KOSI82",
+        "total": 226,
+        "installers": 1,
+        "replacement": 226,
+        "nsc": 0,
+        "pct_share": 0.02
+      },
+      {
+        "circle": "GAYA",
+        "agency": "PS",
+        "total": 225,
+        "installers": 7,
+        "replacement": 54,
+        "nsc": 171,
+        "pct_share": 0.02
+      },
+      {
+        "circle": "ARRAH",
+        "agency": "AVNI",
+        "total": 206,
+        "installers": 6,
+        "replacement": 124,
+        "nsc": 82,
+        "pct_share": 0.02
+      },
+      {
+        "circle": "ARRAH",
+        "agency": "BMD",
+        "total": 202,
+        "installers": 8,
+        "replacement": 174,
+        "nsc": 28,
+        "pct_share": 0.02
+      },
+      {
+        "circle": "BIHARSARIF",
+        "agency": "MANGO",
+        "total": 166,
+        "installers": 2,
+        "replacement": 166,
+        "nsc": 0,
+        "pct_share": 0.01
+      },
+      {
+        "circle": "GAYA",
+        "agency": "KOSI20",
+        "total": 164,
+        "installers": 1,
+        "replacement": 164,
+        "nsc": 0,
+        "pct_share": 0.01
+      },
+      {
+        "circle": "AURANGABAD",
+        "agency": "GS",
+        "total": 146,
+        "installers": 5,
+        "replacement": 142,
+        "nsc": 4,
+        "pct_share": 0.01
+      },
+      {
+        "circle": "BIHARSARIF",
+        "agency": "SAWNA",
+        "total": 133,
+        "installers": 2,
+        "replacement": 133,
+        "nsc": 0,
+        "pct_share": 0.01
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "UMA",
+        "total": 126,
+        "installers": 3,
+        "replacement": 126,
+        "nsc": 0,
+        "pct_share": 0.01
+      },
+      {
+        "circle": "PATNA",
+        "agency": "MZN12",
+        "total": 101,
+        "installers": 1,
+        "replacement": 101,
+        "nsc": 0,
+        "pct_share": 0.01
+      },
+      {
+        "circle": "BIHARSARIF",
+        "agency": "AI",
+        "total": 77,
+        "installers": 5,
+        "replacement": 77,
+        "nsc": 0,
+        "pct_share": 0.01
+      },
+      {
+        "circle": "PATNA",
+        "agency": "BMD",
+        "total": 74,
+        "installers": 7,
+        "replacement": 74,
+        "nsc": 0,
+        "pct_share": 0.01
+      },
+      {
+        "circle": "PATNA",
+        "agency": "MZN06",
+        "total": 63,
+        "installers": 1,
+        "replacement": 62,
+        "nsc": 1,
+        "pct_share": 0.01
+      },
+      {
+        "circle": "ARRAH",
+        "agency": "INS",
+        "total": 59,
+        "installers": 13,
+        "replacement": 59,
+        "nsc": 0,
+        "pct_share": 0.01
+      },
+      {
+        "circle": "GAYA",
+        "agency": "MZN",
+        "total": 58,
+        "installers": 2,
+        "replacement": 58,
+        "nsc": 0,
+        "pct_share": 0.01
+      },
+      {
+        "circle": "GAYA",
+        "agency": "CYAN",
+        "total": 51,
+        "installers": 3,
+        "replacement": 27,
+        "nsc": 24,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "GAYA",
+        "agency": "GESIL",
+        "total": 49,
+        "installers": 3,
+        "replacement": 49,
+        "nsc": 0,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "PATNA",
+        "agency": "INS",
+        "total": 45,
+        "installers": 13,
+        "replacement": 28,
+        "nsc": 17,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "BIHARSARIF",
+        "agency": "INS",
+        "total": 45,
+        "installers": 19,
+        "replacement": 45,
+        "nsc": 0,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "MUNGER",
+        "agency": "INS",
+        "total": 34,
+        "installers": 14,
+        "replacement": 34,
+        "nsc": 0,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "INS",
+        "total": 32,
+        "installers": 5,
+        "replacement": 31,
+        "nsc": 1,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "ARRAH",
+        "agency": "FSC",
+        "total": 31,
+        "installers": 3,
+        "replacement": 21,
+        "nsc": 10,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "AURANGABAD",
+        "agency": "RIDS",
+        "total": 28,
+        "installers": 4,
+        "replacement": 28,
+        "nsc": 0,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "ERI",
+        "total": 27,
+        "installers": 2,
+        "replacement": 27,
+        "nsc": 0,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "AURANGABAD",
+        "agency": "INS",
+        "total": 24,
+        "installers": 7,
+        "replacement": 24,
+        "nsc": 0,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "KHUS",
+        "total": 17,
+        "installers": 2,
+        "replacement": 17,
+        "nsc": 0,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "TGS00",
+        "total": 15,
+        "installers": 1,
+        "replacement": 15,
+        "nsc": 0,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "PATNA",
+        "agency": "KNN",
+        "total": 14,
+        "installers": 2,
+        "replacement": 14,
+        "nsc": 0,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "PATNA",
+        "agency": "AEW20",
+        "total": 12,
+        "installers": 1,
+        "replacement": 12,
+        "nsc": 0,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "ARRAH",
+        "agency": "D",
+        "total": 7,
+        "installers": 1,
+        "replacement": 7,
+        "nsc": 0,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "BIHARSARIF",
+        "agency": "D",
+        "total": 7,
+        "installers": 1,
+        "replacement": 5,
+        "nsc": 2,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "PATNA",
+        "agency": "AEW46",
+        "total": 4,
+        "installers": 1,
+        "replacement": 4,
+        "nsc": 0,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "TCMT",
+        "total": 2,
+        "installers": 1,
+        "replacement": 2,
+        "nsc": 0,
+        "pct_share": 0.0
+      }
+    ],
+    "tariffs": [
+      {
+        "tariff": "DS1D",
+        "total": 663861,
+        "phase_1ph": 663510,
+        "phase_3ph_wc": 349,
+        "replacement": 355695,
+        "nsc": 308166,
+        "pct_share": 59.06
+      },
+      {
+        "tariff": "NDS1D",
+        "total": 156826,
+        "phase_1ph": 148825,
+        "phase_3ph_wc": 7729,
+        "replacement": 84775,
+        "nsc": 72051,
+        "pct_share": 13.95
+      },
+      {
+        "tariff": "KJ",
+        "total": 101485,
+        "phase_1ph": 101485,
+        "phase_3ph_wc": 0,
+        "replacement": 97924,
+        "nsc": 3561,
+        "pct_share": 9.03
+      },
+      {
+        "tariff": "DS2D",
+        "total": 93483,
+        "phase_1ph": 92563,
+        "phase_3ph_wc": 907,
+        "replacement": 66924,
+        "nsc": 26559,
+        "pct_share": 8.32
+      },
+      {
+        "tariff": "NDS2D",
+        "total": 38567,
+        "phase_1ph": 33825,
+        "phase_3ph_wc": 4284,
+        "replacement": 26467,
+        "nsc": 12100,
+        "pct_share": 3.43
+      },
+      {
+        "tariff": "LTIS1D",
+        "total": 27176,
+        "phase_1ph": 5260,
+        "phase_3ph_wc": 21903,
+        "replacement": 18254,
+        "nsc": 8922,
+        "pct_share": 2.42
+      },
+      {
+        "tariff": "HGN",
+        "total": 20911,
+        "phase_1ph": 15929,
+        "phase_3ph_wc": 4982,
+        "replacement": 16813,
+        "nsc": 4098,
+        "pct_share": 1.86
+      },
+      {
+        "tariff": "KJ_BPL_MTR",
+        "total": 11487,
+        "phase_1ph": 11487,
+        "phase_3ph_wc": 0,
+        "replacement": 11363,
+        "nsc": 124,
+        "pct_share": 1.02
+      },
+      {
+        "tariff": "IAS1",
+        "total": 4286,
+        "phase_1ph": 3223,
+        "phase_3ph_wc": 999,
+        "replacement": 1332,
+        "nsc": 2954,
+        "pct_share": 0.38
+      },
+      {
+        "tariff": "OTHER",
+        "total": 2583,
+        "phase_1ph": 2555,
+        "phase_3ph_wc": 21,
+        "replacement": 1525,
+        "nsc": 1058,
+        "pct_share": 0.23
+      },
+      {
+        "tariff": "NDS-IID(A)",
+        "total": 912,
+        "phase_1ph": 912,
+        "phase_3ph_wc": 0,
+        "replacement": 313,
+        "nsc": 599,
+        "pct_share": 0.08
+      },
+      {
+        "tariff": "LTIS2D",
+        "total": 859,
+        "phase_1ph": 1,
+        "phase_3ph_wc": 115,
+        "replacement": 568,
+        "nsc": 291,
+        "pct_share": 0.08
+      },
+      {
+        "tariff": "PWWD",
+        "total": 549,
+        "phase_1ph": 112,
+        "phase_3ph_wc": 406,
+        "replacement": 521,
+        "nsc": 28,
+        "pct_share": 0.05
+      },
+      {
+        "tariff": "LTEV",
+        "total": 426,
+        "phase_1ph": 285,
+        "phase_3ph_wc": 71,
+        "replacement": 45,
+        "nsc": 381,
+        "pct_share": 0.04
+      },
+      {
+        "tariff": "SS1D",
+        "total": 310,
+        "phase_1ph": 210,
+        "phase_3ph_wc": 68,
+        "replacement": 53,
+        "nsc": 257,
+        "pct_share": 0.03
+      },
+      {
+        "tariff": "IAS2D",
+        "total": 239,
+        "phase_1ph": 94,
+        "phase_3ph_wc": 135,
+        "replacement": 106,
+        "nsc": 133,
+        "pct_share": 0.02
+      },
+      {
+        "tariff": "DS3D",
+        "total": 143,
+        "phase_1ph": 130,
+        "phase_3ph_wc": 13,
+        "replacement": 35,
+        "nsc": 108,
+        "pct_share": 0.01
+      }
+    ],
+    "tariff_by_circle": [
+      {
+        "circle": "PATNA",
+        "tariff": "DS1D",
+        "total": 138711,
+        "phase_1ph": 138546,
+        "phase_3ph_wc": 165,
+        "replacement": 91382,
+        "nsc": 47329,
+        "pct_share": 12.34
+      },
+      {
+        "circle": "GAYA",
+        "tariff": "DS1D",
+        "total": 118643,
+        "phase_1ph": 118579,
+        "phase_3ph_wc": 62,
+        "replacement": 52660,
+        "nsc": 65983,
+        "pct_share": 10.55
+      },
+      {
+        "circle": "BIHARSARIF",
+        "tariff": "DS1D",
+        "total": 97893,
+        "phase_1ph": 97852,
+        "phase_3ph_wc": 41,
+        "replacement": 54067,
+        "nsc": 43826,
+        "pct_share": 8.71
+      },
+      {
+        "circle": "ARRAH",
+        "tariff": "DS1D",
+        "total": 95184,
+        "phase_1ph": 95173,
+        "phase_3ph_wc": 11,
+        "replacement": 49779,
+        "nsc": 45405,
+        "pct_share": 8.47
+      },
+      {
+        "circle": "SASARAM",
+        "tariff": "DS1D",
+        "total": 79831,
+        "phase_1ph": 79799,
+        "phase_3ph_wc": 32,
+        "replacement": 35623,
+        "nsc": 44208,
+        "pct_share": 7.1
+      },
+      {
+        "circle": "AURANGABAD",
+        "tariff": "DS1D",
+        "total": 73159,
+        "phase_1ph": 73126,
+        "phase_3ph_wc": 33,
+        "replacement": 32637,
+        "nsc": 40522,
+        "pct_share": 6.51
+      },
+      {
+        "circle": "MUNGER",
+        "tariff": "DS1D",
+        "total": 60440,
+        "phase_1ph": 60435,
+        "phase_3ph_wc": 5,
+        "replacement": 39547,
+        "nsc": 20893,
+        "pct_share": 5.38
+      },
+      {
+        "circle": "GAYA",
+        "tariff": "DS2D",
+        "total": 40738,
+        "phase_1ph": 40021,
+        "phase_3ph_wc": 709,
+        "replacement": 26902,
+        "nsc": 13836,
+        "pct_share": 3.62
+      },
+      {
+        "circle": "GAYA",
+        "tariff": "NDS1D",
+        "total": 31496,
+        "phase_1ph": 30267,
+        "phase_3ph_wc": 1175,
+        "replacement": 15139,
+        "nsc": 16357,
+        "pct_share": 2.8
+      },
+      {
+        "circle": "BIHARSARIF",
+        "tariff": "NDS1D",
+        "total": 28763,
+        "phase_1ph": 27431,
+        "phase_3ph_wc": 1300,
+        "replacement": 16812,
+        "nsc": 11951,
+        "pct_share": 2.56
+      },
+      {
+        "circle": "ARRAH",
+        "tariff": "NDS1D",
+        "total": 22967,
+        "phase_1ph": 21736,
+        "phase_3ph_wc": 1188,
+        "replacement": 13082,
+        "nsc": 9885,
+        "pct_share": 2.04
+      },
+      {
+        "circle": "PATNA",
+        "tariff": "NDS1D",
+        "total": 22538,
+        "phase_1ph": 21047,
+        "phase_3ph_wc": 1441,
+        "replacement": 13305,
+        "nsc": 9233,
+        "pct_share": 2.0
+      },
+      {
+        "circle": "AURANGABAD",
+        "tariff": "NDS1D",
+        "total": 21637,
+        "phase_1ph": 20752,
+        "phase_3ph_wc": 850,
+        "replacement": 10898,
+        "nsc": 10739,
+        "pct_share": 1.92
+      },
+      {
+        "circle": "ARRAH",
+        "tariff": "KJ",
+        "total": 20667,
+        "phase_1ph": 20667,
+        "phase_3ph_wc": 0,
+        "replacement": 20497,
+        "nsc": 170,
+        "pct_share": 1.84
+      },
+      {
+        "circle": "SASARAM",
+        "tariff": "NDS1D",
+        "total": 20259,
+        "phase_1ph": 19170,
+        "phase_3ph_wc": 1060,
+        "replacement": 9917,
+        "nsc": 10342,
+        "pct_share": 1.8
+      },
+      {
+        "circle": "GAYA",
+        "tariff": "NDS2D",
+        "total": 16732,
+        "phase_1ph": 14866,
+        "phase_3ph_wc": 1590,
+        "replacement": 9612,
+        "nsc": 7120,
+        "pct_share": 1.49
+      },
+      {
+        "circle": "GAYA",
+        "tariff": "KJ",
+        "total": 15968,
+        "phase_1ph": 15968,
+        "phase_3ph_wc": 0,
+        "replacement": 15458,
+        "nsc": 510,
+        "pct_share": 1.42
+      },
+      {
+        "circle": "BIHARSARIF",
+        "tariff": "KJ",
+        "total": 14334,
+        "phase_1ph": 14334,
+        "phase_3ph_wc": 0,
+        "replacement": 14103,
+        "nsc": 231,
+        "pct_share": 1.28
+      },
+      {
+        "circle": "PATNA",
+        "tariff": "KJ",
+        "total": 13986,
+        "phase_1ph": 13986,
+        "phase_3ph_wc": 0,
+        "replacement": 13671,
+        "nsc": 315,
+        "pct_share": 1.24
+      },
+      {
+        "circle": "SASARAM",
+        "tariff": "KJ",
+        "total": 13928,
+        "phase_1ph": 13928,
+        "phase_3ph_wc": 0,
+        "replacement": 11997,
+        "nsc": 1931,
+        "pct_share": 1.24
+      },
+      {
+        "circle": "BIHARSARIF",
+        "tariff": "DS2D",
+        "total": 12943,
+        "phase_1ph": 12926,
+        "phase_3ph_wc": 17,
+        "replacement": 10632,
+        "nsc": 2311,
+        "pct_share": 1.15
+      },
+      {
+        "circle": "MUNGER",
+        "tariff": "KJ",
+        "total": 12874,
+        "phase_1ph": 12874,
+        "phase_3ph_wc": 0,
+        "replacement": 12696,
+        "nsc": 178,
+        "pct_share": 1.15
+      },
+      {
+        "circle": "SASARAM",
+        "tariff": "DS2D",
+        "total": 11157,
+        "phase_1ph": 11131,
+        "phase_3ph_wc": 25,
+        "replacement": 6371,
+        "nsc": 4786,
+        "pct_share": 0.99
+      },
+      {
+        "circle": "PATNA",
+        "tariff": "DS2D",
+        "total": 9797,
+        "phase_1ph": 9657,
+        "phase_3ph_wc": 140,
+        "replacement": 8291,
+        "nsc": 1506,
+        "pct_share": 0.87
+      },
+      {
+        "circle": "AURANGABAD",
+        "tariff": "KJ",
+        "total": 9728,
+        "phase_1ph": 9728,
+        "phase_3ph_wc": 0,
+        "replacement": 9502,
+        "nsc": 226,
+        "pct_share": 0.87
+      },
+      {
+        "circle": "MUNGER",
+        "tariff": "DS2D",
+        "total": 9715,
+        "phase_1ph": 9704,
+        "phase_3ph_wc": 10,
+        "replacement": 7905,
+        "nsc": 1810,
+        "pct_share": 0.86
+      },
+      {
+        "circle": "MUNGER",
+        "tariff": "NDS1D",
+        "total": 9166,
+        "phase_1ph": 8422,
+        "phase_3ph_wc": 715,
+        "replacement": 5622,
+        "nsc": 3544,
+        "pct_share": 0.82
+      },
+      {
+        "circle": "ARRAH",
+        "tariff": "DS2D",
+        "total": 6395,
+        "phase_1ph": 6390,
+        "phase_3ph_wc": 3,
+        "replacement": 4813,
+        "nsc": 1582,
+        "pct_share": 0.57
+      },
+      {
+        "circle": "BIHARSARIF",
+        "tariff": "NDS2D",
+        "total": 5532,
+        "phase_1ph": 4996,
+        "phase_3ph_wc": 504,
+        "replacement": 4339,
+        "nsc": 1193,
+        "pct_share": 0.49
+      },
+      {
+        "circle": "GAYA",
+        "tariff": "LTIS1D",
+        "total": 5339,
+        "phase_1ph": 1071,
+        "phase_3ph_wc": 4263,
+        "replacement": 3457,
+        "nsc": 1882,
+        "pct_share": 0.47
+      },
+      {
+        "circle": "BIHARSARIF",
+        "tariff": "LTIS1D",
+        "total": 5173,
+        "phase_1ph": 1056,
+        "phase_3ph_wc": 4116,
+        "replacement": 3732,
+        "nsc": 1441,
+        "pct_share": 0.46
+      },
+      {
+        "circle": "SASARAM",
+        "tariff": "NDS2D",
+        "total": 5154,
+        "phase_1ph": 4478,
+        "phase_3ph_wc": 636,
+        "replacement": 3562,
+        "nsc": 1592,
+        "pct_share": 0.46
+      },
+      {
+        "circle": "ARRAH",
+        "tariff": "LTIS1D",
+        "total": 4045,
+        "phase_1ph": 670,
+        "phase_3ph_wc": 3371,
+        "replacement": 2899,
+        "nsc": 1146,
+        "pct_share": 0.36
+      },
+      {
+        "circle": "PATNA",
+        "tariff": "LTIS1D",
+        "total": 3884,
+        "phase_1ph": 658,
+        "phase_3ph_wc": 3226,
+        "replacement": 2386,
+        "nsc": 1498,
+        "pct_share": 0.35
+      },
+      {
+        "circle": "ARRAH",
+        "tariff": "HGN",
+        "total": 3849,
+        "phase_1ph": 3775,
+        "phase_3ph_wc": 74,
+        "replacement": 3316,
+        "nsc": 533,
+        "pct_share": 0.34
+      },
+      {
+        "circle": "SASARAM",
+        "tariff": "LTIS1D",
+        "total": 3840,
+        "phase_1ph": 862,
+        "phase_3ph_wc": 2976,
+        "replacement": 2400,
+        "nsc": 1440,
+        "pct_share": 0.34
+      },
+      {
+        "circle": "BIHARSARIF",
+        "tariff": "HGN",
+        "total": 3705,
+        "phase_1ph": 675,
+        "phase_3ph_wc": 3030,
+        "replacement": 3316,
+        "nsc": 389,
+        "pct_share": 0.33
+      },
+      {
+        "circle": "PATNA",
+        "tariff": "KJ_BPL_MTR",
+        "total": 3526,
+        "phase_1ph": 3526,
+        "phase_3ph_wc": 0,
+        "replacement": 3525,
+        "nsc": 1,
+        "pct_share": 0.31
+      },
+      {
+        "circle": "PATNA",
+        "tariff": "NDS2D",
+        "total": 3290,
+        "phase_1ph": 2598,
+        "phase_3ph_wc": 670,
+        "replacement": 2688,
+        "nsc": 602,
+        "pct_share": 0.29
+      },
+      {
+        "circle": "SASARAM",
+        "tariff": "HGN",
+        "total": 3170,
+        "phase_1ph": 2860,
+        "phase_3ph_wc": 310,
+        "replacement": 2201,
+        "nsc": 969,
+        "pct_share": 0.28
+      },
+      {
+        "circle": "ARRAH",
+        "tariff": "NDS2D",
+        "total": 3080,
+        "phase_1ph": 2543,
+        "phase_3ph_wc": 490,
+        "replacement": 2477,
+        "nsc": 603,
+        "pct_share": 0.27
+      },
+      {
+        "circle": "MUNGER",
+        "tariff": "NDS2D",
+        "total": 3070,
+        "phase_1ph": 2913,
+        "phase_3ph_wc": 142,
+        "replacement": 2361,
+        "nsc": 709,
+        "pct_share": 0.27
+      },
+      {
+        "circle": "GAYA",
+        "tariff": "HGN",
+        "total": 2900,
+        "phase_1ph": 2363,
+        "phase_3ph_wc": 537,
+        "replacement": 2347,
+        "nsc": 553,
+        "pct_share": 0.26
+      },
+      {
+        "circle": "AURANGABAD",
+        "tariff": "DS2D",
+        "total": 2738,
+        "phase_1ph": 2734,
+        "phase_3ph_wc": 3,
+        "replacement": 2010,
+        "nsc": 728,
+        "pct_share": 0.24
+      },
+      {
+        "circle": "GAYA",
+        "tariff": "KJ_BPL_MTR",
+        "total": 2552,
+        "phase_1ph": 2552,
+        "phase_3ph_wc": 0,
+        "replacement": 2503,
+        "nsc": 49,
+        "pct_share": 0.23
+      },
+      {
+        "circle": "MUNGER",
+        "tariff": "LTIS1D",
+        "total": 2511,
+        "phase_1ph": 466,
+        "phase_3ph_wc": 2044,
+        "replacement": 1852,
+        "nsc": 659,
+        "pct_share": 0.22
+      },
+      {
+        "circle": "MUNGER",
+        "tariff": "HGN",
+        "total": 2510,
+        "phase_1ph": 2466,
+        "phase_3ph_wc": 44,
+        "replacement": 1856,
+        "nsc": 654,
+        "pct_share": 0.22
+      },
+      {
+        "circle": "AURANGABAD",
+        "tariff": "HGN",
+        "total": 2469,
+        "phase_1ph": 2382,
+        "phase_3ph_wc": 87,
+        "replacement": 1706,
+        "nsc": 763,
+        "pct_share": 0.22
+      },
+      {
+        "circle": "AURANGABAD",
+        "tariff": "LTIS1D",
+        "total": 2384,
+        "phase_1ph": 477,
+        "phase_3ph_wc": 1907,
+        "replacement": 1528,
+        "nsc": 856,
+        "pct_share": 0.21
+      },
+      {
+        "circle": "PATNA",
+        "tariff": "HGN",
+        "total": 2308,
+        "phase_1ph": 1408,
+        "phase_3ph_wc": 900,
+        "replacement": 2071,
+        "nsc": 237,
+        "pct_share": 0.21
+      },
+      {
+        "circle": "ARRAH",
+        "tariff": "KJ_BPL_MTR",
+        "total": 2008,
+        "phase_1ph": 2008,
+        "phase_3ph_wc": 0,
+        "replacement": 2006,
+        "nsc": 2,
+        "pct_share": 0.18
+      },
+      {
+        "circle": "AURANGABAD",
+        "tariff": "NDS2D",
+        "total": 1709,
+        "phase_1ph": 1431,
+        "phase_3ph_wc": 252,
+        "replacement": 1428,
+        "nsc": 281,
+        "pct_share": 0.15
+      },
+      {
+        "circle": "SASARAM",
+        "tariff": "KJ_BPL_MTR",
+        "total": 1581,
+        "phase_1ph": 1581,
+        "phase_3ph_wc": 0,
+        "replacement": 1543,
+        "nsc": 38,
+        "pct_share": 0.14
+      },
+      {
+        "circle": "BIHARSARIF",
+        "tariff": "KJ_BPL_MTR",
+        "total": 1556,
+        "phase_1ph": 1556,
+        "phase_3ph_wc": 0,
+        "replacement": 1547,
+        "nsc": 9,
+        "pct_share": 0.14
+      },
+      {
+        "circle": "BIHARSARIF",
+        "tariff": "IAS1",
+        "total": 814,
+        "phase_1ph": 451,
+        "phase_3ph_wc": 353,
+        "replacement": 214,
+        "nsc": 600,
+        "pct_share": 0.07
+      },
+      {
+        "circle": "AURANGABAD",
+        "tariff": "IAS1",
+        "total": 780,
+        "phase_1ph": 682,
+        "phase_3ph_wc": 90,
+        "replacement": 236,
+        "nsc": 544,
+        "pct_share": 0.07
+      },
+      {
+        "circle": "PATNA",
+        "tariff": "IAS1",
+        "total": 728,
+        "phase_1ph": 512,
+        "phase_3ph_wc": 199,
+        "replacement": 361,
+        "nsc": 367,
+        "pct_share": 0.06
+      },
+      {
+        "circle": "SASARAM",
+        "tariff": "IAS1",
+        "total": 674,
+        "phase_1ph": 516,
+        "phase_3ph_wc": 145,
+        "replacement": 125,
+        "nsc": 549,
+        "pct_share": 0.06
+      },
+      {
+        "circle": "GAYA",
+        "tariff": "IAS1",
+        "total": 645,
+        "phase_1ph": 500,
+        "phase_3ph_wc": 133,
+        "replacement": 157,
+        "nsc": 488,
+        "pct_share": 0.06
+      },
+      {
+        "circle": "GAYA",
+        "tariff": "OTHER",
+        "total": 622,
+        "phase_1ph": 616,
+        "phase_3ph_wc": 4,
+        "replacement": 324,
+        "nsc": 298,
+        "pct_share": 0.06
+      },
+      {
+        "circle": "ARRAH",
+        "tariff": "OTHER",
+        "total": 430,
+        "phase_1ph": 429,
+        "phase_3ph_wc": 1,
+        "replacement": 281,
+        "nsc": 149,
+        "pct_share": 0.04
+      },
+      {
+        "circle": "ARRAH",
+        "tariff": "IAS1",
+        "total": 407,
+        "phase_1ph": 337,
+        "phase_3ph_wc": 66,
+        "replacement": 170,
+        "nsc": 237,
+        "pct_share": 0.04
+      },
+      {
+        "circle": "BIHARSARIF",
+        "tariff": "OTHER",
+        "total": 360,
+        "phase_1ph": 355,
+        "phase_3ph_wc": 4,
+        "replacement": 209,
+        "nsc": 151,
+        "pct_share": 0.03
+      },
+      {
+        "circle": "AURANGABAD",
+        "tariff": "OTHER",
+        "total": 346,
+        "phase_1ph": 341,
+        "phase_3ph_wc": 5,
+        "replacement": 196,
+        "nsc": 150,
+        "pct_share": 0.03
+      },
+      {
+        "circle": "SASARAM",
+        "tariff": "OTHER",
+        "total": 336,
+        "phase_1ph": 332,
+        "phase_3ph_wc": 2,
+        "replacement": 242,
+        "nsc": 94,
+        "pct_share": 0.03
+      },
+      {
+        "circle": "PATNA",
+        "tariff": "OTHER",
+        "total": 325,
+        "phase_1ph": 318,
+        "phase_3ph_wc": 5,
+        "replacement": 206,
+        "nsc": 119,
+        "pct_share": 0.03
+      },
+      {
+        "circle": "GAYA",
+        "tariff": "NDS-IID(A)",
+        "total": 262,
+        "phase_1ph": 262,
+        "phase_3ph_wc": 0,
+        "replacement": 80,
+        "nsc": 182,
+        "pct_share": 0.02
+      },
+      {
+        "circle": "BIHARSARIF",
+        "tariff": "NDS-IID(A)",
+        "total": 247,
+        "phase_1ph": 247,
+        "phase_3ph_wc": 0,
+        "replacement": 87,
+        "nsc": 160,
+        "pct_share": 0.02
+      },
+      {
+        "circle": "BIHARSARIF",
+        "tariff": "PWWD",
+        "total": 239,
+        "phase_1ph": 37,
+        "phase_3ph_wc": 197,
+        "replacement": 223,
+        "nsc": 16,
+        "pct_share": 0.02
+      },
+      {
+        "circle": "MUNGER",
+        "tariff": "IAS1",
+        "total": 238,
+        "phase_1ph": 225,
+        "phase_3ph_wc": 13,
+        "replacement": 69,
+        "nsc": 169,
+        "pct_share": 0.02
+      },
+      {
+        "circle": "PATNA",
+        "tariff": "LTIS2D",
+        "total": 220,
+        "phase_1ph": 1,
+        "phase_3ph_wc": 51,
+        "replacement": 108,
+        "nsc": 112,
+        "pct_share": 0.02
+      },
+      {
+        "circle": "MUNGER",
+        "tariff": "KJ_BPL_MTR",
+        "total": 205,
+        "phase_1ph": 205,
+        "phase_3ph_wc": 0,
+        "replacement": 183,
+        "nsc": 22,
+        "pct_share": 0.02
+      },
+      {
+        "circle": "ARRAH",
+        "tariff": "LTIS2D",
+        "total": 173,
+        "phase_1ph": 0,
+        "phase_3ph_wc": 12,
+        "replacement": 146,
+        "nsc": 27,
+        "pct_share": 0.02
+      },
+      {
+        "circle": "MUNGER",
+        "tariff": "OTHER",
+        "total": 164,
+        "phase_1ph": 164,
+        "phase_3ph_wc": 0,
+        "replacement": 67,
+        "nsc": 97,
+        "pct_share": 0.01
+      },
+      {
+        "circle": "GAYA",
+        "tariff": "LTIS2D",
+        "total": 154,
+        "phase_1ph": 0,
+        "phase_3ph_wc": 14,
+        "replacement": 103,
+        "nsc": 51,
+        "pct_share": 0.01
+      },
+      {
+        "circle": "MUNGER",
+        "tariff": "NDS-IID(A)",
+        "total": 149,
+        "phase_1ph": 149,
+        "phase_3ph_wc": 0,
+        "replacement": 99,
+        "nsc": 50,
+        "pct_share": 0.01
+      },
+      {
+        "circle": "GAYA",
+        "tariff": "LTEV",
+        "total": 135,
+        "phase_1ph": 69,
+        "phase_3ph_wc": 46,
+        "replacement": 15,
+        "nsc": 120,
+        "pct_share": 0.01
+      },
+      {
+        "circle": "SASARAM",
+        "tariff": "NDS-IID(A)",
+        "total": 121,
+        "phase_1ph": 121,
+        "phase_3ph_wc": 0,
+        "replacement": 5,
+        "nsc": 116,
+        "pct_share": 0.01
+      },
+      {
+        "circle": "BIHARSARIF",
+        "tariff": "LTIS2D",
+        "total": 120,
+        "phase_1ph": 0,
+        "phase_3ph_wc": 11,
+        "replacement": 70,
+        "nsc": 50,
+        "pct_share": 0.01
+      },
+      {
+        "circle": "PATNA",
+        "tariff": "LTEV",
+        "total": 85,
+        "phase_1ph": 52,
+        "phase_3ph_wc": 21,
+        "replacement": 2,
+        "nsc": 83,
+        "pct_share": 0.01
+      },
+      {
+        "circle": "GAYA",
+        "tariff": "IAS2D",
+        "total": 84,
+        "phase_1ph": 71,
+        "phase_3ph_wc": 12,
+        "replacement": 8,
+        "nsc": 76,
+        "pct_share": 0.01
+      },
+      {
+        "circle": "BIHARSARIF",
+        "tariff": "LTEV",
+        "total": 82,
+        "phase_1ph": 75,
+        "phase_3ph_wc": 1,
+        "replacement": 3,
+        "nsc": 79,
+        "pct_share": 0.01
+      },
+      {
+        "circle": "ARRAH",
+        "tariff": "PWWD",
+        "total": 80,
+        "phase_1ph": 16,
+        "phase_3ph_wc": 55,
+        "replacement": 78,
+        "nsc": 2,
+        "pct_share": 0.01
+      },
+      {
+        "circle": "SASARAM",
+        "tariff": "LTIS2D",
+        "total": 78,
+        "phase_1ph": 0,
+        "phase_3ph_wc": 6,
+        "replacement": 49,
+        "nsc": 29,
+        "pct_share": 0.01
+      },
+      {
+        "circle": "SASARAM",
+        "tariff": "PWWD",
+        "total": 74,
+        "phase_1ph": 17,
+        "phase_3ph_wc": 54,
+        "replacement": 70,
+        "nsc": 4,
+        "pct_share": 0.01
+      },
+      {
+        "circle": "SASARAM",
+        "tariff": "SS1D",
+        "total": 70,
+        "phase_1ph": 53,
+        "phase_3ph_wc": 6,
+        "replacement": 1,
+        "nsc": 69,
+        "pct_share": 0.01
+      },
+      {
+        "circle": "GAYA",
+        "tariff": "SS1D",
+        "total": 67,
+        "phase_1ph": 52,
+        "phase_3ph_wc": 13,
+        "replacement": 6,
+        "nsc": 61,
+        "pct_share": 0.01
+      },
+      {
+        "circle": "MUNGER",
+        "tariff": "LTIS2D",
+        "total": 65,
+        "phase_1ph": 0,
+        "phase_3ph_wc": 14,
+        "replacement": 58,
+        "nsc": 7,
+        "pct_share": 0.01
+      },
+      {
+        "circle": "AURANGABAD",
+        "tariff": "KJ_BPL_MTR",
+        "total": 59,
+        "phase_1ph": 59,
+        "phase_3ph_wc": 0,
+        "replacement": 56,
+        "nsc": 3,
+        "pct_share": 0.01
+      },
+      {
+        "circle": "MUNGER",
+        "tariff": "LTEV",
+        "total": 55,
+        "phase_1ph": 51,
+        "phase_3ph_wc": 0,
+        "replacement": 14,
+        "nsc": 41,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "MUNGER",
+        "tariff": "PWWD",
+        "total": 52,
+        "phase_1ph": 20,
+        "phase_3ph_wc": 28,
+        "replacement": 51,
+        "nsc": 1,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "BIHARSARIF",
+        "tariff": "SS1D",
+        "total": 52,
+        "phase_1ph": 29,
+        "phase_3ph_wc": 21,
+        "replacement": 13,
+        "nsc": 39,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "PATNA",
+        "tariff": "DS3D",
+        "total": 50,
+        "phase_1ph": 42,
+        "phase_3ph_wc": 8,
+        "replacement": 31,
+        "nsc": 19,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "AURANGABAD",
+        "tariff": "NDS-IID(A)",
+        "total": 49,
+        "phase_1ph": 49,
+        "phase_3ph_wc": 0,
+        "replacement": 23,
+        "nsc": 26,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "AURANGABAD",
+        "tariff": "LTIS2D",
+        "total": 49,
+        "phase_1ph": 0,
+        "phase_3ph_wc": 7,
+        "replacement": 34,
+        "nsc": 15,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "PATNA",
+        "tariff": "PWWD",
+        "total": 48,
+        "phase_1ph": 1,
+        "phase_3ph_wc": 44,
+        "replacement": 48,
+        "nsc": 0,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "ARRAH",
+        "tariff": "NDS-IID(A)",
+        "total": 48,
+        "phase_1ph": 48,
+        "phase_3ph_wc": 0,
+        "replacement": 1,
+        "nsc": 47,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "BIHARSARIF",
+        "tariff": "IAS2D",
+        "total": 48,
+        "phase_1ph": 1,
+        "phase_3ph_wc": 45,
+        "replacement": 45,
+        "nsc": 3,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "ARRAH",
+        "tariff": "SS1D",
+        "total": 43,
+        "phase_1ph": 18,
+        "phase_3ph_wc": 13,
+        "replacement": 26,
+        "nsc": 17,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "GAYA",
+        "tariff": "PWWD",
+        "total": 41,
+        "phase_1ph": 12,
+        "phase_3ph_wc": 23,
+        "replacement": 38,
+        "nsc": 3,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "PATNA",
+        "tariff": "NDS-IID(A)",
+        "total": 36,
+        "phase_1ph": 36,
+        "phase_3ph_wc": 0,
+        "replacement": 18,
+        "nsc": 18,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "AURANGABAD",
+        "tariff": "IAS2D",
+        "total": 36,
+        "phase_1ph": 4,
+        "phase_3ph_wc": 28,
+        "replacement": 8,
+        "nsc": 28,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "GAYA",
+        "tariff": "DS3D",
+        "total": 35,
+        "phase_1ph": 31,
+        "phase_3ph_wc": 4,
+        "replacement": 2,
+        "nsc": 33,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "SASARAM",
+        "tariff": "LTEV",
+        "total": 33,
+        "phase_1ph": 23,
+        "phase_3ph_wc": 2,
+        "replacement": 7,
+        "nsc": 26,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "MUNGER",
+        "tariff": "SS1D",
+        "total": 29,
+        "phase_1ph": 25,
+        "phase_3ph_wc": 0,
+        "replacement": 0,
+        "nsc": 29,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "PATNA",
+        "tariff": "SS1D",
+        "total": 26,
+        "phase_1ph": 13,
+        "phase_3ph_wc": 12,
+        "replacement": 2,
+        "nsc": 24,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "PATNA",
+        "tariff": "IAS2D",
+        "total": 26,
+        "phase_1ph": 7,
+        "phase_3ph_wc": 18,
+        "replacement": 18,
+        "nsc": 8,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "ARRAH",
+        "tariff": "LTEV",
+        "total": 24,
+        "phase_1ph": 13,
+        "phase_3ph_wc": 1,
+        "replacement": 2,
+        "nsc": 22,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "ARRAH",
+        "tariff": "IAS2D",
+        "total": 24,
+        "phase_1ph": 7,
+        "phase_3ph_wc": 15,
+        "replacement": 15,
+        "nsc": 9,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "ARRAH",
+        "tariff": "DS3D",
+        "total": 24,
+        "phase_1ph": 24,
+        "phase_3ph_wc": 0,
+        "replacement": 0,
+        "nsc": 24,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "AURANGABAD",
+        "tariff": "SS1D",
+        "total": 23,
+        "phase_1ph": 20,
+        "phase_3ph_wc": 3,
+        "replacement": 5,
+        "nsc": 18,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "BIHARSARIF",
+        "tariff": "DS3D",
+        "total": 20,
+        "phase_1ph": 19,
+        "phase_3ph_wc": 1,
+        "replacement": 2,
+        "nsc": 18,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "AURANGABAD",
+        "tariff": "PWWD",
+        "total": 15,
+        "phase_1ph": 9,
+        "phase_3ph_wc": 5,
+        "replacement": 13,
+        "nsc": 2,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "AURANGABAD",
+        "tariff": "LTEV",
+        "total": 12,
+        "phase_1ph": 2,
+        "phase_3ph_wc": 0,
+        "replacement": 2,
+        "nsc": 10,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "MUNGER",
+        "tariff": "IAS2D",
+        "total": 11,
+        "phase_1ph": 2,
+        "phase_3ph_wc": 9,
+        "replacement": 7,
+        "nsc": 4,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "SASARAM",
+        "tariff": "IAS2D",
+        "total": 10,
+        "phase_1ph": 2,
+        "phase_3ph_wc": 8,
+        "replacement": 5,
+        "nsc": 5,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "SASARAM",
+        "tariff": "DS3D",
+        "total": 7,
+        "phase_1ph": 7,
+        "phase_3ph_wc": 0,
+        "replacement": 0,
+        "nsc": 7,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "AURANGABAD",
+        "tariff": "DS3D",
+        "total": 5,
+        "phase_1ph": 5,
+        "phase_3ph_wc": 0,
+        "replacement": 0,
+        "nsc": 5,
+        "pct_share": 0.0
+      },
+      {
+        "circle": "MUNGER",
+        "tariff": "DS3D",
+        "total": 2,
+        "phase_1ph": 2,
+        "phase_3ph_wc": 0,
+        "replacement": 0,
+        "nsc": 2,
+        "pct_share": 0.0
+      }
+    ]
+  },
+  "daily": {
+    "circles": [
+      {
+        "circle": "BIHARSARIF",
+        "total": 477,
+        "replacement": 249,
+        "nsc": 228,
+        "divisions": 5,
+        "agencies": 5,
+        "pct_share": 24.47
+      },
+      {
+        "circle": "SASARAM",
+        "total": 373,
+        "replacement": 240,
+        "nsc": 133,
+        "divisions": 3,
+        "agencies": 3,
+        "pct_share": 19.14
+      },
+      {
+        "circle": "ARRAH",
+        "total": 366,
+        "replacement": 201,
+        "nsc": 165,
+        "divisions": 3,
+        "agencies": 2,
+        "pct_share": 18.78
+      },
+      {
+        "circle": "GAYA",
+        "total": 290,
+        "replacement": 153,
+        "nsc": 137,
+        "divisions": 5,
+        "agencies": 4,
+        "pct_share": 14.88
+      },
+      {
+        "circle": "AURANGABAD",
+        "total": 236,
+        "replacement": 108,
+        "nsc": 128,
+        "divisions": 3,
+        "agencies": 3,
+        "pct_share": 12.11
+      },
+      {
+        "circle": "PATNA",
+        "total": 184,
+        "replacement": 111,
+        "nsc": 73,
+        "divisions": 5,
+        "agencies": 3,
+        "pct_share": 9.44
+      },
+      {
+        "circle": "MUNGER",
+        "total": 23,
+        "replacement": 4,
+        "nsc": 19,
+        "divisions": 2,
+        "agencies": 1,
+        "pct_share": 1.18
+      }
+    ],
+    "divisions": [
+      {
+        "circle": "ARRAH",
+        "division": "BUXAR",
+        "total": 176,
+        "replacement": 78,
+        "nsc": 98,
+        "agencies": 2,
+        "pct_share": 9.03
+      },
+      {
+        "circle": "BIHARSARIF",
+        "division": "RAJAULI",
+        "total": 176,
+        "replacement": 88,
+        "nsc": 88,
+        "agencies": 3,
+        "pct_share": 9.03
+      },
+      {
+        "circle": "SASARAM",
+        "division": "Bhabhua",
+        "total": 157,
+        "replacement": 103,
+        "nsc": 54,
+        "agencies": 2,
+        "pct_share": 8.06
+      },
+      {
+        "circle": "SASARAM",
+        "division": "SASARAM",
+        "total": 136,
+        "replacement": 91,
+        "nsc": 45,
+        "agencies": 3,
+        "pct_share": 6.98
+      },
+      {
+        "circle": "BIHARSARIF",
+        "division": "Biharshariff Rural",
+        "total": 122,
+        "replacement": 62,
+        "nsc": 60,
+        "agencies": 4,
+        "pct_share": 6.26
+      },
+      {
+        "circle": "GAYA",
+        "division": "JAHANABAD",
+        "total": 117,
+        "replacement": 75,
+        "nsc": 42,
+        "agencies": 3,
+        "pct_share": 6.0
+      },
+      {
+        "circle": "ARRAH",
+        "division": "JAGDISHPUR",
+        "total": 117,
+        "replacement": 70,
+        "nsc": 47,
+        "agencies": 1,
+        "pct_share": 6.0
+      },
+      {
+        "circle": "BIHARSARIF",
+        "division": "NAWADA",
+        "total": 107,
+        "replacement": 66,
+        "nsc": 41,
+        "agencies": 4,
+        "pct_share": 5.49
+      },
+      {
+        "circle": "AURANGABAD",
+        "division": "DAUDNAGAR",
+        "total": 99,
+        "replacement": 44,
+        "nsc": 55,
+        "agencies": 3,
+        "pct_share": 5.08
+      },
+      {
+        "circle": "GAYA",
+        "division": "SHERGHATI",
+        "total": 84,
+        "replacement": 37,
+        "nsc": 47,
+        "agencies": 3,
+        "pct_share": 4.31
+      },
+      {
+        "circle": "SASARAM",
+        "division": "DEHARI",
+        "total": 80,
+        "replacement": 46,
+        "nsc": 34,
+        "agencies": 2,
+        "pct_share": 4.1
+      },
+      {
+        "circle": "AURANGABAD",
+        "division": "AURANGABAD",
+        "total": 76,
+        "replacement": 29,
+        "nsc": 47,
+        "agencies": 3,
+        "pct_share": 3.9
+      },
+      {
+        "circle": "PATNA",
+        "division": "MASAURHI",
+        "total": 74,
+        "replacement": 53,
+        "nsc": 21,
+        "agencies": 3,
+        "pct_share": 3.8
+      },
+      {
+        "circle": "ARRAH",
+        "division": "ARRAH",
+        "total": 73,
+        "replacement": 53,
+        "nsc": 20,
+        "agencies": 2,
+        "pct_share": 3.75
+      },
+      {
+        "circle": "AURANGABAD",
+        "division": "ARWAL",
+        "total": 61,
+        "replacement": 35,
+        "nsc": 26,
+        "agencies": 2,
+        "pct_share": 3.13
+      },
+      {
+        "circle": "PATNA",
+        "division": "BIHTA",
+        "total": 54,
+        "replacement": 52,
+        "nsc": 2,
+        "agencies": 3,
+        "pct_share": 2.77
+      },
+      {
+        "circle": "GAYA",
+        "division": "MANPUR",
+        "total": 48,
+        "replacement": 21,
+        "nsc": 27,
+        "agencies": 3,
+        "pct_share": 2.46
+      },
+      {
+        "circle": "BIHARSARIF",
+        "division": "RAJGIR",
+        "total": 37,
+        "replacement": 22,
+        "nsc": 15,
+        "agencies": 2,
+        "pct_share": 1.9
+      },
+      {
+        "circle": "BIHARSARIF",
+        "division": "EKANGARSARAI",
+        "total": 35,
+        "replacement": 11,
+        "nsc": 24,
+        "agencies": 2,
+        "pct_share": 1.8
+      },
+      {
+        "circle": "PATNA",
+        "division": "Barh",
+        "total": 26,
+        "replacement": 0,
+        "nsc": 26,
+        "agencies": 1,
+        "pct_share": 1.33
+      },
+      {
+        "circle": "GAYA",
+        "division": "GAYAU",
+        "total": 22,
+        "replacement": 14,
+        "nsc": 8,
+        "agencies": 3,
+        "pct_share": 1.13
+      },
+      {
+        "circle": "GAYA",
+        "division": "GAYA RURAL",
+        "total": 19,
+        "replacement": 6,
+        "nsc": 13,
+        "agencies": 2,
+        "pct_share": 0.97
+      },
+      {
+        "circle": "MUNGER",
+        "division": "LAKHISARAI",
+        "total": 18,
+        "replacement": 4,
+        "nsc": 14,
+        "agencies": 1,
+        "pct_share": 0.92
+      },
+      {
+        "circle": "PATNA",
+        "division": "FATUHA",
+        "total": 18,
+        "replacement": 2,
+        "nsc": 16,
+        "agencies": 1,
+        "pct_share": 0.92
+      },
+      {
+        "circle": "PATNA",
+        "division": "PATNA",
+        "total": 12,
+        "replacement": 4,
+        "nsc": 8,
+        "agencies": 2,
+        "pct_share": 0.62
+      },
+      {
+        "circle": "MUNGER",
+        "division": "MUNGER",
+        "total": 5,
+        "replacement": 0,
+        "nsc": 5,
+        "agencies": 1,
+        "pct_share": 0.26
+      }
+    ],
+    "agencies": [
+      {
+        "circle": "ARRAH",
+        "agency": "AEWS",
+        "total": 358,
+        "installers": 33,
+        "replacement": 193,
+        "nsc": 165,
+        "pct_share": 18.37
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "AEWS",
+        "total": 296,
+        "installers": 23,
+        "replacement": 173,
+        "nsc": 123,
+        "pct_share": 15.19
+      },
+      {
+        "circle": "BIHARSARIF",
+        "agency": "SIV",
+        "total": 164,
+        "installers": 16,
+        "replacement": 53,
+        "nsc": 111,
+        "pct_share": 8.41
+      },
+      {
+        "circle": "BIHARSARIF",
+        "agency": "JMT",
+        "total": 135,
+        "installers": 8,
+        "replacement": 78,
+        "nsc": 57,
+        "pct_share": 6.93
+      },
+      {
+        "circle": "GAYA",
+        "agency": "AEWS",
+        "total": 132,
+        "installers": 16,
+        "replacement": 60,
+        "nsc": 72,
+        "pct_share": 6.77
+      },
+      {
+        "circle": "GAYA",
+        "agency": "PCI",
+        "total": 129,
+        "installers": 23,
+        "replacement": 72,
+        "nsc": 57,
+        "pct_share": 6.62
+      },
+      {
+        "circle": "AURANGABAD",
+        "agency": "SAWNA",
+        "total": 111,
+        "installers": 10,
+        "replacement": 36,
+        "nsc": 75,
+        "pct_share": 5.7
+      },
+      {
+        "circle": "PATNA",
+        "agency": "AEWS",
+        "total": 103,
+        "installers": 17,
+        "replacement": 56,
+        "nsc": 47,
+        "pct_share": 5.28
+      },
+      {
+        "circle": "AURANGABAD",
+        "agency": "AEWS",
+        "total": 83,
+        "installers": 8,
+        "replacement": 32,
+        "nsc": 51,
+        "pct_share": 4.26
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "SMRT",
+        "total": 73,
+        "installers": 17,
+        "replacement": 63,
+        "nsc": 10,
+        "pct_share": 3.75
+      },
+      {
+        "circle": "BIHARSARIF",
+        "agency": "ST",
+        "total": 72,
+        "installers": 16,
+        "replacement": 41,
+        "nsc": 31,
+        "pct_share": 3.69
+      },
+      {
+        "circle": "PATNA",
+        "agency": "SSC",
+        "total": 69,
+        "installers": 8,
+        "replacement": 47,
+        "nsc": 22,
+        "pct_share": 3.54
+      },
+      {
+        "circle": "BIHARSARIF",
+        "agency": "AEWS",
+        "total": 59,
+        "installers": 9,
+        "replacement": 31,
+        "nsc": 28,
+        "pct_share": 3.03
+      },
+      {
+        "circle": "BIHARSARIF",
+        "agency": "SMRT",
+        "total": 47,
+        "installers": 13,
+        "replacement": 46,
+        "nsc": 1,
+        "pct_share": 2.41
+      },
+      {
+        "circle": "AURANGABAD",
+        "agency": "SMRT",
+        "total": 42,
+        "installers": 8,
+        "replacement": 40,
+        "nsc": 2,
+        "pct_share": 2.15
+      },
+      {
+        "circle": "GAYA",
+        "agency": "SMRT",
+        "total": 26,
+        "installers": 12,
+        "replacement": 18,
+        "nsc": 8,
+        "pct_share": 1.33
+      },
+      {
+        "circle": "MUNGER",
+        "agency": "AEWS",
+        "total": 23,
+        "installers": 7,
+        "replacement": 4,
+        "nsc": 19,
+        "pct_share": 1.18
+      },
+      {
+        "circle": "PATNA",
+        "agency": "SMRT",
+        "total": 12,
+        "installers": 4,
+        "replacement": 8,
+        "nsc": 4,
+        "pct_share": 0.62
+      },
+      {
+        "circle": "ARRAH",
+        "agency": "SMRT",
+        "total": 8,
+        "installers": 4,
+        "replacement": 8,
+        "nsc": 0,
+        "pct_share": 0.41
+      },
+      {
+        "circle": "SASARAM",
+        "agency": "HPL",
+        "total": 4,
+        "installers": 2,
+        "replacement": 4,
+        "nsc": 0,
+        "pct_share": 0.21
+      },
+      {
+        "circle": "GAYA",
+        "agency": "ST",
+        "total": 3,
+        "installers": 3,
+        "replacement": 3,
+        "nsc": 0,
+        "pct_share": 0.15
+      }
+    ],
+    "tariffs": [
+      {
+        "tariff": "DS1D",
+        "total": 916,
+        "replacement": 247,
+        "nsc": 669,
+        "pct_share": 47.0
+      },
+      {
+        "tariff": "KJ",
+        "total": 775,
+        "replacement": 770,
+        "nsc": 5,
+        "pct_share": 39.76
+      },
+      {
+        "tariff": "NDS1D",
+        "total": 152,
+        "replacement": 13,
+        "nsc": 139,
+        "pct_share": 7.8
+      },
+      {
+        "tariff": "DS2D",
+        "total": 26,
+        "replacement": 11,
+        "nsc": 15,
+        "pct_share": 1.33
+      },
+      {
+        "tariff": "HGN",
+        "total": 21,
+        "replacement": 1,
+        "nsc": 20,
+        "pct_share": 1.08
+      },
+      {
+        "tariff": "KJ_BPL_MTR",
+        "total": 17,
+        "replacement": 17,
+        "nsc": 0,
+        "pct_share": 0.87
+      },
+      {
+        "tariff": "LTIS1D",
+        "total": 14,
+        "replacement": 0,
+        "nsc": 14,
+        "pct_share": 0.72
+      },
+      {
+        "tariff": "NDS2D",
+        "total": 13,
+        "replacement": 4,
+        "nsc": 9,
+        "pct_share": 0.67
+      },
+      {
+        "tariff": "IAS1",
+        "total": 9,
+        "replacement": 3,
+        "nsc": 6,
+        "pct_share": 0.46
+      },
+      {
+        "tariff": "LTEV",
+        "total": 5,
+        "replacement": 0,
+        "nsc": 5,
+        "pct_share": 0.26
+      },
+      {
+        "tariff": "DS3D",
+        "total": 1,
+        "replacement": 0,
+        "nsc": 1,
+        "pct_share": 0.05
+      }
+    ],
+    "tariff_by_circle": [
+      {
+        "circle": "BIHARSARIF",
+        "tariff": "DS1D",
+        "total": 249,
+        "replacement": 60,
+        "nsc": 189,
+        "pct_share": 12.78
+      },
+      {
+        "circle": "SASARAM",
+        "tariff": "KJ",
+        "total": 201,
+        "replacement": 198,
+        "nsc": 3,
+        "pct_share": 10.31
+      },
+      {
+        "circle": "BIHARSARIF",
+        "tariff": "KJ",
+        "total": 185,
+        "replacement": 185,
+        "nsc": 0,
+        "pct_share": 9.49
+      },
+      {
+        "circle": "ARRAH",
+        "tariff": "KJ",
+        "total": 179,
+        "replacement": 179,
+        "nsc": 0,
+        "pct_share": 9.18
+      },
+      {
+        "circle": "AURANGABAD",
+        "tariff": "DS1D",
+        "total": 145,
+        "replacement": 60,
+        "nsc": 85,
+        "pct_share": 7.44
+      },
+      {
+        "circle": "GAYA",
+        "tariff": "DS1D",
+        "total": 144,
+        "replacement": 40,
+        "nsc": 104,
+        "pct_share": 7.39
+      },
+      {
+        "circle": "ARRAH",
+        "tariff": "DS1D",
+        "total": 137,
+        "replacement": 14,
+        "nsc": 123,
+        "pct_share": 7.03
+      },
+      {
+        "circle": "SASARAM",
+        "tariff": "DS1D",
+        "total": 129,
+        "replacement": 30,
+        "nsc": 99,
+        "pct_share": 6.62
+      },
+      {
+        "circle": "GAYA",
+        "tariff": "KJ",
+        "total": 101,
+        "replacement": 99,
+        "nsc": 2,
+        "pct_share": 5.18
+      },
+      {
+        "circle": "PATNA",
+        "tariff": "DS1D",
+        "total": 99,
+        "replacement": 42,
+        "nsc": 57,
+        "pct_share": 5.08
+      },
+      {
+        "circle": "PATNA",
+        "tariff": "KJ",
+        "total": 63,
+        "replacement": 63,
+        "nsc": 0,
+        "pct_share": 3.23
+      },
+      {
+        "circle": "AURANGABAD",
+        "tariff": "KJ",
+        "total": 43,
+        "replacement": 43,
+        "nsc": 0,
+        "pct_share": 2.21
+      },
+      {
+        "circle": "ARRAH",
+        "tariff": "NDS1D",
+        "total": 31,
+        "replacement": 1,
+        "nsc": 30,
+        "pct_share": 1.59
+      },
+      {
+        "circle": "BIHARSARIF",
+        "tariff": "NDS1D",
+        "total": 30,
+        "replacement": 0,
+        "nsc": 30,
+        "pct_share": 1.54
+      },
+      {
+        "circle": "AURANGABAD",
+        "tariff": "NDS1D",
+        "total": 30,
+        "replacement": 2,
+        "nsc": 28,
+        "pct_share": 1.54
+      },
+      {
+        "circle": "GAYA",
+        "tariff": "NDS1D",
+        "total": 26,
+        "replacement": 7,
+        "nsc": 19,
+        "pct_share": 1.33
+      },
+      {
+        "circle": "SASARAM",
+        "tariff": "NDS1D",
+        "total": 20,
+        "replacement": 2,
+        "nsc": 18,
+        "pct_share": 1.03
+      },
+      {
+        "circle": "MUNGER",
+        "tariff": "DS1D",
+        "total": 13,
+        "replacement": 1,
+        "nsc": 12,
+        "pct_share": 0.67
+      },
+      {
+        "circle": "PATNA",
+        "tariff": "NDS1D",
+        "total": 11,
+        "replacement": 1,
+        "nsc": 10,
+        "pct_share": 0.56
+      },
+      {
+        "circle": "AURANGABAD",
+        "tariff": "HGN",
+        "total": 11,
+        "replacement": 0,
+        "nsc": 11,
+        "pct_share": 0.56
+      },
+      {
+        "circle": "SASARAM",
+        "tariff": "DS2D",
+        "total": 8,
+        "replacement": 2,
+        "nsc": 6,
+        "pct_share": 0.41
+      },
+      {
+        "circle": "ARRAH",
+        "tariff": "HGN",
+        "total": 8,
+        "replacement": 1,
+        "nsc": 7,
+        "pct_share": 0.41
+      },
+      {
+        "circle": "GAYA",
+        "tariff": "DS2D",
+        "total": 7,
+        "replacement": 2,
+        "nsc": 5,
+        "pct_share": 0.36
+      },
+      {
+        "circle": "SASARAM",
+        "tariff": "KJ_BPL_MTR",
+        "total": 7,
+        "replacement": 7,
+        "nsc": 0,
+        "pct_share": 0.36
+      },
+      {
+        "circle": "SASARAM",
+        "tariff": "NDS2D",
+        "total": 6,
+        "replacement": 1,
+        "nsc": 5,
+        "pct_share": 0.31
+      },
+      {
+        "circle": "ARRAH",
+        "tariff": "KJ_BPL_MTR",
+        "total": 5,
+        "replacement": 5,
+        "nsc": 0,
+        "pct_share": 0.26
+      },
+      {
+        "circle": "ARRAH",
+        "tariff": "LTIS1D",
+        "total": 4,
+        "replacement": 0,
+        "nsc": 4,
+        "pct_share": 0.21
+      },
+      {
+        "circle": "AURANGABAD",
+        "tariff": "DS2D",
+        "total": 4,
+        "replacement": 3,
+        "nsc": 1,
+        "pct_share": 0.21
+      },
+      {
+        "circle": "BIHARSARIF",
+        "tariff": "DS2D",
+        "total": 4,
+        "replacement": 1,
+        "nsc": 3,
+        "pct_share": 0.21
+      },
+      {
+        "circle": "MUNGER",
+        "tariff": "NDS1D",
+        "total": 4,
+        "replacement": 0,
+        "nsc": 4,
+        "pct_share": 0.21
+      },
+      {
+        "circle": "GAYA",
+        "tariff": "IAS1",
+        "total": 4,
+        "replacement": 2,
+        "nsc": 2,
+        "pct_share": 0.21
+      },
+      {
+        "circle": "MUNGER",
+        "tariff": "KJ",
+        "total": 3,
+        "replacement": 3,
+        "nsc": 0,
+        "pct_share": 0.15
+      },
+      {
+        "circle": "GAYA",
+        "tariff": "NDS2D",
+        "total": 3,
+        "replacement": 1,
+        "nsc": 2,
+        "pct_share": 0.15
+      },
+      {
+        "circle": "BIHARSARIF",
+        "tariff": "NDS2D",
+        "total": 3,
+        "replacement": 2,
+        "nsc": 1,
+        "pct_share": 0.15
+      },
+      {
+        "circle": "BIHARSARIF",
+        "tariff": "LTIS1D",
+        "total": 3,
+        "replacement": 0,
+        "nsc": 3,
+        "pct_share": 0.15
+      },
+      {
+        "circle": "AURANGABAD",
+        "tariff": "IAS1",
+        "total": 2,
+        "replacement": 0,
+        "nsc": 2,
+        "pct_share": 0.1
+      },
+      {
+        "circle": "GAYA",
+        "tariff": "KJ_BPL_MTR",
+        "total": 2,
+        "replacement": 2,
+        "nsc": 0,
+        "pct_share": 0.1
+      },
+      {
+        "circle": "PATNA",
+        "tariff": "HGN",
+        "total": 2,
+        "replacement": 0,
+        "nsc": 2,
+        "pct_share": 0.1
+      },
+      {
+        "circle": "PATNA",
+        "tariff": "LTEV",
+        "total": 2,
+        "replacement": 0,
+        "nsc": 2,
+        "pct_share": 0.1
+      },
+      {
+        "circle": "SASARAM",
+        "tariff": "LTIS1D",
+        "total": 2,
+        "replacement": 0,
+        "nsc": 2,
+        "pct_share": 0.1
+      },
+      {
+        "circle": "PATNA",
+        "tariff": "DS2D",
+        "total": 2,
+        "replacement": 2,
+        "nsc": 0,
+        "pct_share": 0.1
+      },
+      {
+        "circle": "PATNA",
+        "tariff": "KJ_BPL_MTR",
+        "total": 2,
+        "replacement": 2,
+        "nsc": 0,
+        "pct_share": 0.1
+      },
+      {
+        "circle": "GAYA",
+        "tariff": "LTEV",
+        "total": 2,
+        "replacement": 0,
+        "nsc": 2,
+        "pct_share": 0.1
+      },
+      {
+        "circle": "PATNA",
+        "tariff": "LTIS1D",
+        "total": 2,
+        "replacement": 0,
+        "nsc": 2,
+        "pct_share": 0.1
+      },
+      {
+        "circle": "BIHARSARIF",
+        "tariff": "KJ_BPL_MTR",
+        "total": 1,
+        "replacement": 1,
+        "nsc": 0,
+        "pct_share": 0.05
+      },
+      {
+        "circle": "PATNA",
+        "tariff": "IAS1",
+        "total": 1,
+        "replacement": 1,
+        "nsc": 0,
+        "pct_share": 0.05
+      },
+      {
+        "circle": "ARRAH",
+        "tariff": "DS2D",
+        "total": 1,
+        "replacement": 1,
+        "nsc": 0,
+        "pct_share": 0.05
+      },
+      {
+        "circle": "AURANGABAD",
+        "tariff": "LTIS1D",
+        "total": 1,
+        "replacement": 0,
+        "nsc": 1,
+        "pct_share": 0.05
+      },
+      {
+        "circle": "MUNGER",
+        "tariff": "LTIS1D",
+        "total": 1,
+        "replacement": 0,
+        "nsc": 1,
+        "pct_share": 0.05
+      },
+      {
+        "circle": "GAYA",
+        "tariff": "LTIS1D",
+        "total": 1,
+        "replacement": 0,
+        "nsc": 1,
+        "pct_share": 0.05
+      },
+      {
+        "circle": "MUNGER",
+        "tariff": "NDS2D",
+        "total": 1,
+        "replacement": 0,
+        "nsc": 1,
+        "pct_share": 0.05
+      },
+      {
+        "circle": "BIHARSARIF",
+        "tariff": "IAS1",
+        "total": 1,
+        "replacement": 0,
+        "nsc": 1,
+        "pct_share": 0.05
+      },
+      {
+        "circle": "BIHARSARIF",
+        "tariff": "LTEV",
+        "total": 1,
+        "replacement": 0,
+        "nsc": 1,
+        "pct_share": 0.05
+      },
+      {
+        "circle": "ARRAH",
+        "tariff": "DS3D",
+        "total": 1,
+        "replacement": 0,
+        "nsc": 1,
+        "pct_share": 0.05
+      },
+      {
+        "circle": "MUNGER",
+        "tariff": "IAS1",
+        "total": 1,
+        "replacement": 0,
+        "nsc": 1,
+        "pct_share": 0.05
+      }
+    ]
+  },
+  "ula": {
+    "circles": [
+      {
+        "circle": "BIHARSARIF",
+        "total_scope": 40884,
+        "installed_master": 4925,
+        "pending": 35959,
+        "daily_installed": 74,
+        "pct_complete": 12.05
+      },
+      {
+        "circle": "SASARAM",
+        "total_scope": 13907,
+        "installed_master": 3846,
+        "pending": 10061,
+        "daily_installed": 192,
+        "pct_complete": 27.66
+      },
+      {
+        "circle": "AURANGABAD",
+        "total_scope": 12143,
+        "installed_master": 2050,
+        "pending": 10093,
+        "daily_installed": 34,
+        "pct_complete": 16.88
+      },
+      {
+        "circle": "ARRAH",
+        "total_scope": 8738,
+        "installed_master": 3727,
+        "pending": 5011,
+        "daily_installed": 93,
+        "pct_complete": 42.65
+      },
+      {
+        "circle": "PATNA",
+        "total_scope": 7090,
+        "installed_master": 3200,
+        "pending": 3890,
+        "daily_installed": 57,
+        "pct_complete": 45.13
+      },
+      {
+        "circle": "GAYA",
+        "total_scope": 6828,
+        "installed_master": 2392,
+        "pending": 4436,
+        "daily_installed": 86,
+        "pct_complete": 35.03
+      },
+      {
+        "circle": "MUNGER",
+        "total_scope": 1443,
+        "installed_master": 838,
+        "pending": 605,
+        "daily_installed": 2,
+        "pct_complete": 58.07
+      }
+    ],
+    "divisions": [
+      {
+        "circle": "ARRAH",
+        "division": "BUXAR",
+        "total_scope": 3446,
+        "installed_master": 1712,
+        "pending": 1734,
+        "daily_installed": 47,
+        "pct_complete": 49.68
+      },
+      {
+        "circle": "ARRAH",
+        "division": "ARRAH",
+        "total_scope": 3101,
+        "installed_master": 794,
+        "pending": 2307,
+        "daily_installed": 25,
+        "pct_complete": 25.6
+      },
+      {
+        "circle": "ARRAH",
+        "division": "JAGDISHPUR",
+        "total_scope": 2191,
+        "installed_master": 1221,
+        "pending": 970,
+        "daily_installed": 21,
+        "pct_complete": 55.73
+      },
+      {
+        "circle": "AURANGABAD",
+        "division": "AURANGABAD",
+        "total_scope": 4270,
+        "installed_master": 446,
+        "pending": 3824,
+        "daily_installed": 0,
+        "pct_complete": 10.44
+      },
+      {
+        "circle": "AURANGABAD",
+        "division": "DAUDNAGAR",
+        "total_scope": 4125,
+        "installed_master": 519,
+        "pending": 3606,
+        "daily_installed": 5,
+        "pct_complete": 12.58
+      },
+      {
+        "circle": "AURANGABAD",
+        "division": "ARWAL",
+        "total_scope": 3748,
+        "installed_master": 1085,
+        "pending": 2663,
+        "daily_installed": 29,
+        "pct_complete": 28.95
+      },
+      {
+        "circle": "BIHARSARIF",
+        "division": "Biharshariff Rural",
+        "total_scope": 21330,
+        "installed_master": 2354,
+        "pending": 18976,
+        "daily_installed": 30,
+        "pct_complete": 11.04
+      },
+      {
+        "circle": "BIHARSARIF",
+        "division": "RAJAULI",
+        "total_scope": 7455,
+        "installed_master": 792,
+        "pending": 6663,
+        "daily_installed": 29,
+        "pct_complete": 10.62
+      },
+      {
+        "circle": "BIHARSARIF",
+        "division": "NAWADA",
+        "total_scope": 5405,
+        "installed_master": 563,
+        "pending": 4842,
+        "daily_installed": 2,
+        "pct_complete": 10.42
+      },
+      {
+        "circle": "BIHARSARIF",
+        "division": "EKANGARSARAI",
+        "total_scope": 3886,
+        "installed_master": 647,
+        "pending": 3239,
+        "daily_installed": 1,
+        "pct_complete": 16.65
+      },
+      {
+        "circle": "BIHARSARIF",
+        "division": "RAJGIR",
+        "total_scope": 2808,
+        "installed_master": 569,
+        "pending": 2239,
+        "daily_installed": 12,
+        "pct_complete": 20.26
+      },
+      {
+        "circle": "GAYA",
+        "division": "Jehanabad",
+        "total_scope": 3163,
+        "installed_master": 1048,
+        "pending": 2115,
+        "daily_installed": 65,
+        "pct_complete": 33.13
+      },
+      {
+        "circle": "GAYA",
+        "division": "Gaya Rural",
+        "total_scope": 1222,
+        "installed_master": 246,
+        "pending": 976,
+        "daily_installed": 0,
+        "pct_complete": 20.13
+      },
+      {
+        "circle": "GAYA",
+        "division": "Manpur",
+        "total_scope": 1073,
+        "installed_master": 380,
+        "pending": 693,
+        "daily_installed": 1,
+        "pct_complete": 35.41
+      },
+      {
+        "circle": "GAYA",
+        "division": "Sherghati",
+        "total_scope": 985,
+        "installed_master": 512,
+        "pending": 473,
+        "daily_installed": 18,
+        "pct_complete": 51.98
+      },
+      {
+        "circle": "GAYA",
+        "division": "Gaya Urban",
+        "total_scope": 385,
+        "installed_master": 207,
+        "pending": 178,
+        "daily_installed": 2,
+        "pct_complete": 53.77
+      },
+      {
+        "circle": "MUNGER",
+        "division": "Lakhisarai",
+        "total_scope": 831,
+        "installed_master": 564,
+        "pending": 267,
+        "daily_installed": 2,
+        "pct_complete": 67.87
+      },
+      {
+        "circle": "MUNGER",
+        "division": "Munger",
+        "total_scope": 612,
+        "installed_master": 274,
+        "pending": 338,
+        "daily_installed": 0,
+        "pct_complete": 44.77
+      },
+      {
+        "circle": "PATNA",
+        "division": "BARH",
+        "total_scope": 2279,
+        "installed_master": 1005,
+        "pending": 1274,
+        "daily_installed": 0,
+        "pct_complete": 44.1
+      },
+      {
+        "circle": "PATNA",
+        "division": "BIHTA",
+        "total_scope": 1992,
+        "installed_master": 525,
+        "pending": 1467,
+        "daily_installed": 48,
+        "pct_complete": 26.36
+      },
+      {
+        "circle": "PATNA",
+        "division": "FATUHA",
+        "total_scope": 1611,
+        "installed_master": 1162,
+        "pending": 449,
+        "daily_installed": 0,
+        "pct_complete": 72.13
+      },
+      {
+        "circle": "PATNA",
+        "division": "MASAURHI",
+        "total_scope": 1031,
+        "installed_master": 406,
+        "pending": 625,
+        "daily_installed": 9,
+        "pct_complete": 39.38
+      },
+      {
+        "circle": "PATNA",
+        "division": "PATNA",
+        "total_scope": 177,
+        "installed_master": 102,
+        "pending": 75,
+        "daily_installed": 0,
+        "pct_complete": 57.63
+      },
+      {
+        "circle": "SASARAM",
+        "division": "BHABHUA",
+        "total_scope": 6039,
+        "installed_master": 1940,
+        "pending": 4099,
+        "daily_installed": 79,
+        "pct_complete": 32.12
+      },
+      {
+        "circle": "SASARAM",
+        "division": "SASARAM",
+        "total_scope": 4723,
+        "installed_master": 1416,
+        "pending": 3307,
+        "daily_installed": 73,
+        "pct_complete": 29.98
+      },
+      {
+        "circle": "SASARAM",
+        "division": "DEHRI",
+        "total_scope": 3145,
+        "installed_master": 490,
+        "pending": 2655,
+        "daily_installed": 40,
+        "pct_complete": 15.58
+      }
+    ]
+  }
+}
