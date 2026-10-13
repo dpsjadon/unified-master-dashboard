@@ -51,16 +51,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // --- CIRCLE SLICER CONTROLS ---
 function setupCircleSlicer() {
-  const container = document.getElementById('circleSlicerContainer');
+  const circleSelect = document.getElementById('circleSelect');
   const clearBtn = document.getElementById('slicerClearBtn');
-  if (!container) return;
 
-  container.addEventListener('click', (e) => {
-    const chip = e.target.closest('.slicer-chip');
-    if (!chip) return;
-    const circle = chip.getAttribute('data-circle') || 'ALL';
-    selectCircleFilter(circle);
-  });
+  if (circleSelect) {
+    circleSelect.addEventListener('change', (e) => {
+      selectCircleFilter(e.target.value);
+    });
+  }
 
   if (clearBtn) {
     clearBtn.addEventListener('click', () => {
@@ -72,14 +70,11 @@ function setupCircleSlicer() {
 async function selectCircleFilter(circle) {
   state.activeCircle = circle;
 
-  // Update chip styles
-  document.querySelectorAll('.slicer-chip').forEach(btn => {
-    if (btn.getAttribute('data-circle') === circle) {
-      btn.classList.add('active');
-    } else {
-      btn.classList.remove('active');
-    }
-  });
+  // Sync dropdown value
+  const circleSelect = document.getElementById('circleSelect');
+  if (circleSelect && circleSelect.value !== circle) {
+    circleSelect.value = circle || 'ALL';
+  }
 
   // Toggle clear filter button
   const clearBtn = document.getElementById('slicerClearBtn');
@@ -163,32 +158,58 @@ function setupNavigation() {
     });
   });
 
-  // Cumulative Sub-Pills
+  // Executive Dimension Dropdowns
+  const selectCumType = document.getElementById('selectCumulativeType');
+  if (selectCumType) {
+    selectCumType.addEventListener('change', (e) => {
+      state.activeCumType = e.target.value;
+      loadCumulativeTable();
+    });
+  }
+
+  const selectDailyType = document.getElementById('selectDailyType');
+  if (selectDailyType) {
+    selectDailyType.addEventListener('change', (e) => {
+      state.activeDailyType = e.target.value;
+      loadDailyTable();
+    });
+  }
+
+  const selectUlaType = document.getElementById('selectUlaType');
+  if (selectUlaType) {
+    selectUlaType.addEventListener('change', (e) => {
+      state.activeUlaType = e.target.value;
+      loadUlaTable();
+    });
+  }
+
+  // Legacy sub-pills support (if present)
   document.querySelectorAll('[data-cum-type]').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('[data-cum-type]').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       state.activeCumType = btn.getAttribute('data-cum-type');
+      if (selectCumType) selectCumType.value = state.activeCumType;
       loadCumulativeTable();
     });
   });
 
-  // Daily Sub-Pills
   document.querySelectorAll('[data-daily-type]').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('[data-daily-type]').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       state.activeDailyType = btn.getAttribute('data-daily-type');
+      if (selectDailyType) selectDailyType.value = state.activeDailyType;
       loadDailyTable();
     });
   });
 
-  // ULA Sub-Pills
   document.querySelectorAll('[data-ula-type]').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('[data-ula-type]').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       state.activeUlaType = btn.getAttribute('data-ula-type');
+      if (selectUlaType) selectUlaType.value = state.activeUlaType;
       loadUlaTable();
     });
   });
@@ -219,19 +240,53 @@ function setupNavigation() {
   }
 
   // Export CSV Buttons
-  document.getElementById('btnExportCumulativeCsv').addEventListener('click', exportCumulativeCsv);
-  document.getElementById('btnExportDailyCsv').addEventListener('click', exportDailyCsv);
-  document.getElementById('btnExportUlaCsv').addEventListener('click', exportUlaCsv);
+  const btnExportCum = document.getElementById('btnExportCumulativeCsv');
+  if (btnExportCum) btnExportCum.addEventListener('click', exportCumulativeCsv);
+  const btnExportDaily = document.getElementById('btnExportDailyCsv');
+  if (btnExportDaily) btnExportDaily.addEventListener('click', exportDailyCsv);
+  const btnExportUla = document.getElementById('btnExportUlaCsv');
+  if (btnExportUla) btnExportUla.addEventListener('click', exportUlaCsv);
 }
 
 // --- DATE RANGE FILTERS ---
 function setupDateFilters() {
-  const modeBtns = document.querySelectorAll('.date-mode-btn');
+  const selectDateMode = document.getElementById('selectDateMode');
   const monthGroup = document.getElementById('monthSelectGroup');
   const customGroup = document.getElementById('customDateGroup');
   const selectMonth = document.getElementById('selectMonth');
   const badge = document.getElementById('activeFilterBadge');
 
+  if (selectDateMode) {
+    selectDateMode.addEventListener('change', (e) => {
+      const mode = e.target.value;
+      state.dateMode = mode;
+
+      if (monthGroup) {
+        monthGroup.style.display = mode === 'monthly' ? 'flex' : 'none';
+        monthGroup.classList.toggle('d-none', mode !== 'monthly');
+      }
+      if (customGroup) {
+        customGroup.style.display = mode === 'daily' ? 'flex' : 'none';
+        customGroup.classList.toggle('d-none', mode !== 'daily');
+      }
+
+      if (mode === 'all') {
+        if (badge) badge.textContent = 'All Time Cumulative (1,124,022 Meters)';
+        state.selectedMonth = '';
+        state.startDate = '';
+        state.endDate = '';
+        loadCumulativeTable();
+      } else if (mode === 'weekly') {
+        if (badge) badge.textContent = 'Last 7 Days (Weekly Velocity)';
+        loadCumulativeTable();
+      } else if (mode === 'monthly') {
+        if (badge) badge.textContent = `Month: ${state.selectedMonth || 'Latest'}`;
+        loadCumulativeTable();
+      }
+    });
+  }
+
+  const modeBtns = document.querySelectorAll('.date-mode-btn');
   modeBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       modeBtns.forEach(b => {
@@ -242,39 +297,51 @@ function setupDateFilters() {
       btn.classList.add('btn-primary');
 
       const mode = btn.getAttribute('data-mode');
+      if (selectDateMode) selectDateMode.value = mode;
       state.dateMode = mode;
 
-      monthGroup.style.display = mode === 'monthly' ? 'flex' : 'none';
-      customGroup.style.display = mode === 'daily' ? 'flex' : 'none';
+      if (monthGroup) {
+        monthGroup.style.display = mode === 'monthly' ? 'flex' : 'none';
+        monthGroup.classList.toggle('d-none', mode !== 'monthly');
+      }
+      if (customGroup) {
+        customGroup.style.display = mode === 'daily' ? 'flex' : 'none';
+        customGroup.classList.toggle('d-none', mode !== 'daily');
+      }
 
       if (mode === 'all') {
-        badge.textContent = 'All Time Cumulative (1,124,022 Meters)';
+        if (badge) badge.textContent = 'All Time Cumulative (1,124,022 Meters)';
         state.selectedMonth = '';
         state.startDate = '';
         state.endDate = '';
         loadCumulativeTable();
       } else if (mode === 'weekly') {
-        badge.textContent = 'Last 7 Days (Weekly Velocity)';
+        if (badge) badge.textContent = 'Last 7 Days (Weekly Velocity)';
         loadCumulativeTable();
       } else if (mode === 'monthly') {
-        badge.textContent = `Month: ${state.selectedMonth || 'Latest'}`;
+        if (badge) badge.textContent = `Month: ${state.selectedMonth || 'Latest'}`;
         loadCumulativeTable();
       }
     });
   });
 
-  selectMonth.addEventListener('change', (e) => {
-    state.selectedMonth = e.target.value;
-    badge.textContent = `Month: ${state.selectedMonth || 'All'}`;
-    loadCumulativeTable();
-  });
+  if (selectMonth) {
+    selectMonth.addEventListener('change', (e) => {
+      state.selectedMonth = e.target.value;
+      if (badge) badge.textContent = `Month: ${state.selectedMonth || 'All'}`;
+      loadCumulativeTable();
+    });
+  }
 
-  document.getElementById('btnApplyCustomDate').addEventListener('click', () => {
-    state.startDate = document.getElementById('inputStartDate').value;
-    state.endDate = document.getElementById('inputEndDate').value;
-    badge.textContent = `Custom Range: ${state.startDate} to ${state.endDate}`;
-    loadCumulativeTable();
-  });
+  const applyBtn = document.getElementById('btnApplyCustomDate');
+  if (applyBtn) {
+    applyBtn.addEventListener('click', () => {
+      state.startDate = document.getElementById('inputStartDate').value;
+      state.endDate = document.getElementById('inputEndDate').value;
+      if (badge) badge.textContent = `Custom Range: ${state.startDate} to ${state.endDate}`;
+      loadCumulativeTable();
+    });
+  }
 }
 
 // --- SUMMARY KPIS & INITIAL DATA LOAD ---
@@ -418,6 +485,10 @@ function renderCumulativeTable() {
   if (!data || !data.rows) return;
 
   const type = state.activeCumType;
+  const selectCumType = document.getElementById('selectCumulativeType');
+  if (selectCumType && selectCumType.value !== type) {
+    selectCumType.value = type;
+  }
   const q = state.searchFilters.cumulative;
   let rows = data.rows.slice();
 
@@ -906,6 +977,10 @@ function renderDailyTable() {
   if (!data || !data.rows) return;
 
   const type = state.activeDailyType;
+  const selectDailyType = document.getElementById('selectDailyType');
+  if (selectDailyType && selectDailyType.value !== type) {
+    selectDailyType.value = type;
+  }
   const q = state.searchFilters.daily;
   let rows = data.rows.slice();
 
@@ -1273,6 +1348,10 @@ function renderUlaTable() {
   if (!data || !data.rows) return;
 
   const type = state.activeUlaType;
+  const selectUlaType = document.getElementById('selectUlaType');
+  if (selectUlaType && selectUlaType.value !== type) {
+    selectUlaType.value = type;
+  }
   const q = state.searchFilters.ula;
   let rows = data.rows.slice();
 

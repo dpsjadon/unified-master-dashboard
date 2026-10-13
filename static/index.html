@@ -20,45 +20,39 @@
   <style id="minimalist-mobile-core">
 
     /* =======================================================
-       EXECUTIVE CIRCLE-WISE SLICER BAR (UNIVERSAL)
+       EXECUTIVE CIRCLE-WISE SLICER BAR & LIST SELECTOR
        ======================================================= */
     .circle-slicer-section {
       background: #ffffff !important;
-      border-bottom: 1px solid #e2e8f0 !important;
-      padding: 7px 14px !important;
-      position: sticky !important;
-      top: 48px !important;
-      z-index: 95 !important;
+      border: 1px solid #e2e8f0 !important;
+      border-radius: 12px !important;
+      padding: 10px 16px !important;
+      margin: 0.85rem auto 0 !important;
+      max-width: 1680px !important;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+      box-sizing: border-box !important;
+      width: 100% !important;
     }
     [data-theme="dark"] .circle-slicer-section {
       background: #0d1b2e !important;
-      border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+      border-color: rgba(255, 255, 255, 0.08) !important;
     }
 
-    .slicer-container {
-      max-width: 1440px !important;
-      margin: 0 auto !important;
+    .slicer-container-list {
       display: flex !important;
       flex-direction: row !important;
       align-items: center !important;
       justify-content: flex-start !important;
-      gap: 10px !important;
-      overflow-x: auto !important;
-      flex-wrap: nowrap !important;
-      white-space: nowrap !important;
-      scrollbar-width: none !important;
-      -webkit-overflow-scrolling: touch !important;
-    }
-    .slicer-container::-webkit-scrollbar {
-      display: none !important;
+      gap: 12px !important;
+      flex-wrap: wrap !important;
+      width: 100% !important;
     }
 
     .slicer-header-box {
       display: inline-flex !important;
       align-items: center !important;
       gap: 6px !important;
-      font-size: 0.78rem !important;
+      font-size: 0.80rem !important;
       font-weight: 700 !important;
       color: #0f172a !important;
       flex-shrink: 0 !important;
@@ -73,82 +67,67 @@
       font-size: 0.85rem !important;
     }
 
-    .slicer-chips {
-      display: inline-flex !important;
-      flex-direction: row !important;
-      align-items: center !important;
-      gap: 6px !important;
-      overflow-x: auto !important;
-      flex-wrap: nowrap !important;
+    .slicer-select-wrapper {
       flex-grow: 1 !important;
-      scrollbar-width: none !important;
-      padding: 2px 0 !important;
-    }
-    .slicer-chips::-webkit-scrollbar {
-      display: none !important;
+      max-width: 520px !important;
     }
 
-    .slicer-chip {
-      display: inline-flex !important;
-      align-items: center !important;
-      gap: 5px !important;
-      padding: 4px 11px !important;
-      background: #f1f5f9 !important;
-      color: #334155 !important;
+    .executive-slicer-select,
+    .executive-select {
+      appearance: none !important;
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
+      background-color: #f8fafc !important;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%230284c7' stroke-width='2.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") !important;
+      background-repeat: no-repeat !important;
+      background-position: right 12px center !important;
+      background-size: 14px 14px !important;
       border: 1px solid #cbd5e1 !important;
-      border-radius: 20px !important;
-      font-size: 0.74rem !important;
+      border-radius: 9px !important;
+      padding: 8px 36px 8px 12px !important;
+      font-size: 0.84rem !important;
       font-weight: 600 !important;
+      color: #0f172a !important;
       cursor: pointer !important;
-      white-space: nowrap !important;
-      flex-shrink: 0 !important;
       outline: none !important;
-      transition: all 0.15s ease !important;
-      user-select: none !important;
+      transition: all 0.2s ease !important;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+      width: 100% !important;
+      font-family: inherit !important;
     }
-    [data-theme="dark"] .slicer-chip {
-      background: #13253e !important;
-      color: #94a3b8 !important;
-      border-color: rgba(255, 255, 255, 0.12) !important;
+    [data-theme="dark"] .executive-slicer-select,
+    [data-theme="dark"] .executive-select {
+      background-color: #13253e !important;
+      border-color: rgba(255, 255, 255, 0.14) !important;
+      color: #f1f5f9 !important;
     }
-
-    .slicer-chip:hover {
-      background: #e0f2fe !important;
-      color: #0284c7 !important;
-      border-color: #38bdf8 !important;
-      transform: translateY(-1px) !important;
-    }
-
-    .slicer-chip.active {
-      background: #0284c7 !important;
-      color: #ffffff !important;
+    .executive-slicer-select:hover,
+    .executive-select:hover {
       border-color: #0284c7 !important;
-      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.35) !important;
+      background-color: #ffffff !important;
     }
-
-    .slicer-chip .chip-count {
-      font-size: 0.65rem !important;
-      padding: 1px 5px !important;
-      border-radius: 10px !important;
-      background: rgba(0, 0, 0, 0.08) !important;
-      color: inherit !important;
+    [data-theme="dark"] .executive-slicer-select:hover,
+    [data-theme="dark"] .executive-select:hover {
+      border-color: #38bdf8 !important;
+      background-color: #162c4b !important;
     }
-    .slicer-chip.active .chip-count {
-      background: rgba(255, 255, 255, 0.28) !important;
-      color: #ffffff !important;
+    .executive-slicer-select:focus,
+    .executive-select:focus {
+      border-color: #0284c7 !important;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2) !important;
     }
 
     .slicer-clear-btn {
-      display: inline-flex;
+      display: inline-flex !important;
       align-items: center !important;
-      gap: 4px !important;
-      padding: 4px 10px !important;
-      font-size: 0.72rem !important;
+      gap: 5px !important;
+      padding: 6px 12px !important;
+      font-size: 0.74rem !important;
       font-weight: 600 !important;
       color: #f43f5e !important;
       background: rgba(244, 63, 94, 0.08) !important;
       border: 1px solid rgba(244, 63, 94, 0.25) !important;
-      border-radius: 20px !important;
+      border-radius: 8px !important;
       cursor: pointer !important;
       white-space: nowrap !important;
       flex-shrink: 0 !important;
@@ -157,6 +136,185 @@
     }
     .slicer-clear-btn:hover {
       background: rgba(244, 63, 94, 0.18) !important;
+    }
+
+    /* =======================================================
+       EXECUTIVE ANALYTICS TOOLBAR (CLEAN LIST CONTROLS)
+       ======================================================= */
+    .executive-analytics-toolbar {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      justify-content: flex-start !important;
+      flex-wrap: wrap !important;
+      gap: 12px !important;
+      background: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
+      border-radius: 12px !important;
+      padding: 10px 14px !important;
+      margin-bottom: 12px !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+      box-sizing: border-box !important;
+      width: 100% !important;
+    }
+    [data-theme="dark"] .executive-analytics-toolbar {
+      background: #0f1d30 !important;
+      border-color: rgba(255, 255, 255, 0.08) !important;
+    }
+
+    .toolbar-filter-item {
+      display: inline-flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .toolbar-filter-item.d-none {
+      display: none !important;
+    }
+    .toolbar-label {
+      font-size: 0.78rem !important;
+      font-weight: 700 !important;
+      color: #475569 !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      white-space: nowrap !important;
+      user-select: none !important;
+      letter-spacing: 0.2px !important;
+    }
+    [data-theme="dark"] .toolbar-label {
+      color: #94a3b8 !important;
+    }
+    .toolbar-label i {
+      color: #0284c7 !important;
+      font-size: 0.85rem !important;
+    }
+
+    .toolbar-filter-item .select-wrapper {
+      min-width: 260px !important;
+    }
+
+    .toolbar-actions-group {
+      margin-left: auto !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 10px !important;
+      flex-wrap: wrap !important;
+    }
+
+    .btn-export {
+      padding: 7px 14px !important;
+      font-size: 0.78rem !important;
+      font-weight: 600 !important;
+      background: #f1f5f9 !important;
+      color: #0f172a !important;
+      border: 1px solid #cbd5e1 !important;
+      border-radius: 8px !important;
+      cursor: pointer !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      transition: all 0.15s ease !important;
+      white-space: nowrap !important;
+      height: 36px !important;
+    }
+    [data-theme="dark"] .btn-export {
+      background: #1e293b !important;
+      color: #e2e8f0 !important;
+      border-color: rgba(255, 255, 255, 0.12) !important;
+    }
+    .btn-export:hover {
+      background: #e0f2fe !important;
+      color: #0284c7 !important;
+      border-color: #38bdf8 !important;
+    }
+
+    .custom-date-inline {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+    }
+
+    /* Contained Table Cards */
+    .table-card {
+      background: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
+      border-radius: 12px !important;
+      padding: 12px 16px !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+      margin-bottom: 1rem !important;
+      overflow: hidden !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    [data-theme="dark"] .table-card {
+      background: #0d1b2e !important;
+      border-color: rgba(255, 255, 255, 0.08) !important;
+    }
+
+    .table-header-row {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 12px !important;
+      margin-bottom: 12px !important;
+      flex-wrap: wrap !important;
+    }
+
+    .table-title {
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+    }
+    .table-title h3 {
+      font-size: 0.95rem !important;
+      font-weight: 700 !important;
+      margin: 0 !important;
+      color: #0f172a !important;
+    }
+    [data-theme="dark"] .table-title h3 {
+      color: #f8fafc !important;
+    }
+
+    .table-responsive {
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+      overscroll-behavior-x: contain !important;
+      border-radius: 8px !important;
+      border: 1px solid #e2e8f0 !important;
+      box-sizing: border-box !important;
+    }
+    [data-theme="dark"] .table-responsive {
+      border-color: rgba(255, 255, 255, 0.08) !important;
+    }
+
+    /* Sticky First Column for Wide Tables */
+    .styled-table th:first-child,
+    .styled-table td:first-child {
+      position: sticky !important;
+      left: 0 !important;
+      z-index: 2 !important;
+      background: #ffffff !important;
+      box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05) !important;
+    }
+    .styled-table th:first-child {
+      z-index: 3 !important;
+      background: #f1f5f9 !important;
+    }
+    [data-theme="dark"] .styled-table td:first-child {
+      background: #0d1b2e !important;
+    }
+    [data-theme="dark"] .styled-table th:first-child {
+      background: #13253e !important;
+    }
+    .styled-table tr:hover td:first-child {
+      background: #f1f5f9 !important;
+    }
+    [data-theme="dark"] .styled-table tr:hover td:first-child {
+      background: #1a2f4c !important;
     }
 
 
@@ -342,28 +500,36 @@
         gap: 2px !important;
       }
 
-      /* 4. Segmented Control Main Tabs */
+      /* 4. Segmented Control Main Tabs (2x2 Grid on Mobile) */
       .main-nav-tabs {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 6px !important;
         margin: 8px 12px 0 !important;
-        padding: 3px !important;
+        padding: 4px !important;
         background: #e2e8f0 !important;
-        border-radius: 10px !important;
+        border-radius: 12px !important;
         border-bottom: none !important;
-        display: flex !important;
-        gap: 3px !important;
-        overflow-x: auto !important;
-        scrollbar-width: none !important;
+        overflow-x: visible !important;
+        box-sizing: border-box !important;
+      }
+      [data-theme="dark"] .main-nav-tabs {
+        background: #0f172a !important;
       }
 
       .main-tab-btn {
-        flex: 1 !important;
-        padding: 6px 8px !important;
-        font-size: 0.74rem !important;
+        flex: unset !important;
+        padding: 8px 6px !important;
+        font-size: 0.72rem !important;
         border-radius: 8px !important;
+        text-align: center !important;
         justify-content: center !important;
         color: #475569 !important;
-        white-space: nowrap !important;
-        gap: 4px !important;
+        white-space: normal !important;
+        line-height: 1.25 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 5px !important;
       }
 
       .main-tab-btn.active {
@@ -381,51 +547,109 @@
         display: none !important;
       }
 
-      /* 5. Sub-Navigation Chips: Single Horizontal Swipe Row */
+      /* 5. Executive Toolbars on Mobile: Clean Full-Width Stack */
       .tab-content {
         padding: 8px 12px 24px !important;
       }
 
-      .sub-nav-bar {
-        margin-bottom: 8px !important;
-        gap: 6px !important;
-        display: flex !important;
+      .executive-analytics-toolbar {
         flex-direction: column !important;
         align-items: stretch !important;
+        gap: 10px !important;
+        padding: 10px 12px !important;
       }
 
-      .sub-nav-pills {
-        display: flex !important;
-        gap: 5px !important;
+      .toolbar-filter-item {
+        display: flex;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 4px !important;
+        width: 100% !important;
+      }
+      .toolbar-filter-item.d-none {
+        display: none !important;
+      }
+
+      .toolbar-filter-item .select-wrapper {
+        min-width: 0 !important;
+        width: 100% !important;
+      }
+
+      .executive-select,
+      .executive-slicer-select {
+        width: 100% !important;
+        min-width: 0 !important;
+        height: 42px !important;
+        font-size: 0.82rem !important;
+        padding: 8px 34px 8px 11px !important;
+      }
+
+      .slicer-container-list {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+      }
+
+      .slicer-select-wrapper {
+        max-width: 100% !important;
+        width: 100% !important;
+      }
+
+      .toolbar-actions-group {
+        margin-left: 0 !important;
+        width: 100% !important;
+        justify-content: space-between !important;
+        padding-top: 6px !important;
+        border-top: 1px dashed #e2e8f0 !important;
+      }
+
+      .btn-export {
+        flex: 1 !important;
+        justify-content: center !important;
+        height: 38px !important;
+      }
+
+      /* Strict Mobile Containment & Internal Horizontal Scroll */
+      html, body {
+        width: 100% !important;
+        max-width: 100vw !important;
+        overflow-x: hidden !important;
+        position: relative !important;
+      }
+
+      .app-container, main, section, .tab-content, .table-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+      }
+
+      .table-card {
+        padding: 10px !important;
+      }
+
+      .table-header-row {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+      }
+
+      .table-header-row #searchCumulative,
+      .table-header-row #searchDaily,
+      .table-header-row #searchUla {
+        width: 100% !important;
+      }
+
+      .table-responsive {
+        width: 100% !important;
+        max-width: 100% !important;
         overflow-x: auto !important;
-        flex-wrap: nowrap !important;
         -webkit-overflow-scrolling: touch !important;
-        scrollbar-width: none !important;
-        padding: 2px 0 !important;
+        overscroll-behavior-x: contain !important;
       }
 
-      .sub-pill-btn {
-        padding: 5px 12px !important;
-        font-size: 0.72rem !important;
-        border-radius: 16px !important;
-        flex-shrink: 0 !important;
-        background: #ffffff !important;
-        border: 1px solid #cbd5e1 !important;
-        color: #334155 !important;
-      }
-
-      .sub-pill-btn.active {
-        background: #0284c7 !important;
-        color: #ffffff !important;
-        border-color: #0284c7 !important;
-      }
-
-      #btnExportCumulativeCsv {
-        align-self: flex-end !important;
-        padding: 4px 10px !important;
-        font-size: 0.68rem !important;
-        border-radius: 14px !important;
-        background: #f1f5f9 !important;
+      .styled-table {
+        min-width: 650px !important;
       }
 
       /* 6. Clean Table Card */
@@ -903,43 +1127,27 @@
   </section>
 
   
-  <!-- Universal Circle Wise Slicer Bar (Applies to All Reports & KPIs) -->
+  <!-- Universal Circle Wise Slicer (Executive List Option) -->
   <section class="circle-slicer-section" id="circleSlicerSection">
-    <div class="slicer-container">
+    <div class="slicer-container-list">
       <div class="slicer-header-box">
         <i class="fa-solid fa-filter"></i>
-        <span>Circle Slicer:</span>
+        <span>Circle Filter:</span>
       </div>
-      <div class="slicer-chips" id="circleSlicerContainer">
-        <button type="button" class="slicer-chip active" data-circle="ALL">
-          <i class="fa-solid fa-globe"></i>
-          <span>All Circles</span>
-          <span class="chip-count">7 Circles</span>
-        </button>
-        <button type="button" class="slicer-chip" data-circle="BIHARSARIF">
-          <span>BIHARSARIF</span>
-        </button>
-        <button type="button" class="slicer-chip" data-circle="SASARAM">
-          <span>SASARAM</span>
-        </button>
-        <button type="button" class="slicer-chip" data-circle="ARRAH">
-          <span>ARRAH</span>
-        </button>
-        <button type="button" class="slicer-chip" data-circle="GAYA">
-          <span>GAYA</span>
-        </button>
-        <button type="button" class="slicer-chip" data-circle="AURANGABAD">
-          <span>AURANGABAD</span>
-        </button>
-        <button type="button" class="slicer-chip" data-circle="PATNA">
-          <span>PATNA</span>
-        </button>
-        <button type="button" class="slicer-chip" data-circle="MUNGER">
-          <span>MUNGER</span>
-        </button>
+      <div class="slicer-select-wrapper">
+        <select id="circleSelect" class="executive-slicer-select" aria-label="Filter by Circle">
+          <option value="ALL">🌐 All Circles (7 Operational Circles — SBPDCL Discom Total)</option>
+          <option value="BIHARSARIF">📍 BIHARSARIF Circle</option>
+          <option value="SASARAM">📍 SASARAM Circle</option>
+          <option value="ARRAH">📍 ARRAH Circle</option>
+          <option value="GAYA">📍 GAYA Circle</option>
+          <option value="AURANGABAD">📍 AURANGABAD Circle</option>
+          <option value="PATNA">📍 PATNA Circle</option>
+          <option value="MUNGER">📍 MUNGER Circle</option>
+        </select>
       </div>
       <button type="button" class="slicer-clear-btn" id="slicerClearBtn" style="display: none;" title="Reset filter to all circles">
-        <i class="fa-solid fa-xmark"></i> Clear Filter
+        <i class="fa-solid fa-rotate-left"></i> Reset Circle
       </button>
     </div>
   </section>
@@ -965,68 +1173,68 @@
 
   <!-- TAB 1: CUMULATIVE MASTER ANALYTICS -->
   <main id="tabCumulative" class="tab-content active">
-    <!-- Date Range & Time Aggregation Selector -->
-    <div class="date-filter-bar desktop-only">
-      <div class="date-filter-group">
-        <span style="font-weight: 600; font-size: 0.8rem; color: var(--text-secondary);"><i class="fa-solid fa-calendar-days"></i> Aggregation Range:</span>
-        <button class="btn btn-primary date-mode-btn" data-mode="all">All Time Cumulative</button>
-        <button class="btn btn-secondary date-mode-btn" data-mode="monthly">Monthly Breakdown</button>
-        <button class="btn btn-secondary date-mode-btn" data-mode="weekly">Last 7 Days (Weekly)</button>
-        <button class="btn btn-secondary date-mode-btn" data-mode="daily">Custom Date Range</button>
+    <!-- Executive Analytics Toolbar (List Selectors) -->
+    <div class="executive-analytics-toolbar">
+      <div class="toolbar-filter-item">
+        <label for="selectCumulativeType" class="toolbar-label">
+          <i class="fa-solid fa-layer-group"></i> Analytical Dimension:
+        </label>
+        <div class="select-wrapper">
+          <select id="selectCumulativeType" class="executive-select" aria-label="Select Breakdown Dimension">
+            <option value="circle" selected>🌐 Circle Wise Summary (7 Circles)</option>
+            <option value="division">🏛️ Division Wise (26 Divisions)</option>
+            <option value="subdivision">🏢 Sub-Division Wise (77 Sub-Divisions)</option>
+            <option value="section">🏘️ Section Wise (241 Sections)</option>
+            <option value="agency">🛡️ Agency Wise (74 Agencies)</option>
+            <option value="phase">⚡ Phase Wise (1-Phase / 3-Phase)</option>
+            <option value="tariff">🏷️ Tariff Wise (All Consumer Categories)</option>
+            <option value="installation_type">📦 Installation Type Wise (Replacement vs NSC)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="toolbar-filter-item">
+        <label for="selectDateMode" class="toolbar-label">
+          <i class="fa-solid fa-calendar-days"></i> Aggregation Range:
+        </label>
+        <div class="select-wrapper">
+          <select id="selectDateMode" class="executive-select" aria-label="Select Aggregation Range">
+            <option value="all" selected>📅 All Time Cumulative (1.12M Records)</option>
+            <option value="monthly">📆 Monthly Breakdown</option>
+            <option value="weekly">📊 Last 7 Days (Weekly)</option>
+            <option value="daily">🎯 Custom Date Range</option>
+          </select>
+        </div>
       </div>
 
       <!-- Monthly Selector Dropdown (Hidden unless Monthly selected) -->
-      <div class="date-filter-group" id="monthSelectGroup" style="display: none;">
-        <label for="selectMonth" style="font-size: 0.775rem; color: var(--text-muted);">Select Month:</label>
-        <select id="selectMonth" class="styled-select">
-          <option value="">Latest Month</option>
-        </select>
+      <div class="toolbar-filter-item d-none" id="monthSelectGroup" style="display: none;">
+        <label for="selectMonth" class="toolbar-label">
+          <i class="fa-solid fa-calendar-check"></i> Month:
+        </label>
+        <div class="select-wrapper">
+          <select id="selectMonth" class="executive-select">
+            <option value="">Latest Month</option>
+          </select>
+        </div>
       </div>
 
       <!-- Custom Date Inputs (Hidden unless Custom Date selected) -->
-      <div class="date-filter-group" id="customDateGroup" style="display: none;">
-        <input type="date" id="inputStartDate" class="styled-input">
-        <span style="color: var(--text-muted);">&rarr;</span>
-        <input type="date" id="inputEndDate" class="styled-input">
-        <button id="btnApplyCustomDate" class="btn btn-primary" style="padding: 0.35rem 0.7rem;">Apply</button>
+      <div class="toolbar-filter-item d-none" id="customDateGroup" style="display: none;">
+        <label class="toolbar-label">
+          <i class="fa-solid fa-calendar-week"></i> Custom Dates:
+        </label>
+        <div class="custom-date-inline">
+          <input type="date" id="inputStartDate" class="styled-input">
+          <span style="color: var(--text-muted);">&rarr;</span>
+          <input type="date" id="inputEndDate" class="styled-input">
+          <button id="btnApplyCustomDate" class="btn btn-primary" style="padding: 0.35rem 0.7rem;">Apply</button>
+        </div>
       </div>
 
-      <div style="margin-left: auto;">
+      <div class="toolbar-actions-group">
         <span class="badge badge-cyan" id="activeFilterBadge">All Time Cumulative (1,124,022 Meters)</span>
-      </div>
-    </div>
-
-    <!-- Summary Tables Sub-Navigation Pills -->
-    <div class="sub-nav-bar">
-      <div class="sub-nav-pills">
-        <button class="sub-pill-btn active" data-cum-type="circle">
-          <i class="fa-solid fa-circle-nodes"></i> Circle Wise Summary
-        </button>
-        <button class="sub-pill-btn" data-cum-type="division">
-          <i class="fa-solid fa-sitemap"></i> Division Wise (26)
-        </button>
-        <button class="sub-pill-btn" data-cum-type="subdivision">
-          <i class="fa-solid fa-diagram-project"></i> Sub-Division Wise (77)
-        </button>
-        <button class="sub-pill-btn" data-cum-type="section">
-          <i class="fa-solid fa-building"></i> Section Wise (241)
-        </button>
-        <button class="sub-pill-btn" data-cum-type="agency">
-          <i class="fa-solid fa-building-shield"></i> Agency Wise (74)
-        </button>
-        <button class="sub-pill-btn" data-cum-type="phase">
-          <i class="fa-solid fa-bolt"></i> Phase Wise
-        </button>
-        <button class="sub-pill-btn" data-cum-type="tariff">
-          <i class="fa-solid fa-tags"></i> Tariff Wise
-        </button>
-        <button class="sub-pill-btn" data-cum-type="installation_type">
-          <i class="fa-solid fa-layer-group"></i> Installation Type Wise
-        </button>
-      </div>
-
-      <div class="header-actions">
-        <button id="btnExportCumulativeCsv" class="btn btn-secondary">
+        <button id="btnExportCumulativeCsv" class="btn btn-export">
           <i class="fa-solid fa-file-excel"></i> Export Active Table to CSV
         </button>
       </div>
@@ -1100,34 +1308,27 @@
 
   <!-- TAB 2: DAILY INSTALLATION & FIELD STATUS -->
   <main id="tabDaily" class="tab-content">
-    <!-- Daily Sub-Navigation Pills -->
-    <div class="sub-nav-bar">
-      <div class="sub-nav-pills">
-        <button class="sub-pill-btn active" data-daily-type="circle">
-          <i class="fa-solid fa-circle-nodes"></i> Circle Wise Daily (7)
-        </button>
-        <button class="sub-pill-btn" data-daily-type="division">
-          <i class="fa-solid fa-sitemap"></i> Division Wise Daily (26)
-        </button>
-        <button class="sub-pill-btn" data-daily-type="section">
-          <i class="fa-solid fa-building"></i> Section Wise Daily (222)
-        </button>
-        <button class="sub-pill-btn" data-daily-type="agency">
-          <i class="fa-solid fa-building-shield"></i> Agency Wise Daily
-        </button>
-        <button class="sub-pill-btn" data-daily-type="phase">
-          <i class="fa-solid fa-bolt"></i> Phase Wise Daily
-        </button>
-        <button class="sub-pill-btn" data-daily-type="tariff">
-          <i class="fa-solid fa-tags"></i> Tariff Wise Daily
-        </button>
-        <button class="sub-pill-btn" data-daily-type="teams">
-          <i class="fa-solid fa-users-gear"></i> Field Teams Availability & Output (448)
-        </button>
+    <!-- Daily Executive Analytics Toolbar -->
+    <div class="executive-analytics-toolbar">
+      <div class="toolbar-filter-item">
+        <label for="selectDailyType" class="toolbar-label">
+          <i class="fa-solid fa-layer-group"></i> Daily Dimension:
+        </label>
+        <div class="select-wrapper">
+          <select id="selectDailyType" class="executive-select" aria-label="Select Daily Dimension">
+            <option value="circle">🌐 Circle Wise Daily (7 Circles)</option>
+            <option value="division" selected>🏛️ Division Wise Daily (26 Divisions)</option>
+            <option value="section">🏘️ Section Wise Daily (222 Sections)</option>
+            <option value="agency">🛡️ Agency Wise Daily</option>
+            <option value="phase">⚡ Phase Wise Daily</option>
+            <option value="tariff">🏷️ Tariff Wise Daily</option>
+            <option value="teams">👥 Field Teams Availability & Output (448)</option>
+          </select>
+        </div>
       </div>
 
-      <div class="header-actions">
-        <button id="btnExportDailyCsv" class="btn btn-secondary">
+      <div class="toolbar-actions-group">
+        <button id="btnExportDailyCsv" class="btn btn-export">
           <i class="fa-solid fa-file-excel"></i> Export Daily Table to CSV
         </button>
       </div>
@@ -1187,22 +1388,23 @@
 
   <!-- TAB 3: ULA METERING TRACKER -->
   <main id="tabUla" class="tab-content">
-    <!-- ULA Sub-Navigation Pills -->
-    <div class="sub-nav-bar">
-      <div class="sub-nav-pills">
-        <button class="sub-pill-btn active" data-ula-type="circle">
-          <i class="fa-solid fa-circle-nodes"></i> Circle Wise ULA Progress
-        </button>
-        <button class="sub-pill-btn" data-ula-type="division">
-          <i class="fa-solid fa-sitemap"></i> Division Wise ULA Progress
-        </button>
-        <button class="sub-pill-btn" data-ula-type="agency">
-          <i class="fa-solid fa-building-shield"></i> Agency Wise ULA Progress
-        </button>
+    <!-- ULA Executive Analytics Toolbar -->
+    <div class="executive-analytics-toolbar">
+      <div class="toolbar-filter-item">
+        <label for="selectUlaType" class="toolbar-label">
+          <i class="fa-solid fa-layer-group"></i> ULA Dimension:
+        </label>
+        <div class="select-wrapper">
+          <select id="selectUlaType" class="executive-select" aria-label="Select ULA Dimension">
+            <option value="circle" selected>🌐 Circle Wise ULA Progress (7 Circles)</option>
+            <option value="division">🏛️ Division Wise ULA Progress</option>
+            <option value="agency">🛡️ Agency Wise ULA Progress</option>
+          </select>
+        </div>
       </div>
 
-      <div class="header-actions">
-        <button id="btnExportUlaCsv" class="btn btn-secondary">
+      <div class="toolbar-actions-group">
+        <button id="btnExportUlaCsv" class="btn btn-export">
           <i class="fa-solid fa-file-excel"></i> Export ULA Table to CSV
         </button>
       </div>

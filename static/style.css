@@ -1290,3 +1290,154 @@ body {
     text-align: center !important;
   }
 }
+
+/* ==========================================================================
+   Executive Toolbar, Selectors, and Contained Scroll Architecture
+   ========================================================================== */
+.executive-analytics-toolbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--card-border, #e2e8f0);
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="dark"] .executive-analytics-toolbar {
+  background: #0f1d30;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.toolbar-filter-item {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.toolbar-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-secondary, #475569);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  letter-spacing: 0.2px;
+}
+
+[data-theme="dark"] .toolbar-label {
+  color: #94a3b8;
+}
+
+.toolbar-label i {
+  color: var(--brand-blue, #0284c7);
+  font-size: 0.85rem;
+}
+
+.executive-select,
+.executive-slicer-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: var(--bg-tertiary, #f8fafc);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%230284c7' stroke-width='2.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 14px 14px;
+  border: 1px solid var(--card-border, #cbd5e1);
+  border-radius: 9px;
+  padding: 8px 36px 8px 12px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text-primary, #0f172a);
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+  min-width: 240px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="dark"] .executive-select,
+[data-theme="dark"] .executive-slicer-select {
+  background-color: #13253e;
+  border-color: rgba(255, 255, 255, 0.14);
+  color: #f1f5f9;
+}
+
+.executive-select:hover,
+.executive-slicer-select:hover {
+  border-color: #0284c7;
+  background-color: #ffffff;
+}
+
+[data-theme="dark"] .executive-select:hover,
+[data-theme="dark"] .executive-slicer-select:hover {
+  border-color: #38bdf8;
+  background-color: #162c4b;
+}
+
+.executive-select:focus,
+.executive-slicer-select:focus {
+  border-color: #0284c7;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2);
+}
+
+.slicer-container-list {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.slicer-select-wrapper {
+  flex-grow: 1;
+  max-width: 520px;
+}
+
+.toolbar-actions-group {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-export {
+  padding: 7px 14px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--bg-tertiary, #f1f5f9);
+  color: var(--text-primary, #0f172a);
+  border: 1px solid var(--card-border, #cbd5e1);
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  height: 36px;
+}
+
+[data-theme="dark"] .btn-export {
+  background: #1e293b;
+  color: #e2e8f0;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.btn-export:hover {
+  background: #e0f2fe;
+  color: #0284c7;
+  border-color: #38bdf8;
+}
+
