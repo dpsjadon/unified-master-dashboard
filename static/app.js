@@ -13,22 +13,52 @@ const state = {
   selectedMonth: '',
   startDate: '',
   endDate: '',
+  activeUnsyncType: 'circle',
+  activeMeterAvailType: 'circle',
+  unsyncFilters: {
+    circle: 'ALL',
+    division: 'ALL',
+    vendor: 'ALL',
+    status_vendor: 'ALL',
+    aging: 'ALL',
+    match_status: 'ALL'
+  },
+  meterAvailFilters: {
+    circle: 'ALL',
+    division: 'ALL',
+    vendor: 'ALL',
+    status_vendor: 'ALL',
+    aging: 'ALL',
+    match_status: 'ALL'
+  },
+  unsyncPage: 1,
+  meterAvailPage: 1,
+  unsyncPageLimit: 50,
+  meterAvailPageLimit: 50,
+  unsyncData: null,
+  meterAvailData: null,
   charts: {},
   data: {
     summary: null,
     cumulative: null,
     daily: null,
-    ula: null
+    ula: null,
+    unsync: null,
+    meter_available: null
   },
   searchFilters: {
     cumulative: '',
     daily: '',
-    ula: ''
+    ula: '',
+    unsync: '',
+    meter_available: ''
   },
   sortConfig: {
     cumulative: { col: 'total', dir: 'desc' },
     daily: { col: 'total', dir: 'desc' },
-    ula: { col: 'scope', dir: 'desc' }
+    ula: { col: 'scope', dir: 'desc' },
+    unsync: { col: 'total', dir: 'desc' },
+    meter_available: { col: 'total', dir: 'desc' }
   }
 };
 
@@ -180,6 +210,12 @@ function setupNavigation() {
         loadDailyTable();
       } else if (targetId === 'tabUla') {
         loadUlaTable();
+      } else if (targetId === 'tabUnsync') {
+        loadUnsyncFilters();
+        loadUnsyncDashboard();
+      } else if (targetId === 'tabMeterAvailable') {
+        loadMeterAvailFilters();
+        loadMeterAvailDashboard();
       }
       resizeAllCharts();
     });
@@ -207,6 +243,170 @@ function setupNavigation() {
     selectUlaType.addEventListener('change', (e) => {
       state.activeUlaType = e.target.value;
       loadUlaTable();
+    });
+  }
+
+  const selectUnsyncType = document.getElementById('selectUnsyncType');
+  if (selectUnsyncType) {
+    selectUnsyncType.addEventListener('change', (e) => {
+      state.activeUnsyncType = e.target.value;
+      state.unsyncPage = 1;
+      loadUnsyncDashboard();
+    });
+  }
+
+  const selectMeterAvailType = document.getElementById('selectMeterAvailType');
+  if (selectMeterAvailType) {
+    selectMeterAvailType.addEventListener('change', (e) => {
+      state.activeMeterAvailType = e.target.value;
+      state.meterAvailPage = 1;
+      loadMeterAvailDashboard();
+    });
+  }
+
+  // --- UNSYNC FILTER CONTROLS ---
+  const filterUnsyncStatusVendor = document.getElementById('filterUnsyncStatusVendor');
+  if (filterUnsyncStatusVendor) {
+    filterUnsyncStatusVendor.addEventListener('change', (e) => {
+      state.unsyncFilters.status_vendor = e.target.value;
+      state.unsyncPage = 1;
+      loadUnsyncDashboard();
+    });
+  }
+
+  const filterUnsyncCircle = document.getElementById('filterUnsyncCircle');
+  if (filterUnsyncCircle) {
+    filterUnsyncCircle.addEventListener('change', (e) => {
+      state.unsyncFilters.circle = e.target.value;
+      state.unsyncPage = 1;
+      loadUnsyncDashboard();
+    });
+  }
+
+  const filterUnsyncDivision = document.getElementById('filterUnsyncDivision');
+  if (filterUnsyncDivision) {
+    filterUnsyncDivision.addEventListener('change', (e) => {
+      state.unsyncFilters.division = e.target.value;
+      state.unsyncPage = 1;
+      loadUnsyncDashboard();
+    });
+  }
+
+  const filterUnsyncVendor = document.getElementById('filterUnsyncVendor');
+  if (filterUnsyncVendor) {
+    filterUnsyncVendor.addEventListener('change', (e) => {
+      state.unsyncFilters.vendor = e.target.value;
+      state.unsyncPage = 1;
+      loadUnsyncDashboard();
+    });
+  }
+
+  const filterUnsyncAging = document.getElementById('filterUnsyncAging');
+  if (filterUnsyncAging) {
+    filterUnsyncAging.addEventListener('change', (e) => {
+      state.unsyncFilters.aging = e.target.value;
+      state.unsyncPage = 1;
+      loadUnsyncDashboard();
+    });
+  }
+
+  const filterUnsyncMatch = document.getElementById('filterUnsyncMatch');
+  if (filterUnsyncMatch) {
+    filterUnsyncMatch.addEventListener('change', (e) => {
+      state.unsyncFilters.match_status = e.target.value;
+      state.unsyncPage = 1;
+      loadUnsyncDashboard();
+    });
+  }
+
+  const btnResetUnsyncFilters = document.getElementById('btnResetUnsyncFilters');
+  if (btnResetUnsyncFilters) {
+    btnResetUnsyncFilters.addEventListener('click', () => {
+      state.unsyncFilters = { circle: 'ALL', division: 'ALL', vendor: 'ALL', status_vendor: 'ALL', aging: 'ALL', match_status: 'ALL' };
+      if (filterUnsyncStatusVendor) filterUnsyncStatusVendor.value = 'ALL';
+      if (filterUnsyncCircle) filterUnsyncCircle.value = 'ALL';
+      if (filterUnsyncDivision) filterUnsyncDivision.value = 'ALL';
+      if (filterUnsyncVendor) filterUnsyncVendor.value = 'ALL';
+      if (filterUnsyncAging) filterUnsyncAging.value = 'ALL';
+      if (filterUnsyncMatch) filterUnsyncMatch.value = 'ALL';
+      const s = document.getElementById('searchUnsync');
+      if (s) s.value = '';
+      state.searchFilters.unsync = '';
+      state.unsyncPage = 1;
+      loadUnsyncDashboard();
+    });
+  }
+
+  // --- METER AVAILABLE FILTER CONTROLS ---
+  const filterMeterAvailStatusVendor = document.getElementById('filterMeterAvailStatusVendor');
+  if (filterMeterAvailStatusVendor) {
+    filterMeterAvailStatusVendor.addEventListener('change', (e) => {
+      state.meterAvailFilters.status_vendor = e.target.value;
+      state.meterAvailPage = 1;
+      loadMeterAvailDashboard();
+    });
+  }
+
+  const filterMeterAvailCircle = document.getElementById('filterMeterAvailCircle');
+  if (filterMeterAvailCircle) {
+    filterMeterAvailCircle.addEventListener('change', (e) => {
+      state.meterAvailFilters.circle = e.target.value;
+      state.meterAvailPage = 1;
+      loadMeterAvailDashboard();
+    });
+  }
+
+  const filterMeterAvailDivision = document.getElementById('filterMeterAvailDivision');
+  if (filterMeterAvailDivision) {
+    filterMeterAvailDivision.addEventListener('change', (e) => {
+      state.meterAvailFilters.division = e.target.value;
+      state.meterAvailPage = 1;
+      loadMeterAvailDashboard();
+    });
+  }
+
+  const filterMeterAvailVendor = document.getElementById('filterMeterAvailVendor');
+  if (filterMeterAvailVendor) {
+    filterMeterAvailVendor.addEventListener('change', (e) => {
+      state.meterAvailFilters.vendor = e.target.value;
+      state.meterAvailPage = 1;
+      loadMeterAvailDashboard();
+    });
+  }
+
+  const filterMeterAvailAging = document.getElementById('filterMeterAvailAging');
+  if (filterMeterAvailAging) {
+    filterMeterAvailAging.addEventListener('change', (e) => {
+      state.meterAvailFilters.aging = e.target.value;
+      state.meterAvailPage = 1;
+      loadMeterAvailDashboard();
+    });
+  }
+
+  const filterMeterAvailMatch = document.getElementById('filterMeterAvailMatch');
+  if (filterMeterAvailMatch) {
+    filterMeterAvailMatch.addEventListener('change', (e) => {
+      state.meterAvailFilters.match_status = e.target.value;
+      state.meterAvailPage = 1;
+      loadMeterAvailDashboard();
+    });
+  }
+
+  const btnResetMeterAvailFilters = document.getElementById('btnResetMeterAvailFilters');
+  if (btnResetMeterAvailFilters) {
+    btnResetMeterAvailFilters.addEventListener('click', () => {
+      state.meterAvailFilters = { circle: 'ALL', division: 'ALL', vendor: 'ALL', status_vendor: 'ALL', aging: 'ALL', match_status: 'ALL' };
+      if (filterMeterAvailStatusVendor) filterMeterAvailStatusVendor.value = 'ALL';
+      if (filterMeterAvailCircle) filterMeterAvailCircle.value = 'ALL';
+      if (filterMeterAvailDivision) filterMeterAvailDivision.value = 'ALL';
+      if (filterMeterAvailVendor) filterMeterAvailVendor.value = 'ALL';
+      if (filterMeterAvailAging) filterMeterAvailAging.value = 'ALL';
+      if (filterMeterAvailMatch) filterMeterAvailMatch.value = 'ALL';
+      const s = document.getElementById('searchMeterAvail');
+      if (s) s.value = '';
+      state.searchFilters.meter_available = '';
+      state.meterAvailPage = 1;
+      loadMeterAvailDashboard();
     });
   }
 
@@ -266,6 +466,75 @@ function setupNavigation() {
     });
   }
 
+  const searchUnsync = document.getElementById('searchUnsync');
+  if (searchUnsync) {
+    let unsyncTimer;
+    searchUnsync.addEventListener('input', (e) => {
+      state.searchFilters.unsync = e.target.value.toLowerCase().trim();
+      clearTimeout(unsyncTimer);
+      unsyncTimer = setTimeout(() => {
+        if (state.activeUnsyncType === 'meters') {
+          state.unsyncPage = 1;
+          renderUnsyncMetersTable();
+        } else {
+          renderUnsyncTable(state.unsyncData);
+        }
+      }, 250);
+    });
+  }
+
+  const searchMeterAvail = document.getElementById('searchMeterAvail');
+  if (searchMeterAvail) {
+    let meterAvailTimer;
+    searchMeterAvail.addEventListener('input', (e) => {
+      state.searchFilters.meter_available = e.target.value.toLowerCase().trim();
+      clearTimeout(meterAvailTimer);
+      meterAvailTimer = setTimeout(() => {
+        if (state.activeMeterAvailType === 'meters') {
+          state.meterAvailPage = 1;
+          renderMeterAvailMetersTable();
+        } else {
+          renderMeterAvailTable(state.meterAvailData);
+        }
+      }, 250);
+    });
+  }
+
+  // Pagination for Unsync and Meter Available Meters list
+  const btnPrevUnsync = document.getElementById('btnPrevUnsyncPage');
+  if (btnPrevUnsync) {
+    btnPrevUnsync.addEventListener('click', () => {
+      if (state.unsyncPage > 1) {
+        state.unsyncPage--;
+        renderUnsyncMetersTable();
+      }
+    });
+  }
+  const btnNextUnsync = document.getElementById('btnNextUnsyncPage');
+  if (btnNextUnsync) {
+    btnNextUnsync.addEventListener('click', () => {
+      state.unsyncPage++;
+      renderUnsyncMetersTable();
+    });
+  }
+
+  const btnPrevMeterAvail = document.getElementById('btnPrevMeterAvailPage');
+  if (btnPrevMeterAvail) {
+    btnPrevMeterAvail.addEventListener('click', () => {
+      if (state.meterAvailPage > 1) {
+        state.meterAvailPage--;
+        renderMeterAvailMetersTable();
+      }
+    });
+  }
+  const btnNextMeterAvail = document.getElementById('btnNextMeterAvailPage');
+  if (btnNextMeterAvail) {
+    btnNextMeterAvail.addEventListener('click', () => {
+      state.meterAvailPage++;
+      renderMeterAvailMetersTable();
+    });
+  }
+
   // Export CSV Buttons
   const btnExportCum = document.getElementById('btnExportCumulativeCsv');
   if (btnExportCum) btnExportCum.addEventListener('click', exportCumulativeCsv);
@@ -273,6 +542,10 @@ function setupNavigation() {
   if (btnExportDaily) btnExportDaily.addEventListener('click', exportDailyCsv);
   const btnExportUla = document.getElementById('btnExportUlaCsv');
   if (btnExportUla) btnExportUla.addEventListener('click', exportUlaCsv);
+  const btnExportUnsync = document.getElementById('btnExportUnsyncCsv');
+  if (btnExportUnsync) btnExportUnsync.addEventListener('click', exportUnsyncCsv);
+  const btnExportMeterAvail = document.getElementById('btnExportMeterAvailCsv');
+  if (btnExportMeterAvail) btnExportMeterAvail.addEventListener('click', exportMeterAvailCsv);
 }
 
 // --- DATE RANGE FILTERS ---
@@ -560,6 +833,124 @@ function updateKpiCardsForActiveTab() {
       subHtml: `<span class="badge badge-purple">26 Divisions • 77 Sub-Divs</span>`
     });
 
+  } else if (state.activeTab === 'tabUnsync') {
+    // --- UNSYNC DASHBOARD TAB CARDS (Excludes SBPDCL) ---
+    const un = json.unsync || {};
+    const unTotal = Number(un.total || 5087);
+    const unClosed = Number(un.closed || 501);
+    const unOpen = Number(un.open_unsync || 4586);
+    const unActive = Number(un.active_vendor || 3226);
+    const unCrit = Number(un.critical_aging || 3819);
+    const unFresh = Number(un.fresh_aging || 931);
+    const unPct = unTotal > 0 ? ((unClosed / unTotal) * 100).toFixed(1) : '0';
+
+    setKpiCard(1, {
+      accent: '#0284c7',
+      icon: 'fa-solid fa-arrows-rotate',
+      title: 'Total Unsync Scope',
+      value: unTotal.toLocaleString(),
+      subHtml: `<span class="badge badge-cyan"><i class="fa-solid fa-ban"></i> Excludes SBPDCL</span> <span>${circleLabel}</span>`
+    });
+
+    setKpiCard(2, {
+      accent: '#10b981',
+      icon: 'fa-solid fa-circle-check',
+      title: 'Closed in Master',
+      value: unClosed.toLocaleString(),
+      subHtml: `<span class="badge badge-emerald"><i class="fa-solid fa-check-double"></i> ${unPct}% Closed</span>`
+    });
+
+    setKpiCard(3, {
+      accent: '#f59e0b',
+      icon: 'fa-solid fa-clock-rotate-left',
+      title: 'Open / Pending Unsync',
+      value: unOpen.toLocaleString(),
+      subHtml: `<span class="badge badge-amber">${(100 - parseFloat(unPct)).toFixed(1)}% Pending</span>`
+    });
+
+    setKpiCard(4, {
+      accent: '#6366f1',
+      icon: 'fa-solid fa-user-check',
+      title: 'Active Vendor Deployment',
+      value: unActive.toLocaleString(),
+      subHtml: `<span class="badge badge-indigo">${unTotal > 0 ? ((unActive / unTotal) * 100).toFixed(1) : '0'}% Active Share</span>`
+    });
+
+    setKpiCard(5, {
+      accent: '#f43f5e',
+      icon: 'fa-solid fa-triangle-exclamation',
+      title: 'Critical Aging (>30 Days)',
+      value: unCrit.toLocaleString(),
+      subHtml: `<span class="badge badge-rose"><i class="fa-solid fa-fire"></i> High Priority</span>`
+    });
+
+    setKpiCard(6, {
+      accent: '#06b6d4',
+      icon: 'fa-solid fa-bolt',
+      title: 'Fresh Aging (0-7 Days)',
+      value: unFresh.toLocaleString(),
+      subHtml: `<span class="badge badge-cyan">Recent Unsync</span>`
+    });
+
+  } else if (state.activeTab === 'tabMeterAvailable') {
+    // --- METER AVAILABLE TAB CARDS (Includes SBPDCL) ---
+    const ma = json.meter_available || {};
+    const maTotal = Number(ma.total || 123090);
+    const maInst = Number(ma.installed || 734);
+    const maAvail = Number(ma.available || 122356);
+    const maActive = Number(ma.active_vendor || 16342);
+    const maCrit = Number(ma.critical_aging || 95753);
+    const maFresh = Number(ma.fresh_aging || 6295);
+    const maPct = maTotal > 0 ? ((maInst / maTotal) * 100).toFixed(2) : '0';
+
+    setKpiCard(1, {
+      accent: '#10b981',
+      icon: 'fa-solid fa-boxes-stacked',
+      title: 'Total Meter Available Stock',
+      value: maTotal.toLocaleString(),
+      subHtml: `<span class="badge badge-emerald"><i class="fa-solid fa-warehouse"></i> Includes SBPDCL</span> <span>${circleLabel}</span>`
+    });
+
+    setKpiCard(2, {
+      accent: '#0284c7',
+      icon: 'fa-solid fa-circle-check',
+      title: 'Installed in Master',
+      value: maInst.toLocaleString(),
+      subHtml: `<span class="badge badge-cyan"><i class="fa-solid fa-bolt"></i> ${maPct}% Installed</span>`
+    });
+
+    setKpiCard(3, {
+      accent: '#f59e0b',
+      icon: 'fa-solid fa-box-open',
+      title: 'Available (Not Installed)',
+      value: maAvail.toLocaleString(),
+      subHtml: `<span class="badge badge-amber">${(100 - parseFloat(maPct)).toFixed(1)}% Available</span>`
+    });
+
+    setKpiCard(4, {
+      accent: '#8b5cf6',
+      icon: 'fa-solid fa-user-check',
+      title: 'Active Vendor Stock',
+      value: maActive.toLocaleString(),
+      subHtml: `<span class="badge badge-purple">${maTotal > 0 ? ((maActive / maTotal) * 100).toFixed(1) : '0'}% Active Share</span>`
+    });
+
+    setKpiCard(5, {
+      accent: '#f43f5e',
+      icon: 'fa-solid fa-clock-rotate-left',
+      title: 'Aging Stock (>30 Days)',
+      value: maCrit.toLocaleString(),
+      subHtml: `<span class="badge badge-rose">Long Outstanding</span>`
+    });
+
+    setKpiCard(6, {
+      accent: '#06b6d4',
+      icon: 'fa-solid fa-truck-ramp-box',
+      title: 'Fresh Stock (0-7 Days)',
+      value: maFresh.toLocaleString(),
+      subHtml: `<span class="badge badge-cyan">Recently Received</span>`
+    });
+
   } else if (state.activeTab === 'tabSearch') {
     // --- SMART METER SEARCH TAB CARDS ---
     setKpiCard(1, {
@@ -690,6 +1081,14 @@ function populateSummaryKpis(json) {
   }
   if (document.getElementById('mobileScopeTotal')) {
     document.getElementById('mobileScopeTotal').textContent = `${Number(m.total || 0).toLocaleString()} Meters`;
+  }
+  if (document.getElementById('tabUnsyncBadge')) {
+    const unTotal = Number(json.unsync?.total || 5087);
+    document.getElementById('tabUnsyncBadge').textContent = `${unTotal.toLocaleString()} Unsync`;
+  }
+  if (document.getElementById('tabMeterAvailBadge')) {
+    const maTotal = Number(json.meter_available?.total || 123090);
+    document.getElementById('tabMeterAvailBadge').textContent = `${Math.round(maTotal/1000)}K Available`;
   }
   if (document.getElementById('scopeReportDownloadTime')) {
     const dlTime = json.report_download_time || json.daily_download_time || '';
@@ -1817,6 +2216,803 @@ function renderUlaCharts() {
       }
     });
   }
+}
+
+// --- TAB: UNSYNC & METER AVAILABLE DASHBOARDS ---
+
+async function loadUnsyncFilters() {
+  try {
+    const res = await fetch('/api/inventory/filters?dashboard=unsync');
+    const json = await res.json();
+    if (!json.success) return;
+
+    const fillSelect = (id, list, placeholder) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const cur = el.value || 'ALL';
+      el.innerHTML = `<option value="ALL">${placeholder}</option>` +
+        list.map(v => `<option value="${v}">${v}</option>`).join('');
+      if (list.includes(cur)) el.value = cur;
+      else el.value = 'ALL';
+    };
+
+    fillSelect('filterUnsyncCircle', json.circles || [], 'All Circles (SBPDCL Excluded)');
+    fillSelect('filterUnsyncDivision', json.divisions || [], 'All HigherOffices');
+    fillSelect('filterUnsyncVendor', json.vendors || [], 'All Vendors');
+  } catch (err) {
+    console.error('Error loading unsync filters:', err);
+  }
+}
+
+async function loadMeterAvailFilters() {
+  try {
+    const res = await fetch('/api/inventory/filters?dashboard=meter_available');
+    const json = await res.json();
+    if (!json.success) return;
+
+    const fillSelect = (id, list, placeholder) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const cur = el.value || 'ALL';
+      el.innerHTML = `<option value="ALL">${placeholder}</option>` +
+        list.map(v => `<option value="${v}">${v}</option>`).join('');
+      if (list.includes(cur)) el.value = cur;
+      else el.value = 'ALL';
+    };
+
+    fillSelect('filterMeterAvailCircle', json.circles || [], 'All Circles (Including SBPDCL)');
+    fillSelect('filterMeterAvailDivision', json.divisions || [], 'All HigherOffices');
+    fillSelect('filterMeterAvailVendor', json.vendors || [], 'All Vendors');
+  } catch (err) {
+    console.error('Error loading meter available filters:', err);
+  }
+}
+
+async function loadUnsyncDashboard() {
+  const container = document.getElementById('unsyncTableContainer');
+  const pagination = document.getElementById('unsyncPagination');
+
+  if (state.activeUnsyncType === 'meters') {
+    if (pagination) pagination.style.display = 'flex';
+    renderUnsyncMetersTable();
+    return;
+  }
+
+  if (pagination) pagination.style.display = 'none';
+  if (container) {
+    container.innerHTML = '<div style="text-align:center; padding: 2.5rem; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Calculating Unsync analytics in DuckDB...</div>';
+  }
+
+  try {
+    const params = new URLSearchParams({ dashboard: 'unsync' });
+    if (state.unsyncFilters.circle !== 'ALL') params.append('circle', state.unsyncFilters.circle);
+    if (state.unsyncFilters.division !== 'ALL') params.append('division', state.unsyncFilters.division);
+    if (state.unsyncFilters.vendor !== 'ALL') params.append('vendor', state.unsyncFilters.vendor);
+    if (state.unsyncFilters.status_vendor !== 'ALL') params.append('status_vendor', state.unsyncFilters.status_vendor);
+    if (state.unsyncFilters.aging !== 'ALL') params.append('aging', state.unsyncFilters.aging);
+    if (state.unsyncFilters.match_status !== 'ALL') params.append('match_status', state.unsyncFilters.match_status);
+
+    const res = await fetch(`/api/inventory/summary?${params.toString()}`);
+    const json = await res.json();
+    if (json.success) {
+      state.unsyncData = json;
+      renderUnsyncTable(json);
+      renderUnsyncCharts(json);
+    } else {
+      if (container) container.innerHTML = `<div style="color: #f43f5e; padding: 1rem;">Failed to load unsync summary: ${json.error}</div>`;
+    }
+  } catch (err) {
+    if (container) container.innerHTML = `<div style="color: #f43f5e; padding: 1rem;">Error loading unsync dashboard: ${err.message}</div>`;
+  }
+}
+
+async function loadMeterAvailDashboard() {
+  const container = document.getElementById('meterAvailTableContainer');
+  const pagination = document.getElementById('meterAvailPagination');
+
+  if (state.activeMeterAvailType === 'meters') {
+    if (pagination) pagination.style.display = 'flex';
+    renderMeterAvailMetersTable();
+    return;
+  }
+
+  if (pagination) pagination.style.display = 'none';
+  if (container) {
+    container.innerHTML = '<div style="text-align:center; padding: 2.5rem; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Calculating Meter Available inventory in DuckDB...</div>';
+  }
+
+  try {
+    const params = new URLSearchParams({ dashboard: 'meter_available' });
+    if (state.meterAvailFilters.circle !== 'ALL') params.append('circle', state.meterAvailFilters.circle);
+    if (state.meterAvailFilters.division !== 'ALL') params.append('division', state.meterAvailFilters.division);
+    if (state.meterAvailFilters.vendor !== 'ALL') params.append('vendor', state.meterAvailFilters.vendor);
+    if (state.meterAvailFilters.status_vendor !== 'ALL') params.append('status_vendor', state.meterAvailFilters.status_vendor);
+    if (state.meterAvailFilters.aging !== 'ALL') params.append('aging', state.meterAvailFilters.aging);
+    if (state.meterAvailFilters.match_status !== 'ALL') params.append('match_status', state.meterAvailFilters.match_status);
+
+    const res = await fetch(`/api/inventory/summary?${params.toString()}`);
+    const json = await res.json();
+    if (json.success) {
+      state.meterAvailData = json;
+      renderMeterAvailTable(json);
+      renderMeterAvailCharts(json);
+    } else {
+      if (container) container.innerHTML = `<div style="color: #f43f5e; padding: 1rem;">Failed to load meter available summary: ${json.error}</div>`;
+    }
+  } catch (err) {
+    if (container) container.innerHTML = `<div style="color: #f43f5e; padding: 1rem;">Error loading meter available dashboard: ${err.message}</div>`;
+  }
+}
+
+function renderUnsyncTable(data) {
+  const container = document.getElementById('unsyncTableContainer');
+  if (!container || !data) return;
+
+  const type = state.activeUnsyncType;
+  const q = state.searchFilters.unsync;
+
+  let list = [];
+  let dimKey = 'circle';
+  let dimLabel = 'Circle Name';
+
+  if (type === 'circle') {
+    list = data.circles || [];
+    dimKey = 'circle';
+    dimLabel = 'Circle Name';
+  } else if (type === 'division') {
+    list = data.divisions || [];
+    dimKey = 'division';
+    dimLabel = 'HigherOffice / Division';
+  } else if (type === 'vendor') {
+    list = data.vendors || [];
+    dimKey = 'vendor';
+    dimLabel = 'Agency / Vendor';
+  } else if (type === 'aging') {
+    list = data.aging || [];
+    dimKey = 'aging_bucket';
+    dimLabel = 'Aging Bucket';
+  } else if (type === 'meter_type') {
+    list = data.meter_types || [];
+    dimKey = 'meter_type';
+    dimLabel = 'Meter Type';
+  } else if (type === 'phase') {
+    list = data.phases || [];
+    dimKey = 'phase';
+    dimLabel = 'Phase Type';
+  } else if (type === 'comm_type') {
+    list = data.comm_types || [];
+    dimKey = 'comm_type';
+    dimLabel = 'Communication Type';
+  }
+
+  let rows = list.slice();
+  if (q) {
+    rows = rows.filter(r => Object.values(r).some(val => String(val).toLowerCase().includes(q)));
+  }
+
+  const titleEl = document.getElementById('unsyncTableTitle');
+  const countEl = document.getElementById('unsyncTableRowCount');
+  const totalMeters = (data.kpi && data.kpi.total) ? data.kpi.total : rows.reduce((a,c) => a + (c.total||0), 0);
+  if (titleEl) titleEl.textContent = `${dimLabel} Wise Unsync Summary`;
+  if (countEl) countEl.textContent = `${rows.length} Rows (${totalMeters.toLocaleString()} Scope)`;
+
+  const totalClosed = rows.reduce((a,c) => a + (c.matched || 0), 0);
+  const totalOpen = rows.reduce((a,c) => a + (c.pending || 0), 0);
+  const totalScope = rows.reduce((a,c) => a + (c.total || 0), 0);
+  const totalActive = rows.reduce((a,c) => a + (c.active_count || 0), 0);
+  const totalInactive = rows.reduce((a,c) => a + (c.inactive_count || 0), 0);
+  const totalAging07 = rows.reduce((a,c) => a + (c.aging_0_7 || 0), 0);
+  const totalAging815 = rows.reduce((a,c) => a + (c.aging_8_15 || 0), 0);
+  const totalAging1530 = rows.reduce((a,c) => a + (c.aging_15_30 || 0), 0);
+  const totalAgingGt30 = rows.reduce((a,c) => a + (c.aging_gt_30 || 0), 0);
+  const avgClosureRate = totalScope > 0 ? ((totalClosed * 100) / totalScope).toFixed(2) : '0.00';
+
+  container.innerHTML = `
+    <table class="styled-table" id="tableUnsyncDynamic">
+      <thead>
+        <tr>
+          <th>${dimLabel}</th>
+          <th class="text-right">Total Scope</th>
+          <th class="text-right">Closed (Installed)</th>
+          <th class="text-right">Open Unsync</th>
+          <th class="text-right">Closure Rate (%)</th>
+          <th class="text-right">Active Vendor</th>
+          <th class="text-right">In Active</th>
+          <th class="text-right">0-7 Days</th>
+          <th class="text-right">8-15 Days</th>
+          <th class="text-right">15-30 Days</th>
+          <th class="text-right">>30 Days (Critical)</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows.map(r => `
+          <tr>
+            <td><strong>${r[dimKey] || 'UNKNOWN'}</strong></td>
+            <td class="text-right" style="color: var(--brand-cyan); font-weight:700;">${(r.total || 0).toLocaleString()}</td>
+            <td class="text-right" style="color: #10b981; font-weight:700;">${(r.matched || 0).toLocaleString()}</td>
+            <td class="text-right" style="color: #f59e0b; font-weight:700;">${(r.pending || 0).toLocaleString()}</td>
+            <td class="text-right"><span class="badge ${Number(r.matched_pct || 0) > 10 ? 'badge-emerald' : 'badge-cyan'}">${Number(r.matched_pct || 0).toFixed(2)}%</span></td>
+            <td class="text-right" style="color: #6366f1;">${(r.active_count || 0).toLocaleString()}</td>
+            <td class="text-right" style="color: var(--text-muted);">${(r.inactive_count || 0).toLocaleString()}</td>
+            <td class="text-right">${(r.aging_0_7 || 0).toLocaleString()}</td>
+            <td class="text-right">${(r.aging_8_15 || 0).toLocaleString()}</td>
+            <td class="text-right">${(r.aging_15_30 || 0).toLocaleString()}</td>
+            <td class="text-right" style="color: #f43f5e; font-weight:600;">${(r.aging_gt_30 || 0).toLocaleString()}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+      <tfoot>
+        <tr class="table-total-row">
+          <td><strong>UNSYNC TOTAL (EXCL. SBPDCL)</strong></td>
+          <td class="text-right"><strong>${totalScope.toLocaleString()}</strong></td>
+          <td class="text-right"><strong>${totalClosed.toLocaleString()}</strong></td>
+          <td class="text-right"><strong>${totalOpen.toLocaleString()}</strong></td>
+          <td class="text-right"><strong>${avgClosureRate}%</strong></td>
+          <td class="text-right"><strong>${totalActive.toLocaleString()}</strong></td>
+          <td class="text-right"><strong>${totalInactive.toLocaleString()}</strong></td>
+          <td class="text-right"><strong>${totalAging07.toLocaleString()}</strong></td>
+          <td class="text-right"><strong>${totalAging815.toLocaleString()}</strong></td>
+          <td class="text-right"><strong>${totalAging1530.toLocaleString()}</strong></td>
+          <td class="text-right"><strong>${totalAgingGt30.toLocaleString()}</strong></td>
+        </tr>
+      </tfoot>
+    </table>
+  `;
+}
+
+function renderMeterAvailTable(data) {
+  const container = document.getElementById('meterAvailTableContainer');
+  if (!container || !data) return;
+
+  const type = state.activeMeterAvailType;
+  const q = state.searchFilters.meter_available;
+
+  let list = [];
+  let dimKey = 'circle';
+  let dimLabel = 'Circle Name';
+
+  if (type === 'circle') {
+    list = data.circles || [];
+    dimKey = 'circle';
+    dimLabel = 'Circle Name';
+  } else if (type === 'division') {
+    list = data.divisions || [];
+    dimKey = 'division';
+    dimLabel = 'HigherOffice / Division';
+  } else if (type === 'vendor') {
+    list = data.vendors || [];
+    dimKey = 'vendor';
+    dimLabel = 'Agency / Vendor';
+  } else if (type === 'aging') {
+    list = data.aging || [];
+    dimKey = 'aging_bucket';
+    dimLabel = 'Aging Bucket';
+  } else if (type === 'meter_type') {
+    list = data.meter_types || [];
+    dimKey = 'meter_type';
+    dimLabel = 'Meter Type';
+  } else if (type === 'phase') {
+    list = data.phases || [];
+    dimKey = 'phase';
+    dimLabel = 'Phase Type';
+  } else if (type === 'comm_type') {
+    list = data.comm_types || [];
+    dimKey = 'comm_type';
+    dimLabel = 'Communication Type';
+  }
+
+  let rows = list.slice();
+  if (q) {
+    rows = rows.filter(r => Object.values(r).some(val => String(val).toLowerCase().includes(q)));
+  }
+
+  const titleEl = document.getElementById('meterAvailTableTitle');
+  const countEl = document.getElementById('meterAvailTableRowCount');
+  const totalMeters = (data.kpi && data.kpi.total) ? data.kpi.total : rows.reduce((a,c) => a + (c.total||0), 0);
+  if (titleEl) titleEl.textContent = `${dimLabel} Wise Available Meter Summary`;
+  if (countEl) countEl.textContent = `${rows.length} Rows (${totalMeters.toLocaleString()} Total Stock)`;
+
+  const totalInstalled = rows.reduce((a,c) => a + (c.matched || 0), 0);
+  const totalAvailable = rows.reduce((a,c) => a + (c.pending || 0), 0);
+  const totalScope = rows.reduce((a,c) => a + (c.total || 0), 0);
+  const totalActive = rows.reduce((a,c) => a + (c.active_count || 0), 0);
+  const totalInactive = rows.reduce((a,c) => a + (c.inactive_count || 0), 0);
+  const totalAging07 = rows.reduce((a,c) => a + (c.aging_0_7 || 0), 0);
+  const totalAging815 = rows.reduce((a,c) => a + (c.aging_8_15 || 0), 0);
+  const totalAging1530 = rows.reduce((a,c) => a + (c.aging_15_30 || 0), 0);
+  const totalAgingGt30 = rows.reduce((a,c) => a + (c.aging_gt_30 || 0), 0);
+  const avgInstRate = totalScope > 0 ? ((totalInstalled * 100) / totalScope).toFixed(2) : '0.00';
+
+  container.innerHTML = `
+    <table class="styled-table" id="tableMeterAvailDynamic">
+      <thead>
+        <tr>
+          <th>${dimLabel}</th>
+          <th class="text-right">Total Available Stock</th>
+          <th class="text-right">Installed in Master</th>
+          <th class="text-right">Available (Not Installed)</th>
+          <th class="text-right">Installed Rate (%)</th>
+          <th class="text-right">Active Vendor</th>
+          <th class="text-right">In Active</th>
+          <th class="text-right">0-7 Days</th>
+          <th class="text-right">8-15 Days</th>
+          <th class="text-right">15-30 Days</th>
+          <th class="text-right">>30 Days (Critical)</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows.map(r => `
+          <tr>
+            <td><strong>${r[dimKey] || 'UNKNOWN'}</strong> ${r[dimKey] === 'SBPDCL' ? '<span class="badge badge-indigo">SBPDCL</span>' : ''}</td>
+            <td class="text-right" style="color: var(--brand-cyan); font-weight:700;">${(r.total || 0).toLocaleString()}</td>
+            <td class="text-right" style="color: #10b981; font-weight:700;">${(r.matched || 0).toLocaleString()}</td>
+            <td class="text-right" style="color: #f59e0b; font-weight:700;">${(r.pending || 0).toLocaleString()}</td>
+            <td class="text-right"><span class="badge ${Number(r.matched_pct || 0) > 1 ? 'badge-emerald' : 'badge-amber'}">${Number(r.matched_pct || 0).toFixed(2)}%</span></td>
+            <td class="text-right" style="color: #6366f1;">${(r.active_count || 0).toLocaleString()}</td>
+            <td class="text-right" style="color: var(--text-muted);">${(r.inactive_count || 0).toLocaleString()}</td>
+            <td class="text-right">${(r.aging_0_7 || 0).toLocaleString()}</td>
+            <td class="text-right">${(r.aging_8_15 || 0).toLocaleString()}</td>
+            <td class="text-right">${(r.aging_15_30 || 0).toLocaleString()}</td>
+            <td class="text-right" style="color: #f43f5e; font-weight:600;">${(r.aging_gt_30 || 0).toLocaleString()}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+      <tfoot>
+        <tr class="table-total-row">
+          <td><strong>METER AVAILABLE TOTAL (INCL. SBPDCL)</strong></td>
+          <td class="text-right"><strong>${totalScope.toLocaleString()}</strong></td>
+          <td class="text-right"><strong>${totalInstalled.toLocaleString()}</strong></td>
+          <td class="text-right"><strong>${totalAvailable.toLocaleString()}</strong></td>
+          <td class="text-right"><strong>${avgInstRate}%</strong></td>
+          <td class="text-right"><strong>${totalActive.toLocaleString()}</strong></td>
+          <td class="text-right"><strong>${totalInactive.toLocaleString()}</strong></td>
+          <td class="text-right"><strong>${totalAging07.toLocaleString()}</strong></td>
+          <td class="text-right"><strong>${totalAging815.toLocaleString()}</strong></td>
+          <td class="text-right"><strong>${totalAging1530.toLocaleString()}</strong></td>
+          <td class="text-right"><strong>${totalAgingGt30.toLocaleString()}</strong></td>
+        </tr>
+      </tfoot>
+    </table>
+  `;
+}
+
+async function renderUnsyncMetersTable() {
+  const container = document.getElementById('unsyncTableContainer');
+  if (!container) return;
+
+  container.innerHTML = '<div style="text-align:center; padding: 2.5rem; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Loading detailed Unsync meters from DuckDB...</div>';
+
+  try {
+    const params = new URLSearchParams({
+      dashboard: 'unsync',
+      type: 'meters',
+      page: state.unsyncPage,
+      limit: state.unsyncPageLimit,
+      search: state.searchFilters.unsync || ''
+    });
+    if (state.unsyncFilters.circle !== 'ALL') params.append('circle', state.unsyncFilters.circle);
+    if (state.unsyncFilters.division !== 'ALL') params.append('division', state.unsyncFilters.division);
+    if (state.unsyncFilters.vendor !== 'ALL') params.append('vendor', state.unsyncFilters.vendor);
+    if (state.unsyncFilters.status_vendor !== 'ALL') params.append('status_vendor', state.unsyncFilters.status_vendor);
+    if (state.unsyncFilters.aging !== 'ALL') params.append('aging', state.unsyncFilters.aging);
+    if (state.unsyncFilters.match_status !== 'ALL') params.append('match_status', state.unsyncFilters.match_status);
+
+    const res = await fetch(`/api/inventory/table?${params.toString()}`);
+    const json = await res.json();
+    if (!json.success) {
+      container.innerHTML = `<div style="color: #f43f5e; padding: 1rem;">Failed to load meters: ${json.error}</div>`;
+      return;
+    }
+
+    const rows = json.rows || [];
+    const total = json.total_records || 0;
+    const startIdx = (state.unsyncPage - 1) * state.unsyncPageLimit + 1;
+    const endIdx = Math.min(state.unsyncPage * state.unsyncPageLimit, total);
+
+    document.getElementById('unsyncTableTitle').textContent = 'Detailed Unsync Meters Record Ledger';
+    document.getElementById('unsyncTableRowCount').textContent = `${total.toLocaleString()} Records Total`;
+
+    const pageInfo = document.getElementById('unsyncPageInfo');
+    if (pageInfo) pageInfo.textContent = total > 0 ? `Showing ${startIdx}-${endIdx} of ${total.toLocaleString()} Meters` : '0 meters';
+
+    const btnPrev = document.getElementById('btnPrevUnsyncPage');
+    const btnNext = document.getElementById('btnNextUnsyncPage');
+    if (btnPrev) btnPrev.disabled = (state.unsyncPage <= 1);
+    if (btnNext) btnNext.disabled = (endIdx >= total);
+
+    if (rows.length === 0) {
+      container.innerHTML = '<div style="text-align:center; padding: 2rem; color: var(--text-muted);">No unsync meters match the selected filter criteria.</div>';
+      return;
+    }
+
+    container.innerHTML = `
+      <table class="styled-table" id="tableUnsyncMeters">
+        <thead>
+          <tr>
+            <th>MSN / Meter No</th>
+            <th>Circle</th>
+            <th>HigherOffice (Division)</th>
+            <th>Agency (Vendor)</th>
+            <th>Status-Vendor</th>
+            <th>Phase</th>
+            <th>Comm Type</th>
+            <th>Meter Type</th>
+            <th class="text-right">Date Gap</th>
+            <th>Aging Bucket</th>
+            <th>Status</th>
+            <th>Matched Installed Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map(r => `
+            <tr>
+              <td><strong style="color: var(--brand-cyan); font-family: monospace;">${r.msn}</strong></td>
+              <td><span class="badge badge-indigo">${r.circle}</span></td>
+              <td>${r.division}</td>
+              <td>${r.vendor}</td>
+              <td><span class="badge ${r.status_vendor === 'Active' ? 'badge-emerald' : 'badge-slate'}">${r.status_vendor}</span></td>
+              <td>${r.phase || '--'}</td>
+              <td><span class="badge badge-cyan">${r.comm_type || 'GPRS'}</span></td>
+              <td>${r.meter_type || 'Consumer'}</td>
+              <td class="text-right font-mono">${r.date_gap}d</td>
+              <td><span class="badge ${r.aging_bucket === '>30 days' ? 'badge-rose' : (r.aging_bucket === '0-7 days' ? 'badge-emerald' : 'badge-amber')}">${r.aging_bucket}</span></td>
+              <td><span class="badge ${r.match_status === 'Closed' ? 'badge-emerald' : 'badge-amber'}"><i class="fa-solid ${r.match_status === 'Closed' ? 'fa-check' : 'fa-clock'}"></i> ${r.match_status}</span></td>
+              <td style="font-size: 0.78rem;">
+                ${r.consumer_number ? `<strong>${r.consumer_number}</strong><br><span style="color: var(--text-muted);">${r.consumer_name || ''} &bull; ${String(r.install_date || '').substring(0, 10)}</span>` : '<span style="color: var(--text-muted);">--</span>'}
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  } catch (err) {
+    container.innerHTML = `<div style="color: #f43f5e; padding: 1rem;">Error rendering meters ledger: ${err.message}</div>`;
+  }
+}
+
+async function renderMeterAvailMetersTable() {
+  const container = document.getElementById('meterAvailTableContainer');
+  if (!container) return;
+
+  container.innerHTML = '<div style="text-align:center; padding: 2.5rem; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Loading detailed Available meters from DuckDB...</div>';
+
+  try {
+    const params = new URLSearchParams({
+      dashboard: 'meter_available',
+      type: 'meters',
+      page: state.meterAvailPage,
+      limit: state.meterAvailPageLimit,
+      search: state.searchFilters.meter_available || ''
+    });
+    if (state.meterAvailFilters.circle !== 'ALL') params.append('circle', state.meterAvailFilters.circle);
+    if (state.meterAvailFilters.division !== 'ALL') params.append('division', state.meterAvailFilters.division);
+    if (state.meterAvailFilters.vendor !== 'ALL') params.append('vendor', state.meterAvailFilters.vendor);
+    if (state.meterAvailFilters.status_vendor !== 'ALL') params.append('status_vendor', state.meterAvailFilters.status_vendor);
+    if (state.meterAvailFilters.aging !== 'ALL') params.append('aging', state.meterAvailFilters.aging);
+    if (state.meterAvailFilters.match_status !== 'ALL') params.append('match_status', state.meterAvailFilters.match_status);
+
+    const res = await fetch(`/api/inventory/table?${params.toString()}`);
+    const json = await res.json();
+    if (!json.success) {
+      container.innerHTML = `<div style="color: #f43f5e; padding: 1rem;">Failed to load meters: ${json.error}</div>`;
+      return;
+    }
+
+    const rows = json.rows || [];
+    const total = json.total_records || 0;
+    const startIdx = (state.meterAvailPage - 1) * state.meterAvailPageLimit + 1;
+    const endIdx = Math.min(state.meterAvailPage * state.meterAvailPageLimit, total);
+
+    document.getElementById('meterAvailTableTitle').textContent = 'Detailed Available Meters Stock Ledger';
+    document.getElementById('meterAvailTableRowCount').textContent = `${total.toLocaleString()} Records Total`;
+
+    const pageInfo = document.getElementById('meterAvailPageInfo');
+    if (pageInfo) pageInfo.textContent = total > 0 ? `Showing ${startIdx}-${endIdx} of ${total.toLocaleString()} Meters` : '0 meters';
+
+    const btnPrev = document.getElementById('btnPrevMeterAvailPage');
+    const btnNext = document.getElementById('btnNextMeterAvailPage');
+    if (btnPrev) btnPrev.disabled = (state.meterAvailPage <= 1);
+    if (btnNext) btnNext.disabled = (endIdx >= total);
+
+    if (rows.length === 0) {
+      container.innerHTML = '<div style="text-align:center; padding: 2rem; color: var(--text-muted);">No available meters match the selected filter criteria.</div>';
+      return;
+    }
+
+    container.innerHTML = `
+      <table class="styled-table" id="tableMeterAvailMeters">
+        <thead>
+          <tr>
+            <th>MSN / Meter No</th>
+            <th>Circle</th>
+            <th>HigherOffice (Division)</th>
+            <th>Agency (Vendor)</th>
+            <th>Status-Vendor</th>
+            <th>Phase</th>
+            <th>Comm Type</th>
+            <th>Meter Type</th>
+            <th class="text-right">Date Gap</th>
+            <th>Aging Bucket</th>
+            <th>Inventory Status</th>
+            <th>Matched Installed Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map(r => `
+            <tr>
+              <td><strong style="color: var(--brand-cyan); font-family: monospace;">${r.msn}</strong></td>
+              <td><span class="badge ${r.circle === 'SBPDCL' ? 'badge-purple' : 'badge-indigo'}">${r.circle}</span></td>
+              <td>${r.division}</td>
+              <td>${r.vendor}</td>
+              <td><span class="badge ${r.status_vendor === 'Active' ? 'badge-emerald' : 'badge-slate'}">${r.status_vendor}</span></td>
+              <td>${r.phase || '--'}</td>
+              <td><span class="badge badge-cyan">${r.comm_type || 'GPRS'}</span></td>
+              <td>${r.meter_type || 'Consumer'}</td>
+              <td class="text-right font-mono">${r.date_gap}d</td>
+              <td><span class="badge ${r.aging_bucket === '>30 days' ? 'badge-rose' : (r.aging_bucket === '0-7 days' ? 'badge-emerald' : 'badge-amber')}">${r.aging_bucket}</span></td>
+              <td><span class="badge ${r.match_status === 'Installed' ? 'badge-emerald' : 'badge-cyan'}"><i class="fa-solid ${r.match_status === 'Installed' ? 'fa-bolt' : 'fa-boxes-stacked'}"></i> ${r.match_status}</span></td>
+              <td style="font-size: 0.78rem;">
+                ${r.consumer_number ? `<strong>${r.consumer_number}</strong><br><span style="color: var(--text-muted);">${r.consumer_name || ''} &bull; ${String(r.install_date || '').substring(0, 10)}</span>` : '<span style="color: var(--text-muted);">--</span>'}
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  } catch (err) {
+    container.innerHTML = `<div style="color: #f43f5e; padding: 1rem;">Error rendering available meters ledger: ${err.message}</div>`;
+  }
+}
+
+function renderUnsyncCharts(data) {
+  if (!data) return;
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const textColor = isDark ? '#94a3b8' : '#475569';
+  const gridColor = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)';
+
+  // 1. Aging Stacked Bar Chart
+  const agingCanvas = document.getElementById('chartUnsyncAging');
+  if (agingCanvas && data.aging) {
+    if (state.charts.unsyncAging) state.charts.unsyncAging.destroy();
+    const ctx = agingCanvas.getContext('2d');
+    const buckets = data.aging;
+    state.charts.unsyncAging = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: buckets.map(b => b.aging_bucket),
+        datasets: [
+          { label: 'Closed in Master', data: buckets.map(b => b.matched), backgroundColor: '#10b981', borderRadius: 4 },
+          { label: 'Open Unsync', data: buckets.map(b => b.pending), backgroundColor: '#f43f5e', borderRadius: 4 }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { stacked: true, ticks: { color: textColor }, grid: { display: false } },
+          y: { stacked: true, ticks: { color: textColor, callback: v => (v >= 1000 ? (v/1000).toFixed(0) + 'k' : v) }, grid: { color: gridColor } }
+        },
+        plugins: { legend: { position: 'top', labels: { color: textColor } } }
+      }
+    });
+  }
+
+  // 2. Top Divisions Bar Chart
+  const divCanvas = document.getElementById('chartUnsyncDivisions');
+  if (divCanvas && data.divisions) {
+    if (state.charts.unsyncDivs) state.charts.unsyncDivs.destroy();
+    const topDivs = (data.divisions || []).slice(0, 10);
+    const ctx = divCanvas.getContext('2d');
+    state.charts.unsyncDivs = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: topDivs.map(d => d.division),
+        datasets: [
+          { label: 'Closed', data: topDivs.map(d => d.matched), backgroundColor: '#10b981' },
+          { label: 'Open Unsync', data: topDivs.map(d => d.pending), backgroundColor: '#8b5cf6' }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        indexAxis: 'y',
+        scales: {
+          x: { stacked: true, ticks: { color: textColor }, grid: { color: gridColor } },
+          y: { stacked: true, ticks: { color: textColor, font: { size: 11 } }, grid: { display: false } }
+        },
+        plugins: { legend: { position: 'top', labels: { color: textColor } } }
+      }
+    });
+  }
+
+  // 3. Circle Share Donut (Excludes SBPDCL)
+  const circleCanvas = document.getElementById('chartUnsyncCircles');
+  if (circleCanvas && data.circles) {
+    if (state.charts.unsyncCircles) state.charts.unsyncCircles.destroy();
+    const ctx = circleCanvas.getContext('2d');
+    state.charts.unsyncCircles = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: data.circles.map(c => `${c.circle} (${c.total.toLocaleString()})`),
+        datasets: [{
+          data: data.circles.map(c => c.total),
+          backgroundColor: PALETTES.circles,
+          borderColor: isDark ? '#0d1b2e' : '#ffffff',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'right', labels: { color: textColor, font: { size: 10 } } } }
+      }
+    });
+  }
+
+  // 4. Vendor Breakdown Chart
+  const vendorCanvas = document.getElementById('chartUnsyncVendors');
+  if (vendorCanvas && data.vendors) {
+    if (state.charts.unsyncVendors) state.charts.unsyncVendors.destroy();
+    const topVendors = (data.vendors || []).slice(0, 8);
+    const ctx = vendorCanvas.getContext('2d');
+    state.charts.unsyncVendors = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: topVendors.map(v => v.vendor),
+        datasets: [
+          { label: 'Closed', data: topVendors.map(v => v.matched), backgroundColor: '#10b981' },
+          { label: 'Open Unsync', data: topVendors.map(v => v.pending), backgroundColor: '#f59e0b' }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { stacked: true, ticks: { color: textColor, maxRotation: 45 }, grid: { display: false } },
+          y: { stacked: true, ticks: { color: textColor }, grid: { color: gridColor } }
+        },
+        plugins: { legend: { position: 'top', labels: { color: textColor } } }
+      }
+    });
+  }
+}
+
+function renderMeterAvailCharts(data) {
+  if (!data) return;
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const textColor = isDark ? '#94a3b8' : '#475569';
+  const gridColor = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)';
+
+  // 1. Available Aging Bar Chart
+  const agingCanvas = document.getElementById('chartMeterAvailAging');
+  if (agingCanvas && data.aging) {
+    if (state.charts.meterAvailAging) state.charts.meterAvailAging.destroy();
+    const ctx = agingCanvas.getContext('2d');
+    state.charts.meterAvailAging = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: data.aging.map(b => b.aging_bucket),
+        datasets: [{
+          label: 'Available Stock',
+          data: data.aging.map(b => b.pending),
+          backgroundColor: '#0284c7',
+          borderRadius: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { ticks: { color: textColor }, grid: { display: false } },
+          y: { ticks: { color: textColor, callback: v => (v >= 1000 ? (v/1000).toFixed(0) + 'k' : v) }, grid: { color: gridColor } }
+        },
+        plugins: { legend: { display: false } }
+      }
+    });
+  }
+
+  // 2. Circle Stock Donut (Includes SBPDCL)
+  const circleCanvas = document.getElementById('chartMeterAvailCircles');
+  if (circleCanvas && data.circles) {
+    if (state.charts.meterAvailCircles) state.charts.meterAvailCircles.destroy();
+    const ctx = circleCanvas.getContext('2d');
+    state.charts.meterAvailCircles = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: data.circles.map(c => `${c.circle} (${c.total.toLocaleString()})`),
+        datasets: [{
+          data: data.circles.map(c => c.total),
+          backgroundColor: [...PALETTES.circles, '#ec4899', '#6366f1', '#14b8a6'],
+          borderColor: isDark ? '#0d1b2e' : '#ffffff',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'right', labels: { color: textColor, font: { size: 10 } } } }
+      }
+    });
+  }
+
+  // 3. Top Divisions Stock
+  const divCanvas = document.getElementById('chartMeterAvailDivisions');
+  if (divCanvas && data.divisions) {
+    if (state.charts.meterAvailDivs) state.charts.meterAvailDivs.destroy();
+    const topDivs = (data.divisions || []).slice(0, 10);
+    const ctx = divCanvas.getContext('2d');
+    state.charts.meterAvailDivs = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: topDivs.map(d => d.division),
+        datasets: [{
+          label: 'Available Meters',
+          data: topDivs.map(d => d.total),
+          backgroundColor: '#8b5cf6',
+          borderRadius: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        indexAxis: 'y',
+        scales: {
+          x: { ticks: { color: textColor, callback: v => (v >= 1000 ? (v/1000).toFixed(0) + 'k' : v) }, grid: { color: gridColor } },
+          y: { ticks: { color: textColor, font: { size: 11 } }, grid: { display: false } }
+        },
+        plugins: { legend: { display: false } }
+      }
+    });
+  }
+
+  // 4. Top Vendors Available Allocation
+  const vendorCanvas = document.getElementById('chartMeterAvailVendors');
+  if (vendorCanvas && data.vendors) {
+    if (state.charts.meterAvailVendors) state.charts.meterAvailVendors.destroy();
+    const topVendors = (data.vendors || []).slice(0, 8);
+    const ctx = vendorCanvas.getContext('2d');
+    state.charts.meterAvailVendors = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: topVendors.map(v => v.vendor),
+        datasets: [
+          { label: 'Installed in Master', data: topVendors.map(v => v.matched), backgroundColor: '#0284c7' },
+          { label: 'Available (Not Installed)', data: topVendors.map(v => v.pending), backgroundColor: '#10b981' }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { stacked: true, ticks: { color: textColor, maxRotation: 45 }, grid: { display: false } },
+          y: { stacked: true, ticks: { color: textColor, callback: v => (v >= 1000 ? (v/1000).toFixed(0) + 'k' : v) }, grid: { color: gridColor } }
+        },
+        plugins: { legend: { position: 'top', labels: { color: textColor } } }
+      }
+    });
+  }
+}
+
+function exportUnsyncCsv() {
+  const params = new URLSearchParams({ dashboard: 'unsync' });
+  if (state.unsyncFilters.circle !== 'ALL') params.append('circle', state.unsyncFilters.circle);
+  if (state.unsyncFilters.division !== 'ALL') params.append('division', state.unsyncFilters.division);
+  if (state.unsyncFilters.vendor !== 'ALL') params.append('vendor', state.unsyncFilters.vendor);
+  if (state.unsyncFilters.status_vendor !== 'ALL') params.append('status_vendor', state.unsyncFilters.status_vendor);
+  if (state.unsyncFilters.aging !== 'ALL') params.append('aging', state.unsyncFilters.aging);
+  if (state.unsyncFilters.match_status !== 'ALL') params.append('match_status', state.unsyncFilters.match_status);
+  window.location.href = `/api/inventory/export?${params.toString()}`;
+}
+
+function exportMeterAvailCsv() {
+  const params = new URLSearchParams({ dashboard: 'meter_available' });
+  if (state.meterAvailFilters.circle !== 'ALL') params.append('circle', state.meterAvailFilters.circle);
+  if (state.meterAvailFilters.division !== 'ALL') params.append('division', state.meterAvailFilters.division);
+  if (state.meterAvailFilters.vendor !== 'ALL') params.append('vendor', state.meterAvailFilters.vendor);
+  if (state.meterAvailFilters.status_vendor !== 'ALL') params.append('status_vendor', state.meterAvailFilters.status_vendor);
+  if (state.meterAvailFilters.aging !== 'ALL') params.append('aging', state.meterAvailFilters.aging);
+  if (state.meterAvailFilters.match_status !== 'ALL') params.append('match_status', state.meterAvailFilters.match_status);
+  window.location.href = `/api/inventory/export?${params.toString()}`;
 }
 
 // --- TAB 4: SEARCH ---

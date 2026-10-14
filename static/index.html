@@ -1345,6 +1345,14 @@
       <i class="fa-solid fa-arrows-to-dot"></i> ULA Metering Tracker
       <span class="tab-badge">91.0K Scope</span>
     </button>
+    <button class="main-tab-btn" data-tab="tabUnsync">
+      <i class="fa-solid fa-arrows-rotate"></i> Unsync
+      <span class="tab-badge" id="tabUnsyncBadge">5,087 Unsync</span>
+    </button>
+    <button class="main-tab-btn" data-tab="tabMeterAvailable">
+      <i class="fa-solid fa-boxes-stacked"></i> Meter Available
+      <span class="tab-badge" id="tabMeterAvailBadge">123K Available</span>
+    </button>
     <button class="main-tab-btn" data-tab="tabSearch">
       <i class="fa-solid fa-magnifying-glass"></i> Smart Meter & MSN Search
     </button>
@@ -1733,6 +1741,382 @@
         </div>
         <div class="chart-wrapper donut-wrapper">
           <canvas id="chartUlaShare"></canvas>
+        </div>
+  <!-- TAB: UNSYNC DASHBOARD (Excludes Circle SBPDCL) -->
+  <main id="tabUnsync" class="tab-content">
+    <!-- Unsync Analytics Toolbar & Filter Bar -->
+    <div class="executive-analytics-toolbar" style="flex-wrap: wrap; gap: 10px;">
+      <!-- Dimension Selector -->
+      <div class="toolbar-filter-item">
+        <label for="selectUnsyncType" class="toolbar-label">
+          <i class="fa-solid fa-layer-group" style="color: #0284c7;"></i> Dimension:
+        </label>
+        <div class="select-wrapper">
+          <select id="selectUnsyncType" class="executive-select" aria-label="Select Breakdown Dimension">
+            <option value="circle" selected>🌐 Circle Wise Summary (Excl. SBPDCL)</option>
+            <option value="division">🏛️ Division Wise (HigherOffice)</option>
+            <option value="vendor">🛡️ Agency / Vendor Wise</option>
+            <option value="aging">⏳ Aging Breakdown (0-7d, 8-15d, 15-30d, >30d)</option>
+            <option value="meter_type">📦 Meter Type (Consumer / DT / Feeder)</option>
+            <option value="phase">⚡ Phase Wise (1-Phase / 3-Phase)</option>
+            <option value="comm_type">📡 Communication Type (GPRS / RF)</option>
+            <option value="meters">🔍 Detailed Meters Inspection List</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Status-Vendor Filter (User Explicit Requirement!) -->
+      <div class="toolbar-filter-item">
+        <label for="filterUnsyncStatusVendor" class="toolbar-label">
+          <i class="fa-solid fa-user-check" style="color: #10b981;"></i> Status-Vendor:
+        </label>
+        <div class="select-wrapper">
+          <select id="filterUnsyncStatusVendor" class="executive-select">
+            <option value="ALL">All (Active & In Active)</option>
+            <option value="Active">🟢 Active Vendors Only</option>
+            <option value="In Active">⚪ In Active Vendors</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Circle Filter -->
+      <div class="toolbar-filter-item">
+        <label for="filterUnsyncCircle" class="toolbar-label">
+          <i class="fa-solid fa-circle-dot" style="color: #6366f1;"></i> Circle:
+        </label>
+        <div class="select-wrapper">
+          <select id="filterUnsyncCircle" class="executive-select">
+            <option value="ALL">All Circles (Excl. SBPDCL)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Division Filter -->
+      <div class="toolbar-filter-item">
+        <label for="filterUnsyncDivision" class="toolbar-label">
+          <i class="fa-solid fa-building" style="color: #8b5cf6;"></i> HigherOffice:
+        </label>
+        <div class="select-wrapper">
+          <select id="filterUnsyncDivision" class="executive-select">
+            <option value="ALL">All HigherOffices</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Vendor Filter -->
+      <div class="toolbar-filter-item">
+        <label for="filterUnsyncVendor" class="toolbar-label">
+          <i class="fa-solid fa-truck-field" style="color: #f59e0b;"></i> Vendor:
+        </label>
+        <div class="select-wrapper">
+          <select id="filterUnsyncVendor" class="executive-select">
+            <option value="ALL">All Vendors</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Aging Filter -->
+      <div class="toolbar-filter-item">
+        <label for="filterUnsyncAging" class="toolbar-label">
+          <i class="fa-solid fa-clock" style="color: #f43f5e;"></i> Aging Bucket:
+        </label>
+        <div class="select-wrapper">
+          <select id="filterUnsyncAging" class="executive-select">
+            <option value="ALL">All Aging Buckets</option>
+            <option value="0-7 days">⚡ 0-7 Days (Fresh)</option>
+            <option value="8-15 days">⏳ 8-15 Days</option>
+            <option value="15-30 days">⚠️ 15-30 Days</option>
+            <option value=">30 days">🚨 >30 Days (Critical)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Unsync Status Filter -->
+      <div class="toolbar-filter-item">
+        <label for="filterUnsyncMatch" class="toolbar-label">
+          <i class="fa-solid fa-flag" style="color: #06b6d4;"></i> Unsync Status:
+        </label>
+        <div class="select-wrapper">
+          <select id="filterUnsyncMatch" class="executive-select">
+            <option value="ALL">All (Closed & Open)</option>
+            <option value="Closed">✅ Closed (Matched in Master)</option>
+            <option value="Unsync">🔄 Unsync (Open)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="toolbar-actions-group" style="display: flex; gap: 8px; align-items: flex-end;">
+        <button id="btnResetUnsyncFilters" class="btn btn-secondary" title="Reset all Unsync filters">
+          <i class="fa-solid fa-rotate-left"></i> Reset
+        </button>
+        <button id="btnExportUnsyncCsv" class="btn btn-export" title="Export Unsync data to CSV">
+          <i class="fa-solid fa-file-excel"></i> Export CSV
+        </button>
+      </div>
+    </div>
+
+    <!-- Active Unsync Table Card -->
+    <div class="table-card">
+      <div class="table-header-row">
+        <div class="table-title">
+          <i class="fa-solid fa-arrows-rotate" style="color: #0284c7;"></i>
+          <h3 id="unsyncTableTitle">Circle Wise Unsync Summary</h3>
+          <span class="badge badge-cyan" id="unsyncTableRowCount">9 Circles</span>
+          <span class="badge badge-amber" style="font-size: 0.72rem;"><i class="fa-solid fa-circle-exclamation"></i> Circle 'SBPDCL' Excluded</span>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <input type="text" id="searchUnsync" class="styled-input" placeholder="Search table (MSN, Division, Vendor)..." style="width: 280px;">
+        </div>
+      </div>
+
+      <div class="table-responsive" id="unsyncTableContainer">
+        <!-- Rendered dynamically via JavaScript -->
+      </div>
+
+      <!-- Pagination for meters view -->
+      <div id="unsyncPagination" style="display: none; justify-content: space-between; align-items: center; padding: 10px 0 0; margin-top: 10px; border-top: 1px solid #e2e8f0; font-size: 0.82rem;">
+        <span id="unsyncPageInfo" style="color: var(--text-secondary);">Showing 1-50 of 0</span>
+        <div style="display: flex; gap: 6px;">
+          <button id="btnPrevUnsyncPage" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.78rem;">&larr; Prev</button>
+          <button id="btnNextUnsyncPage" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.78rem;">Next &rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unsync Visual Charts Grid -->
+    <div class="charts-grid">
+      <!-- Chart 1: Aging Distribution -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h4>Unsync Aging Distribution (Days Since First Comm)</h4>
+          <span class="badge badge-rose">Aging Buckets</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chartUnsyncAging"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 2: Top Divisions -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h4>Top HigherOffices / Divisions by Unsync Count</h4>
+          <span class="badge badge-purple">HigherOffice</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chartUnsyncDivisions"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 3: Circle Wise Share -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h4>Circle Wise Unsync Share</h4>
+          <span class="badge badge-indigo">Circles</span>
+        </div>
+        <div class="chart-wrapper donut-wrapper">
+          <canvas id="chartUnsyncCircles"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 4: Vendor / Agency Breakdown -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h4>Vendor Distribution (Closed vs Unsync)</h4>
+          <span class="badge badge-amber">Vendors</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chartUnsyncVendors"></canvas>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- TAB: METER AVAILABLE DASHBOARD (Includes Circle SBPDCL) -->
+  <main id="tabMeterAvailable" class="tab-content">
+    <!-- Meter Available Analytics Toolbar & Filter Bar -->
+    <div class="executive-analytics-toolbar" style="flex-wrap: wrap; gap: 10px;">
+      <!-- Dimension Selector -->
+      <div class="toolbar-filter-item">
+        <label for="selectMeterAvailType" class="toolbar-label">
+          <i class="fa-solid fa-layer-group" style="color: #10b981;"></i> Dimension:
+        </label>
+        <div class="select-wrapper">
+          <select id="selectMeterAvailType" class="executive-select" aria-label="Select Breakdown Dimension">
+            <option value="circle" selected>🌐 Circle Wise Summary (Incl. SBPDCL)</option>
+            <option value="division">🏛️ Division Wise (HigherOffice)</option>
+            <option value="vendor">🛡️ Agency / Vendor Wise</option>
+            <option value="aging">⏳ Aging Breakdown (0-7d, 8-15d, 15-30d, >30d)</option>
+            <option value="meter_type">📦 Meter Type (Consumer / DT / Feeder)</option>
+            <option value="phase">⚡ Phase Wise (1-Phase / 3-Phase)</option>
+            <option value="comm_type">📡 Communication Type (GPRS / RF)</option>
+            <option value="meters">🔍 Detailed Available Meters List</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Status-Vendor Filter (User Explicit Requirement!) -->
+      <div class="toolbar-filter-item">
+        <label for="filterMeterAvailStatusVendor" class="toolbar-label">
+          <i class="fa-solid fa-user-check" style="color: #10b981;"></i> Status-Vendor:
+        </label>
+        <div class="select-wrapper">
+          <select id="filterMeterAvailStatusVendor" class="executive-select">
+            <option value="ALL">All (Active & In Active)</option>
+            <option value="Active">🟢 Active Vendors Only</option>
+            <option value="In Active">⚪ In Active Vendors</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Circle Filter (Includes SBPDCL!) -->
+      <div class="toolbar-filter-item">
+        <label for="filterMeterAvailCircle" class="toolbar-label">
+          <i class="fa-solid fa-circle-dot" style="color: #6366f1;"></i> Circle:
+        </label>
+        <div class="select-wrapper">
+          <select id="filterMeterAvailCircle" class="executive-select">
+            <option value="ALL">All Circles (Including SBPDCL)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Division Filter -->
+      <div class="toolbar-filter-item">
+        <label for="filterMeterAvailDivision" class="toolbar-label">
+          <i class="fa-solid fa-building" style="color: #8b5cf6;"></i> HigherOffice:
+        </label>
+        <div class="select-wrapper">
+          <select id="filterMeterAvailDivision" class="executive-select">
+            <option value="ALL">All HigherOffices</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Vendor Filter -->
+      <div class="toolbar-filter-item">
+        <label for="filterMeterAvailVendor" class="toolbar-label">
+          <i class="fa-solid fa-truck-field" style="color: #f59e0b;"></i> Vendor:
+        </label>
+        <div class="select-wrapper">
+          <select id="filterMeterAvailVendor" class="executive-select">
+            <option value="ALL">All Vendors</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Aging Filter -->
+      <div class="toolbar-filter-item">
+        <label for="filterMeterAvailAging" class="toolbar-label">
+          <i class="fa-solid fa-clock" style="color: #f43f5e;"></i> Aging Bucket:
+        </label>
+        <div class="select-wrapper">
+          <select id="filterMeterAvailAging" class="executive-select">
+            <option value="ALL">All Aging Buckets</option>
+            <option value="0-7 days">⚡ 0-7 Days (Fresh)</option>
+            <option value="8-15 days">⏳ 8-15 Days</option>
+            <option value="15-30 days">⚠️ 15-30 Days</option>
+            <option value=">30 days">🚨 >30 Days (Critical)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Inventory Status Filter -->
+      <div class="toolbar-filter-item">
+        <label for="filterMeterAvailMatch" class="toolbar-label">
+          <i class="fa-solid fa-warehouse" style="color: #06b6d4;"></i> Inventory Status:
+        </label>
+        <div class="select-wrapper">
+          <select id="filterMeterAvailMatch" class="executive-select">
+            <option value="ALL">All (Installed & Available)</option>
+            <option value="Installed">✅ Installed (Matched in Master)</option>
+            <option value="Available">📦 Available (Not Installed)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="toolbar-actions-group" style="display: flex; gap: 8px; align-items: flex-end;">
+        <button id="btnResetMeterAvailFilters" class="btn btn-secondary" title="Reset all filters">
+          <i class="fa-solid fa-rotate-left"></i> Reset
+        </button>
+        <button id="btnExportMeterAvailCsv" class="btn btn-export" title="Export available meters to CSV">
+          <i class="fa-solid fa-file-excel"></i> Export CSV
+        </button>
+      </div>
+    </div>
+
+    <!-- Active Meter Available Table Card -->
+    <div class="table-card">
+      <div class="table-header-row">
+        <div class="table-title">
+          <i class="fa-solid fa-boxes-stacked" style="color: #10b981;"></i>
+          <h3 id="meterAvailTableTitle">Circle Wise Meter Available Summary</h3>
+          <span class="badge badge-emerald" id="meterAvailTableRowCount">10 Circles</span>
+          <span class="badge badge-cyan" style="font-size: 0.72rem;"><i class="fa-solid fa-circle-check"></i> Includes SBPDCL Circle</span>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <input type="text" id="searchMeterAvail" class="styled-input" placeholder="Search table (MSN, Division, Vendor)..." style="width: 280px;">
+        </div>
+      </div>
+
+      <div class="table-responsive" id="meterAvailTableContainer">
+        <!-- Rendered dynamically via JavaScript -->
+      </div>
+
+      <!-- Pagination for meters view -->
+      <div id="meterAvailPagination" style="display: none; justify-content: space-between; align-items: center; padding: 10px 0 0; margin-top: 10px; border-top: 1px solid #e2e8f0; font-size: 0.82rem;">
+        <span id="meterAvailPageInfo" style="color: var(--text-secondary);">Showing 1-50 of 0</span>
+        <div style="display: flex; gap: 6px;">
+          <button id="btnPrevMeterAvailPage" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.78rem;">&larr; Prev</button>
+          <button id="btnNextMeterAvailPage" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.78rem;">Next &rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Meter Available Visual Charts Grid -->
+    <div class="charts-grid">
+      <!-- Chart 1: Available Aging Distribution -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h4>Meter Available Aging Distribution</h4>
+          <span class="badge badge-rose">Aging Buckets</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chartMeterAvailAging"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 2: Top Circles Stock -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h4>Circle Available Stock Distribution</h4>
+          <span class="badge badge-indigo">Circles</span>
+        </div>
+        <div class="chart-wrapper donut-wrapper">
+          <canvas id="chartMeterAvailCircles"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 3: Top HigherOffices / Divisions -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h4>Top HigherOffices Available Stock</h4>
+          <span class="badge badge-purple">HigherOffice</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chartMeterAvailDivisions"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 4: Vendor Inventory Allocation -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h4>Top Vendors / Agencies Inventory Allocation</h4>
+          <span class="badge badge-amber">Vendors</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chartMeterAvailVendors"></canvas>
         </div>
       </div>
     </div>
