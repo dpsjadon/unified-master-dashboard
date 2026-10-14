@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
   
   <script src="chart.umd.min.js"></script>
   <script src="jszip.min.js"></script>
@@ -1742,6 +1742,10 @@
         <div class="chart-wrapper donut-wrapper">
           <canvas id="chartUlaShare"></canvas>
         </div>
+      </div>
+    </div>
+  </main>
+
   <!-- TAB: UNSYNC DASHBOARD (Excludes Circle SBPDCL) -->
   <main id="tabUnsync" class="tab-content">
     <!-- Unsync Analytics Toolbar & Filter Bar -->
@@ -1858,6 +1862,36 @@
 
     <!-- Active Unsync Table Card -->
     <div class="table-card">
+      <!-- Interactive Segmented Pill Switcher (Circle / Division / Agency / Aging / Meters) -->
+      <div class="inventory-interactive-pills" id="unsyncPillGroup">
+        <button type="button" class="inv-pill-btn active" data-inv-tab="unsync" data-type="circle">
+          <i class="fa-solid fa-circle-notch"></i> Circle Wise Summary
+        </button>
+        <button type="button" class="inv-pill-btn" data-inv-tab="unsync" data-type="division">
+          <i class="fa-solid fa-building"></i> Division Wise (HigherOffice)
+        </button>
+        <button type="button" class="inv-pill-btn" data-inv-tab="unsync" data-type="vendor">
+          <i class="fa-solid fa-truck-field"></i> Agency (Vendor) Wise
+        </button>
+        <button type="button" class="inv-pill-btn" data-inv-tab="unsync" data-type="aging">
+          <i class="fa-solid fa-clock"></i> Aging Breakdown
+        </button>
+        <button type="button" class="inv-pill-btn" data-inv-tab="unsync" data-type="meters">
+          <i class="fa-solid fa-list-check"></i> Detailed Meters Ledger
+        </button>
+      </div>
+
+      <!-- Interactive Hierarchy & Drilldown Breadcrumb Strip -->
+      <div class="interactive-breadcrumb-bar" id="unsyncBreadcrumbsBar">
+        <span class="breadcrumb-label"><i class="fa-solid fa-sitemap"></i> Active Drilldown:</span>
+        <span class="breadcrumb-chip" id="chipUnsyncCircle" style="display:none;"></span>
+        <span class="breadcrumb-chip" id="chipUnsyncDivision" style="display:none;"></span>
+        <span class="breadcrumb-chip" id="chipUnsyncVendor" style="display:none;"></span>
+        <span class="breadcrumb-hint" id="unsyncBreadcrumbHint">
+          <i class="fa-solid fa-lightbulb"></i> Click any Circle, Division, or Agency row to instantly filter &amp; drill down!
+        </span>
+      </div>
+
       <div class="table-header-row">
         <div class="table-title">
           <i class="fa-solid fa-arrows-rotate" style="color: #0284c7;"></i>
@@ -2048,6 +2082,36 @@
 
     <!-- Active Meter Available Table Card -->
     <div class="table-card">
+      <!-- Interactive Segmented Pill Switcher (Circle / Division / Agency / Aging / Meters) -->
+      <div class="inventory-interactive-pills" id="meterAvailPillGroup">
+        <button type="button" class="inv-pill-btn active" data-inv-tab="meter_available" data-type="circle">
+          <i class="fa-solid fa-circle-notch"></i> Circle Wise Summary
+        </button>
+        <button type="button" class="inv-pill-btn" data-inv-tab="meter_available" data-type="division">
+          <i class="fa-solid fa-building"></i> Division Wise (HigherOffice)
+        </button>
+        <button type="button" class="inv-pill-btn" data-inv-tab="meter_available" data-type="vendor">
+          <i class="fa-solid fa-truck-field"></i> Agency (Vendor) Wise
+        </button>
+        <button type="button" class="inv-pill-btn" data-inv-tab="meter_available" data-type="aging">
+          <i class="fa-solid fa-clock"></i> Aging Breakdown
+        </button>
+        <button type="button" class="inv-pill-btn" data-inv-tab="meter_available" data-type="meters">
+          <i class="fa-solid fa-list-check"></i> Detailed Meters Ledger
+        </button>
+      </div>
+
+      <!-- Interactive Hierarchy & Drilldown Breadcrumb Strip -->
+      <div class="interactive-breadcrumb-bar" id="meterAvailBreadcrumbsBar">
+        <span class="breadcrumb-label"><i class="fa-solid fa-sitemap"></i> Active Drilldown:</span>
+        <span class="breadcrumb-chip" id="chipMeterAvailCircle" style="display:none;"></span>
+        <span class="breadcrumb-chip" id="chipMeterAvailDivision" style="display:none;"></span>
+        <span class="breadcrumb-chip" id="chipMeterAvailVendor" style="display:none;"></span>
+        <span class="breadcrumb-hint" id="meterAvailBreadcrumbHint">
+          <i class="fa-solid fa-lightbulb"></i> Click any Circle, Division, or Agency row to instantly filter &amp; drill down!
+        </span>
+      </div>
+
       <div class="table-header-row">
         <div class="table-title">
           <i class="fa-solid fa-boxes-stacked" style="color: #10b981;"></i>

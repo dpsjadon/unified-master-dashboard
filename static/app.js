@@ -441,6 +441,29 @@ function setupNavigation() {
     });
   });
 
+  // Interactive Inventory Pills (Circle / Division / Agency / Aging / Meters)
+  document.querySelectorAll('.inv-pill-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const dashboard = btn.getAttribute('data-inv-tab');
+      const type = btn.getAttribute('data-type');
+      if (dashboard === 'unsync') {
+        state.activeUnsyncType = type;
+        state.unsyncPage = 1;
+        const sel = document.getElementById('selectUnsyncType');
+        if (sel) sel.value = type;
+        updateInventoryPills('unsync', type);
+        loadUnsyncDashboard();
+      } else if (dashboard === 'meter_available') {
+        state.activeMeterAvailType = type;
+        state.meterAvailPage = 1;
+        const sel = document.getElementById('selectMeterAvailType');
+        if (sel) sel.value = type;
+        updateInventoryPills('meter_available', type);
+        loadMeterAvailDashboard();
+      }
+    });
+  });
+
   // Table Search Inputs
   const searchCum = document.getElementById('searchCumulative');
   if (searchCum) {
@@ -2268,9 +2291,180 @@ async function loadMeterAvailFilters() {
   }
 }
 
+function updateInventoryPills(dashboard, activeType) {
+  const pillGroupId = (dashboard === 'unsync') ? 'unsyncPillGroup' : 'meterAvailPillGroup';
+  const group = document.getElementById(pillGroupId);
+  if (!group) return;
+  group.querySelectorAll('.inv-pill-btn').forEach(btn => {
+    if (btn.getAttribute('data-type') === activeType) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+}
+
+function updateInventoryBreadcrumbs(dashboard) {
+  const isUnsync = (dashboard === 'unsync');
+  const filters = isUnsync ? state.unsyncFilters : state.meterAvailFilters;
+  const chipCircle = document.getElementById(isUnsync ? 'chipUnsyncCircle' : 'chipMeterAvailCircle');
+  const chipDivision = document.getElementById(isUnsync ? 'chipUnsyncDivision' : 'chipMeterAvailDivision');
+  const chipVendor = document.getElementById(isUnsync ? 'chipUnsyncVendor' : 'chipMeterAvailVendor');
+  const hintEl = document.getElementById(isUnsync ? 'unsyncBreadcrumbHint' : 'meterAvailBreadcrumbHint');
+
+  let hasAny = false;
+
+  if (chipCircle) {
+    if (filters.circle && filters.circle !== 'ALL') {
+      chipCircle.innerHTML = `<i class="fa-solid fa-circle-dot" style="color: #6366f1;"></i> Circle: <strong>${filters.circle}</strong> <span class="chip-remove" onclick="window.clearInventoryFilter('${dashboard}', 'circle')" title="Remove Circle filter">&times;</span>`;
+      chipCircle.style.display = 'inline-flex';
+      hasAny = true;
+    } else {
+      chipCircle.style.display = 'none';
+    }
+  }
+
+  if (chipDivision) {
+    if (filters.division && filters.division !== 'ALL') {
+      chipDivision.innerHTML = `<i class="fa-solid fa-building" style="color: #8b5cf6;"></i> Division: <strong>${filters.division}</strong> <span class="chip-remove" onclick="window.clearInventoryFilter('${dashboard}', 'division')" title="Remove Division filter">&times;</span>`;
+      chipDivision.style.display = 'inline-flex';
+      hasAny = true;
+    } else {
+      chipDivision.style.display = 'none';
+    }
+  }
+
+  if (chipVendor) {
+    if (filters.vendor && filters.vendor !== 'ALL') {
+      chipVendor.innerHTML = `<i class="fa-solid fa-truck-field" style="color: #f59e0b;"></i> Agency: <strong>${filters.vendor}</strong> <span class="chip-remove" onclick="window.clearInventoryFilter('${dashboard}', 'vendor')" title="Remove Agency filter">&times;</span>`;
+      chipVendor.style.display = 'inline-flex';
+      hasAny = true;
+    } else {
+      chipVendor.style.display = 'none';
+    }
+  }
+
+  if (hintEl) {
+    hintEl.innerHTML = hasAny
+      ? `<button type="button" class="btn btn-secondary" style="padding: 2px 8px; font-size: 0.70rem; border-radius: 4px;" onclick="window.clearInventoryAllFilters('${dashboard}')"><i class="fa-solid fa-rotate-left"></i> Reset Hierarchy</button>`
+      : `<i class="fa-solid fa-lightbulb"></i> Tip: Click any row in Circle, Division or Agency summary to drill down!`;
+  }
+}
+
+window.drilldownInventory = function(dashboard, level, val, parentCircle) {
+  const isUnsync = (dashboard === 'unsync');
+  const filters = isUnsync ? state.unsyncFilters : state.meterAvailFilters;
+
+  if (level === 'circle') {
+    filters.circle = val;
+    const cSel = document.getElementById(isUnsync ? 'filterUnsyncCircle' : 'filterMeterAvailCircle');
+    if (cSel) cSel.value = val;
+    if (isUnsync) {
+      state.activeUnsyncType = 'division';
+      const s = document.getElementById('selectUnsyncType');
+      if (s) s.value = 'division';
+      updateInventoryPills('unsync', 'division');
+      loadUnsyncDashboard();
+    } else {
+      state.activeMeterAvailType = 'division';
+      const s = document.getElementById('selectMeterAvailType');
+      if (s) s.value = 'division';
+      updateInventoryPills('meter_available', 'division');
+      loadMeterAvailDashboard();
+    }
+  } else if (level === 'division') {
+    filters.division = val;
+    if (parentCircle && filters.circle === 'ALL') {
+      filters.circle = parentCircle;
+      const cSel = document.getElementById(isUnsync ? 'filterUnsyncCircle' : 'filterMeterAvailCircle');
+      if (cSel) cSel.value = parentCircle;
+    }
+    const dSel = document.getElementById(isUnsync ? 'filterUnsyncDivision' : 'filterMeterAvailDivision');
+    if (dSel) dSel.value = val;
+    if (isUnsync) {
+      state.activeUnsyncType = 'vendor';
+      const s = document.getElementById('selectUnsyncType');
+      if (s) s.value = 'vendor';
+      updateInventoryPills('unsync', 'vendor');
+      loadUnsyncDashboard();
+    } else {
+      state.activeMeterAvailType = 'vendor';
+      const s = document.getElementById('selectMeterAvailType');
+      if (s) s.value = 'vendor';
+      updateInventoryPills('meter_available', 'vendor');
+      loadMeterAvailDashboard();
+    }
+  } else if (level === 'vendor') {
+    filters.vendor = val;
+    const vSel = document.getElementById(isUnsync ? 'filterUnsyncVendor' : 'filterMeterAvailVendor');
+    if (vSel) vSel.value = val;
+    if (isUnsync) {
+      state.activeUnsyncType = 'meters';
+      state.unsyncPage = 1;
+      const s = document.getElementById('selectUnsyncType');
+      if (s) s.value = 'meters';
+      updateInventoryPills('unsync', 'meters');
+      loadUnsyncDashboard();
+    } else {
+      state.activeMeterAvailType = 'meters';
+      state.meterAvailPage = 1;
+      const s = document.getElementById('selectMeterAvailType');
+      if (s) s.value = 'meters';
+      updateInventoryPills('meter_available', 'meters');
+      loadMeterAvailDashboard();
+    }
+  }
+};
+
+window.clearInventoryFilter = function(dashboard, level) {
+  const isUnsync = (dashboard === 'unsync');
+  const filters = isUnsync ? state.unsyncFilters : state.meterAvailFilters;
+  if (level === 'circle') {
+    filters.circle = 'ALL';
+    const cSel = document.getElementById(isUnsync ? 'filterUnsyncCircle' : 'filterMeterAvailCircle');
+    if (cSel) cSel.value = 'ALL';
+  } else if (level === 'division') {
+    filters.division = 'ALL';
+    const dSel = document.getElementById(isUnsync ? 'filterUnsyncDivision' : 'filterMeterAvailDivision');
+    if (dSel) dSel.value = 'ALL';
+  } else if (level === 'vendor') {
+    filters.vendor = 'ALL';
+    const vSel = document.getElementById(isUnsync ? 'filterUnsyncVendor' : 'filterMeterAvailVendor');
+    if (vSel) vSel.value = 'ALL';
+  }
+  if (isUnsync) loadUnsyncDashboard();
+  else loadMeterAvailDashboard();
+};
+
+window.clearInventoryAllFilters = function(dashboard) {
+  const isUnsync = (dashboard === 'unsync');
+  if (isUnsync) {
+    state.unsyncFilters = { circle: 'ALL', division: 'ALL', vendor: 'ALL', status_vendor: 'ALL', aging: 'ALL', match_status: 'ALL' };
+    ['filterUnsyncCircle', 'filterUnsyncDivision', 'filterUnsyncVendor', 'filterUnsyncStatusVendor', 'filterUnsyncAging', 'filterUnsyncMatch'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = 'ALL';
+    });
+    loadUnsyncDashboard();
+  } else {
+    state.meterAvailFilters = { circle: 'ALL', division: 'ALL', vendor: 'ALL', status_vendor: 'ALL', aging: 'ALL', match_status: 'ALL' };
+    ['filterMeterAvailCircle', 'filterMeterAvailDivision', 'filterMeterAvailVendor', 'filterMeterAvailStatusVendor', 'filterMeterAvailAging', 'filterMeterAvailMatch'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = 'ALL';
+    });
+    loadMeterAvailDashboard();
+  }
+};
+
+function escapeAttr(s) {
+  return String(s || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+}
+
 async function loadUnsyncDashboard() {
   const container = document.getElementById('unsyncTableContainer');
   const pagination = document.getElementById('unsyncPagination');
+
+  updateInventoryPills('unsync', state.activeUnsyncType);
+  updateInventoryBreadcrumbs('unsync');
 
   if (state.activeUnsyncType === 'meters') {
     if (pagination) pagination.style.display = 'flex';
@@ -2309,6 +2503,9 @@ async function loadUnsyncDashboard() {
 async function loadMeterAvailDashboard() {
   const container = document.getElementById('meterAvailTableContainer');
   const pagination = document.getElementById('meterAvailPagination');
+
+  updateInventoryPills('meter_available', state.activeMeterAvailType);
+  updateInventoryBreadcrumbs('meter_available');
 
   if (state.activeMeterAvailType === 'meters') {
     if (pagination) pagination.style.display = 'flex';
@@ -2351,19 +2548,23 @@ function renderUnsyncTable(data) {
   const type = state.activeUnsyncType;
   const q = state.searchFilters.unsync;
 
+  const isCircle = (type === 'circle');
+  const isDivision = (type === 'division');
+  const isVendor = (type === 'vendor');
+
   let list = [];
   let dimKey = 'circle';
   let dimLabel = 'Circle Name';
 
-  if (type === 'circle') {
+  if (isCircle) {
     list = data.circles || [];
     dimKey = 'circle';
     dimLabel = 'Circle Name';
-  } else if (type === 'division') {
+  } else if (isDivision) {
     list = data.divisions || [];
     dimKey = 'division';
-    dimLabel = 'HigherOffice / Division';
-  } else if (type === 'vendor') {
+    dimLabel = 'HigherOffice (Division)';
+  } else if (isVendor) {
     list = data.vendors || [];
     dimKey = 'vendor';
     dimLabel = 'Agency / Vendor';
@@ -2393,7 +2594,7 @@ function renderUnsyncTable(data) {
   const titleEl = document.getElementById('unsyncTableTitle');
   const countEl = document.getElementById('unsyncTableRowCount');
   const totalMeters = (data.kpi && data.kpi.total) ? data.kpi.total : rows.reduce((a,c) => a + (c.total||0), 0);
-  if (titleEl) titleEl.textContent = `${dimLabel} Wise Unsync Summary`;
+  if (titleEl) titleEl.textContent = `${dimLabel} Wise Unsync Interactive Summary`;
   if (countEl) countEl.textContent = `${rows.length} Rows (${totalMeters.toLocaleString()} Scope)`;
 
   const totalClosed = rows.reduce((a,c) => a + (c.matched || 0), 0);
@@ -2412,48 +2613,74 @@ function renderUnsyncTable(data) {
       <thead>
         <tr>
           <th>${dimLabel}</th>
+          ${isDivision ? '<th>Parent Circle</th>' : ''}
+          ${isVendor ? '<th>Vendor Status</th>' : ''}
           <th class="text-right">Total Scope</th>
           <th class="text-right">Closed (Installed)</th>
           <th class="text-right">Open Unsync</th>
           <th class="text-right">Closure Rate (%)</th>
-          <th class="text-right">Active Vendor</th>
-          <th class="text-right">In Active</th>
+          ${!isVendor ? '<th class="text-right">Active Vendor</th><th class="text-right">In Active</th>' : ''}
           <th class="text-right">0-7 Days</th>
           <th class="text-right">8-15 Days</th>
           <th class="text-right">15-30 Days</th>
           <th class="text-right">>30 Days (Critical)</th>
+          ${(isCircle || isDivision || isVendor) ? '<th class="text-center" style="width: 125px;">Interactive Drill</th>' : ''}
         </tr>
       </thead>
       <tbody>
-        ${rows.map(r => `
-          <tr>
-            <td><strong>${r[dimKey] || 'UNKNOWN'}</strong></td>
-            <td class="text-right" style="color: var(--brand-cyan); font-weight:700;">${(r.total || 0).toLocaleString()}</td>
-            <td class="text-right" style="color: #10b981; font-weight:700;">${(r.matched || 0).toLocaleString()}</td>
-            <td class="text-right" style="color: #f59e0b; font-weight:700;">${(r.pending || 0).toLocaleString()}</td>
-            <td class="text-right"><span class="badge ${Number(r.matched_pct || 0) > 10 ? 'badge-emerald' : 'badge-cyan'}">${Number(r.matched_pct || 0).toFixed(2)}%</span></td>
-            <td class="text-right" style="color: #6366f1;">${(r.active_count || 0).toLocaleString()}</td>
-            <td class="text-right" style="color: var(--text-muted);">${(r.inactive_count || 0).toLocaleString()}</td>
-            <td class="text-right">${(r.aging_0_7 || 0).toLocaleString()}</td>
-            <td class="text-right">${(r.aging_8_15 || 0).toLocaleString()}</td>
-            <td class="text-right">${(r.aging_15_30 || 0).toLocaleString()}</td>
-            <td class="text-right" style="color: #f43f5e; font-weight:600;">${(r.aging_gt_30 || 0).toLocaleString()}</td>
-          </tr>
-        `).join('')}
+        ${rows.map(r => {
+          let rowClick = '';
+          let actionBtn = '';
+          if (isCircle) {
+            rowClick = `onclick="window.drilldownInventory('unsync', 'circle', '${escapeAttr(r.circle)}')"` ;
+            actionBtn = `<td class="text-center"><button type="button" class="btn-table-action" onclick="event.stopPropagation(); window.drilldownInventory('unsync', 'circle', '${escapeAttr(r.circle)}')"><i class="fa-solid fa-sitemap"></i> Divisions &rarr;</button></td>`;
+          } else if (isDivision) {
+            rowClick = `onclick="window.drilldownInventory('unsync', 'division', '${escapeAttr(r.division)}', '${escapeAttr(r.circle)}')"` ;
+            actionBtn = `<td class="text-center"><button type="button" class="btn-table-action" onclick="event.stopPropagation(); window.drilldownInventory('unsync', 'division', '${escapeAttr(r.division)}', '${escapeAttr(r.circle)}')"><i class="fa-solid fa-truck-field"></i> Agencies &rarr;</button></td>`;
+          } else if (isVendor) {
+            rowClick = `onclick="window.drilldownInventory('unsync', 'vendor', '${escapeAttr(r.vendor)}')"` ;
+            actionBtn = `<td class="text-center"><button type="button" class="btn-table-action" onclick="event.stopPropagation(); window.drilldownInventory('unsync', 'vendor', '${escapeAttr(r.vendor)}')"><i class="fa-solid fa-list-check"></i> Meters &rarr;</button></td>`;
+          }
+
+          return `
+            <tr class="${(isCircle || isDivision || isVendor) ? 'interactive-row' : ''}" ${rowClick}>
+              <td>
+                <strong style="color: ${isCircle ? '#0284c7' : (isDivision ? '#8b5cf6' : '#0f172a')};">
+                  ${isCircle ? '<i class="fa-solid fa-circle-dot" style="font-size:0.75rem;"></i> ' : (isDivision ? '<i class="fa-solid fa-building" style="font-size:0.75rem;"></i> ' : (isVendor ? '<i class="fa-solid fa-truck-field" style="font-size:0.75rem;"></i> ' : ''))}
+                  ${r[dimKey] || 'UNKNOWN'}
+                </strong>
+              </td>
+              ${isDivision ? `<td><span class="badge badge-indigo">${r.circle || '--'}</span></td>` : ''}
+              ${isVendor ? `<td><span class="badge ${(r.active_count > 0 || r.status_vendor === 'Active') ? 'badge-emerald' : 'badge-slate'}">${(r.active_count > 0 || r.status_vendor === 'Active') ? 'Active' : 'In Active'}</span></td>` : ''}
+              <td class="text-right" style="color: var(--brand-cyan); font-weight:700;">${(r.total || 0).toLocaleString()}</td>
+              <td class="text-right" style="color: #10b981; font-weight:700;">${(r.matched || 0).toLocaleString()}</td>
+              <td class="text-right" style="color: #f59e0b; font-weight:700;">${(r.pending || 0).toLocaleString()}</td>
+              <td class="text-right"><span class="badge ${Number(r.matched_pct || 0) > 10 ? 'badge-emerald' : 'badge-cyan'}">${Number(r.matched_pct || 0).toFixed(2)}%</span></td>
+              ${!isVendor ? `<td class="text-right" style="color: #6366f1;">${(r.active_count || 0).toLocaleString()}</td><td class="text-right" style="color: var(--text-muted);">${(r.inactive_count || 0).toLocaleString()}</td>` : ''}
+              <td class="text-right">${(r.aging_0_7 || 0).toLocaleString()}</td>
+              <td class="text-right">${(r.aging_8_15 || 0).toLocaleString()}</td>
+              <td class="text-right">${(r.aging_15_30 || 0).toLocaleString()}</td>
+              <td class="text-right" style="color: #f43f5e; font-weight:600;">${(r.aging_gt_30 || 0).toLocaleString()}</td>
+              ${actionBtn}
+            </tr>
+          `;
+        }).join('')}
       </tbody>
       <tfoot>
         <tr class="table-total-row">
           <td><strong>UNSYNC TOTAL (EXCL. SBPDCL)</strong></td>
+          ${isDivision ? '<td>-</td>' : ''}
+          ${isVendor ? '<td>-</td>' : ''}
           <td class="text-right"><strong>${totalScope.toLocaleString()}</strong></td>
           <td class="text-right"><strong>${totalClosed.toLocaleString()}</strong></td>
           <td class="text-right"><strong>${totalOpen.toLocaleString()}</strong></td>
           <td class="text-right"><strong>${avgClosureRate}%</strong></td>
-          <td class="text-right"><strong>${totalActive.toLocaleString()}</strong></td>
-          <td class="text-right"><strong>${totalInactive.toLocaleString()}</strong></td>
+          ${!isVendor ? `<td class="text-right"><strong>${totalActive.toLocaleString()}</strong></td><td class="text-right"><strong>${totalInactive.toLocaleString()}</strong></td>` : ''}
           <td class="text-right"><strong>${totalAging07.toLocaleString()}</strong></td>
           <td class="text-right"><strong>${totalAging815.toLocaleString()}</strong></td>
           <td class="text-right"><strong>${totalAging1530.toLocaleString()}</strong></td>
           <td class="text-right"><strong>${totalAgingGt30.toLocaleString()}</strong></td>
+          ${(isCircle || isDivision || isVendor) ? '<td></td>' : ''}
         </tr>
       </tfoot>
     </table>
@@ -2467,19 +2694,23 @@ function renderMeterAvailTable(data) {
   const type = state.activeMeterAvailType;
   const q = state.searchFilters.meter_available;
 
+  const isCircle = (type === 'circle');
+  const isDivision = (type === 'division');
+  const isVendor = (type === 'vendor');
+
   let list = [];
   let dimKey = 'circle';
   let dimLabel = 'Circle Name';
 
-  if (type === 'circle') {
+  if (isCircle) {
     list = data.circles || [];
     dimKey = 'circle';
     dimLabel = 'Circle Name';
-  } else if (type === 'division') {
+  } else if (isDivision) {
     list = data.divisions || [];
     dimKey = 'division';
-    dimLabel = 'HigherOffice / Division';
-  } else if (type === 'vendor') {
+    dimLabel = 'HigherOffice (Division)';
+  } else if (isVendor) {
     list = data.vendors || [];
     dimKey = 'vendor';
     dimLabel = 'Agency / Vendor';
@@ -2509,7 +2740,7 @@ function renderMeterAvailTable(data) {
   const titleEl = document.getElementById('meterAvailTableTitle');
   const countEl = document.getElementById('meterAvailTableRowCount');
   const totalMeters = (data.kpi && data.kpi.total) ? data.kpi.total : rows.reduce((a,c) => a + (c.total||0), 0);
-  if (titleEl) titleEl.textContent = `${dimLabel} Wise Available Meter Summary`;
+  if (titleEl) titleEl.textContent = `${dimLabel} Wise Available Meter Interactive Summary`;
   if (countEl) countEl.textContent = `${rows.length} Rows (${totalMeters.toLocaleString()} Total Stock)`;
 
   const totalInstalled = rows.reduce((a,c) => a + (c.matched || 0), 0);
@@ -2528,48 +2759,75 @@ function renderMeterAvailTable(data) {
       <thead>
         <tr>
           <th>${dimLabel}</th>
+          ${isDivision ? '<th>Parent Circle</th>' : ''}
+          ${isVendor ? '<th>Vendor Status</th>' : ''}
           <th class="text-right">Total Available Stock</th>
           <th class="text-right">Installed in Master</th>
           <th class="text-right">Available (Not Installed)</th>
           <th class="text-right">Installed Rate (%)</th>
-          <th class="text-right">Active Vendor</th>
-          <th class="text-right">In Active</th>
+          ${!isVendor ? '<th class="text-right">Active Vendor</th><th class="text-right">In Active</th>' : ''}
           <th class="text-right">0-7 Days</th>
           <th class="text-right">8-15 Days</th>
           <th class="text-right">15-30 Days</th>
           <th class="text-right">>30 Days (Critical)</th>
+          ${(isCircle || isDivision || isVendor) ? '<th class="text-center" style="width: 125px;">Interactive Drill</th>' : ''}
         </tr>
       </thead>
       <tbody>
-        ${rows.map(r => `
-          <tr>
-            <td><strong>${r[dimKey] || 'UNKNOWN'}</strong> ${r[dimKey] === 'SBPDCL' ? '<span class="badge badge-indigo">SBPDCL</span>' : ''}</td>
-            <td class="text-right" style="color: var(--brand-cyan); font-weight:700;">${(r.total || 0).toLocaleString()}</td>
-            <td class="text-right" style="color: #10b981; font-weight:700;">${(r.matched || 0).toLocaleString()}</td>
-            <td class="text-right" style="color: #f59e0b; font-weight:700;">${(r.pending || 0).toLocaleString()}</td>
-            <td class="text-right"><span class="badge ${Number(r.matched_pct || 0) > 1 ? 'badge-emerald' : 'badge-amber'}">${Number(r.matched_pct || 0).toFixed(2)}%</span></td>
-            <td class="text-right" style="color: #6366f1;">${(r.active_count || 0).toLocaleString()}</td>
-            <td class="text-right" style="color: var(--text-muted);">${(r.inactive_count || 0).toLocaleString()}</td>
-            <td class="text-right">${(r.aging_0_7 || 0).toLocaleString()}</td>
-            <td class="text-right">${(r.aging_8_15 || 0).toLocaleString()}</td>
-            <td class="text-right">${(r.aging_15_30 || 0).toLocaleString()}</td>
-            <td class="text-right" style="color: #f43f5e; font-weight:600;">${(r.aging_gt_30 || 0).toLocaleString()}</td>
-          </tr>
-        `).join('')}
+        ${rows.map(r => {
+          let rowClick = '';
+          let actionBtn = '';
+          if (isCircle) {
+            rowClick = `onclick="window.drilldownInventory('meter_available', 'circle', '${escapeAttr(r.circle)}')"` ;
+            actionBtn = `<td class="text-center"><button type="button" class="btn-table-action" onclick="event.stopPropagation(); window.drilldownInventory('meter_available', 'circle', '${escapeAttr(r.circle)}')"><i class="fa-solid fa-sitemap"></i> Divisions &rarr;</button></td>`;
+          } else if (isDivision) {
+            rowClick = `onclick="window.drilldownInventory('meter_available', 'division', '${escapeAttr(r.division)}', '${escapeAttr(r.circle)}')"` ;
+            actionBtn = `<td class="text-center"><button type="button" class="btn-table-action" onclick="event.stopPropagation(); window.drilldownInventory('meter_available', 'division', '${escapeAttr(r.division)}', '${escapeAttr(r.circle)}')"><i class="fa-solid fa-truck-field"></i> Agencies &rarr;</button></td>`;
+          } else if (isVendor) {
+            rowClick = `onclick="window.drilldownInventory('meter_available', 'vendor', '${escapeAttr(r.vendor)}')"` ;
+            actionBtn = `<td class="text-center"><button type="button" class="btn-table-action" onclick="event.stopPropagation(); window.drilldownInventory('meter_available', 'vendor', '${escapeAttr(r.vendor)}')"><i class="fa-solid fa-list-check"></i> Meters &rarr;</button></td>`;
+          }
+
+          return `
+            <tr class="${(isCircle || isDivision || isVendor) ? 'interactive-row' : ''}" ${rowClick}>
+              <td>
+                <strong style="color: ${isCircle ? '#10b981' : (isDivision ? '#8b5cf6' : '#0f172a')};">
+                  ${isCircle ? '<i class="fa-solid fa-circle-dot" style="font-size:0.75rem;"></i> ' : (isDivision ? '<i class="fa-solid fa-building" style="font-size:0.75rem;"></i> ' : (isVendor ? '<i class="fa-solid fa-truck-field" style="font-size:0.75rem;"></i> ' : ''))}
+                  ${r[dimKey] || 'UNKNOWN'}
+                </strong>
+                ${r[dimKey] === 'SBPDCL' ? '<span class="badge badge-indigo">SBPDCL</span>' : ''}
+              </td>
+              ${isDivision ? `<td><span class="badge badge-indigo">${r.circle || '--'}</span></td>` : ''}
+              ${isVendor ? `<td><span class="badge ${(r.active_count > 0 || r.status_vendor === 'Active') ? 'badge-emerald' : 'badge-slate'}">${(r.active_count > 0 || r.status_vendor === 'Active') ? 'Active' : 'In Active'}</span></td>` : ''}
+              <td class="text-right" style="color: var(--brand-cyan); font-weight:700;">${(r.total || 0).toLocaleString()}</td>
+              <td class="text-right" style="color: #10b981; font-weight:700;">${(r.matched || 0).toLocaleString()}</td>
+              <td class="text-right" style="color: #f59e0b; font-weight:700;">${(r.pending || 0).toLocaleString()}</td>
+              <td class="text-right"><span class="badge ${Number(r.matched_pct || 0) > 1 ? 'badge-emerald' : 'badge-amber'}">${Number(r.matched_pct || 0).toFixed(2)}%</span></td>
+              ${!isVendor ? `<td class="text-right" style="color: #6366f1;">${(r.active_count || 0).toLocaleString()}</td><td class="text-right" style="color: var(--text-muted);">${(r.inactive_count || 0).toLocaleString()}</td>` : ''}
+              <td class="text-right">${(r.aging_0_7 || 0).toLocaleString()}</td>
+              <td class="text-right">${(r.aging_8_15 || 0).toLocaleString()}</td>
+              <td class="text-right">${(r.aging_15_30 || 0).toLocaleString()}</td>
+              <td class="text-right" style="color: #f43f5e; font-weight:600;">${(r.aging_gt_30 || 0).toLocaleString()}</td>
+              ${actionBtn}
+            </tr>
+          `;
+        }).join('')}
       </tbody>
       <tfoot>
         <tr class="table-total-row">
           <td><strong>METER AVAILABLE TOTAL (INCL. SBPDCL)</strong></td>
+          ${isDivision ? '<td>-</td>' : ''}
+          ${isVendor ? '<td>-</td>' : ''}
           <td class="text-right"><strong>${totalScope.toLocaleString()}</strong></td>
           <td class="text-right"><strong>${totalInstalled.toLocaleString()}</strong></td>
           <td class="text-right"><strong>${totalAvailable.toLocaleString()}</strong></td>
           <td class="text-right"><strong>${avgInstRate}%</strong></td>
-          <td class="text-right"><strong>${totalActive.toLocaleString()}</strong></td>
-          <td class="text-right"><strong>${totalInactive.toLocaleString()}</strong></td>
+          ${!isVendor ? `<td class="text-right"><strong>${totalActive.toLocaleString()}</strong></td><td class="text-right"><strong>${totalInactive.toLocaleString()}</strong></td>` : ''}
           <td class="text-right"><strong>${totalAging07.toLocaleString()}</strong></td>
           <td class="text-right"><strong>${totalAging815.toLocaleString()}</strong></td>
           <td class="text-right"><strong>${totalAging1530.toLocaleString()}</strong></td>
           <td class="text-right"><strong>${totalAgingGt30.toLocaleString()}</strong></td>
+          ${(isCircle || isDivision || isVendor) ? '<td></td>' : ''}
         </tr>
       </tfoot>
     </table>

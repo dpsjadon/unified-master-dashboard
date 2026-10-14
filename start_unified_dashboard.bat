@@ -25,9 +25,6 @@ if %ERRORLEVEL% equ 0 (
 )
 
 :srv_ready
-:: Ensure Cloudflare Tunnel is running
-powershell -Command "$p = Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -like '*cloudflared*8095*' }; if (-not $p) { wscript.exe '%D_DIR%run_silent_tunnel.vbs' }" >nul 2>&1
-
 echo [+] Server is LIVE! Opening browser at http://localhost:8095/ ...
 start http://localhost:8095/
 timeout /t 2 /nobreak >nul

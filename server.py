@@ -221,16 +221,6 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
             return self.trigger_daily_sync()
         elif path == "/api/sync/master":
             return self.trigger_master_sync()
-        elif path == "/api/cloudflare-url":
-            cf_url = ""
-            url_p = os.path.join(WORKSPACE_DIR, "cloudflare_url.txt")
-            if os.path.exists(url_p):
-                try:
-                    with open(url_p, "r", encoding="utf-8") as f:
-                        cf_url = f.read().strip()
-                except Exception:
-                    pass
-            return self.send_json({"success": True, "url": cf_url})
         elif path == "/api/debug/mdm-check":
             ctx = ssl.create_default_context()
             ctx.check_hostname = False
