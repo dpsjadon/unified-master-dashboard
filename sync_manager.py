@@ -155,3 +155,41 @@ def start_master_sync():
     t = threading.Thread(target=worker, daemon=True)
     t.start()
     return True, "Master DB MDM report download initiated successfully."
+
+def start_hourly_scheduler():
+    """
+    Background daemon thread that runs hourly between 8:00 AM and 8:00 PM.
+    Ensures that as long as the server is running, the dashboard automatically syncs every hour.
+    """
+    def scheduler_loop():
+        # Short initial wait (30s) after server start
+        time.sleep(30)
+        while True:
+            try:
+                now = datetime.now()
+                # Active hours: 8:00 AM to 8:00 PM
+                if 8 <= now.hour < 20:
+                    last_ts = tracker.state.get("timestamp")
+                    should_run = True
+                    if last_ts:
+                        try:
+                            last_dt = datetime.strptime(last_ts, "%Y-%m-%d %H:%M:%S")
+                            # If synced within the last 50 minutes, wait
+                            if (now - last_dt).total_seconds() < 3000:
+                                should_run = False
+                        except Exception:
+                            pass
+
+                    if should_run and not tracker.state.get("running"):
+                        print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] [HourlyScheduler] Triggering auto-sync...", flush=True)
+                        import auto_sync_hourly
+                        auto_sync_hourly.main()
+            except Exception as e:
+                print(f"[HourlyScheduler] Exception in scheduler loop: {e}", flush=True)
+
+            # Check every 5 minutes
+            time.sleep(300)
+
+    t = threading.Thread(target=scheduler_loop, daemon=True, name="AutoSyncHourlyDaemon")
+    t.start()
+    print("[+] Hourly Auto-Sync Scheduler daemon thread activated (8 AM - 8 PM).", flush=True)

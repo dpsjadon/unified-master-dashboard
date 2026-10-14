@@ -692,11 +692,12 @@ function populateSummaryKpis(json) {
     document.getElementById('mobileScopeTotal').textContent = `${Number(m.total || 0).toLocaleString()} Meters`;
   }
   if (document.getElementById('scopeReportDownloadTime')) {
-    const dlTime = json.report_download_time || json.daily_download_time || '2026-10-12 13:47:24';
-    document.getElementById('scopeReportDownloadTime').textContent = `${dlTime} IST`;
+    const dlTime = json.report_download_time || json.daily_download_time || '';
+    const nextSync = json.next_auto_sync ? ` &bull; <i class="fa-solid fa-clock-rotate-left"></i> Next: ${json.next_auto_sync}` : '';
+    document.getElementById('scopeReportDownloadTime').innerHTML = `${dlTime} IST<span style="font-size:0.75rem; color: #10b981; font-weight:600; margin-left: 6px;">${nextSync}</span>`;
   }
   if (document.getElementById('mobileReportDownloadTime')) {
-    const dlTime = json.report_download_time || json.daily_download_time || '2026-10-12 13:47:24';
+    const dlTime = json.report_download_time || json.daily_download_time || '';
     document.getElementById('mobileReportDownloadTime').textContent = `${dlTime.substring(5, 16)} IST`;
   }
 }
@@ -2102,3 +2103,32 @@ function toggleMobileCharts(banner) {
   }
 }
 window.toggleMobileCharts = toggleMobileCharts;
+
+// --- BACKGROUND AUTO-REFRESH (Pulls fresh sync data every 60s without manual page reload) ---
+let lastKnownDataTimestamp = null;
+setInterval(async () => {
+  // Avoid refreshing if user has the sync console modal open or document is hidden
+  if (document.hidden) return;
+  const syncModal = document.getElementById('syncModal');
+  if (syncModal && !syncModal.classList.contains('hidden')) return;
+
+  try {
+    const res = await fetch('/api/summary');
+    if (!res.ok) return;
+    const json = await res.json();
+    const currentTimestamp = json.report_download_time || json.daily_download_time;
+
+    // Detect if fresh data arrived from an hourly sync
+    if (lastKnownDataTimestamp && currentTimestamp && currentTimestamp !== lastKnownDataTimestamp) {
+      console.log(`[Auto-Refresh] Fresh hourly sync detected (${currentTimestamp}). Updating dashboard view...`);
+      updateOverallMetrics(json);
+      if (state.activeTab === 'tabDaily') loadDailyTable();
+      else if (state.activeTab === 'tabCumulative') loadCumulativeTable();
+      else if (state.activeTab === 'tabUla') loadUlaTable();
+    }
+    lastKnownDataTimestamp = currentTimestamp;
+    updateOverallMetrics(json);
+  } catch (err) {
+    // Silent fail on background polling
+  }
+}, 60000);

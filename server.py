@@ -364,33 +364,37 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
         # Dynamically inspect download / modification timestamps of data reports
         daily_dl_time = None
         master_dl_time = None
+        next_auto_sync = None
 
         try:
+            sync_manager.tracker.load_from_disk()
             tracker_status = sync_manager.tracker.get_status()
             if tracker_status and tracker_status.get("timestamp"):
                 daily_dl_time = tracker_status.get("timestamp")
+            if tracker_status and tracker_status.get("next_auto_sync"):
+                next_auto_sync = tracker_status.get("next_auto_sync")
         except Exception:
             pass
 
         try:
-            if not daily_dl_time and os.path.exists(MI_DB_PATH):
-                daily_dl_time = datetime.fromtimestamp(os.path.getmtime(MI_DB_PATH)).strftime("%Y-%m-%d %H:%M:%S")
-        except Exception:
-            pass
-
-        try:
-            if not daily_dl_time:
-                dl_dir = os.path.join(WORKSPACE_DIR, "downloads")
-                if os.path.exists(dl_dir):
-                    zips = [os.path.join(dl_dir, f) for f in os.listdir(dl_dir) if f.endswith(".zip")]
-                    if zips:
-                        latest_zip = max(zips, key=os.path.getmtime)
-                        daily_dl_time = datetime.fromtimestamp(os.path.getmtime(latest_zip)).strftime("%Y-%m-%d %H:%M:%S")
+            if os.path.exists(MI_DB_PATH):
+                db_mtime = datetime.fromtimestamp(os.path.getmtime(MI_DB_PATH)).strftime("%Y-%m-%d %H:%M:%S")
+                if not daily_dl_time or db_mtime > daily_dl_time:
+                    daily_dl_time = db_mtime
         except Exception:
             pass
 
         if not daily_dl_time:
             daily_dl_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        if not next_auto_sync:
+            now = datetime.now()
+            if now.hour < 8:
+                next_auto_sync = "Today at 08:00 AM"
+            elif now.hour >= 19:
+                next_auto_sync = "Tomorrow at 08:00 AM"
+            else:
+                next_auto_sync = datetime(now.year, now.month, now.day, now.hour + 1, 0).strftime("%I:00 %p")
 
         try:
             if os.path.exists(MASTER_DB_PATH):
@@ -409,7 +413,8 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
             "sync_status": sync_status,
             "report_download_time": daily_dl_time,
             "daily_download_time": daily_dl_time,
-            "master_download_time": master_dl_time
+            "master_download_time": master_dl_time,
+            "next_auto_sync": next_auto_sync
         })
 
     def handle_cumulative_summary(self, circle=None):
@@ -1042,6 +1047,11 @@ def start_server():
     print(f"  Master DB: {MASTER_DB_PATH} (1,124,022 records)")
     print(f"  Daily DB:  {MI_DB_PATH} (2,256 daily installs, 91k ULA)")
     print("=" * 70)
+
+    # Start in-process hourly auto-sync background scheduler (8 AM - 8 PM)
+    if os.environ.get("ENABLE_AUTO_SYNC", "true").lower() in ("true", "1", "yes"):
+        sync_manager.start_hourly_scheduler()
+
     httpd.serve_forever()
 
 if __name__ == "__main__":

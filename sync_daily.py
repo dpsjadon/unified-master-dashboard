@@ -379,7 +379,9 @@ def run_sync_with_tracker(tracker=None):
                 pass
 
 def run_sync():
-    return run_sync_with_tracker()
+    import sync_manager
+    sync_manager.tracker.start_sync("daily", "Starting automated hourly sync from MDM Portal...")
+    return run_sync_with_tracker(sync_manager.tracker)
 
 if __name__ == "__main__":
     run_sync()

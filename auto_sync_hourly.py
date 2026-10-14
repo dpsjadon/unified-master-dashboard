@@ -71,36 +71,65 @@ def get_sync_summary():
             pass
     return "Daily Sync Complete! Downloaded & compiled fresh reports."
 
+def get_next_sync_time():
+    now = datetime.now()
+    if now.hour < 8:
+        return "Today at 08:00 AM"
+    elif now.hour >= 19:
+        return "Tomorrow at 08:00 AM"
+    else:
+        next_h = now.hour + 1
+        return datetime(now.year, now.month, now.day, next_h, 0).strftime("%I:00 %p")
+
+def save_next_sync_info(msg=None):
+    if os.path.exists(STATUS_FILE):
+        try:
+            with open(STATUS_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            data["next_auto_sync"] = get_next_sync_time()
+            data["auto_sync_active"] = True
+            if msg:
+                data["last_auto_sync_msg"] = msg
+            with open(STATUS_FILE, "w", encoding="utf-8") as f:
+                json.dump(data, f, indent=2)
+        except Exception:
+            pass
+
 def main():
+    os.chdir(WORKSPACE_DIR)
+    sys.path.insert(0, WORKSPACE_DIR)
+
     now = datetime.now()
     hour = now.hour
 
     # Active window: 8:00 AM (08) to 8:00 PM (20)
     if hour < 8 or hour >= 20:
         log(f"Current hour ({hour:02d}:00) is outside active window (08:00 - 20:00). Skipping.")
+        save_next_sync_info()
         return
 
     log("=== Starting Scheduled Hourly MDM Sync ===")
-    sys.path.insert(0, WORKSPACE_DIR)
 
     try:
         import sync_daily
         success = sync_daily.run_sync()
         ts = datetime.now().strftime("%I:%M %p")
         summary = get_sync_summary()
+        next_time = get_next_sync_time()
+        save_next_sync_info(summary)
 
         if success:
-            log("=== Hourly MDM Sync & Cloud Update Completed Successfully! ===")
+            log(f"=== Hourly MDM Sync Completed Successfully! Next sync: {next_time} ===")
             show_popup(
                 "⚡ IntelliSmart SBPDCL Auto-Sync",
-                f"Hourly Auto-Sync Completed at {ts}!\n\n{summary}\n\nLocal & Cloud Dashboards are up to date.",
+                f"Hourly Auto-Sync Completed at {ts}!\n\n{summary}\n\nNext scheduled sync: {next_time}\nLocal & Cloud Dashboards are up to date.",
                 timeout=10
             )
         else:
             log("=== Hourly MDM Sync Finished with Notice ===")
             show_popup(
                 "⚠️ IntelliSmart SBPDCL Auto-Sync Notice",
-                f"Hourly Auto-Sync finished at {ts}.\n\n{summary}",
+                f"Hourly Auto-Sync finished at {ts}.\n\n{summary}\n\nNext scheduled sync: {next_time}",
                 timeout=10
             )
     except Exception as e:
