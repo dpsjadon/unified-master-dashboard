@@ -1002,13 +1002,13 @@ function renderCumulativeTable() {
         <tbody>
           ${rows.map(r => `
             <tr>
-              <td><strong>${r.tariff}</strong></td>
-              <td class="text-right" style="color: var(--brand-cyan); font-weight:700;">${r.total.toLocaleString()}</td>
-              <td class="text-right"><span class="badge badge-purple">${r.pct_share}%</span></td>
-              <td class="text-right">${r.phase_1ph.toLocaleString()}</td>
-              <td class="text-right">${(r.phase_3ph_wc + r.phase_3ph_4ct).toLocaleString()}</td>
-              <td class="text-right">${r.circles}</td>
-              <td class="text-right">${r.divisions}</td>
+              <td><strong>${r.tariff || 'UNCLASSIFIED / OTHER'}</strong></td>
+              <td class="text-right" style="color: var(--brand-cyan); font-weight:700;">${(r.total || 0).toLocaleString()}</td>
+              <td class="text-right"><span class="badge badge-purple">${r.pct_share || 0}%</span></td>
+              <td class="text-right">${(r.phase_1ph || 0).toLocaleString()}</td>
+              <td class="text-right">${((r.phase_3ph_wc || 0) + (r.phase_3ph_4ct || 0)).toLocaleString()}</td>
+              <td class="text-right">${r.circles || 0}</td>
+              <td class="text-right">${r.divisions || 0}</td>
             </tr>
           `).join('')}
         </tbody>
@@ -1445,11 +1445,11 @@ function renderDailyTable() {
         <tbody>
           ${rows.map(r => `
             <tr>
-              <td><strong>${r.tariff}</strong></td>
-              <td class="text-right" style="color: #10b981; font-weight:700;">${r.total.toLocaleString()}</td>
-              <td class="text-right">${r.replacement.toLocaleString()}</td>
-              <td class="text-right">${r.nsc.toLocaleString()}</td>
-              <td class="text-right"><span class="badge badge-purple">${r.pct_share}%</span></td>
+              <td><strong>${r.tariff || 'UNCLASSIFIED / OTHER'}</strong></td>
+              <td class="text-right" style="color: #10b981; font-weight:700;">${(r.total || 0).toLocaleString()}</td>
+              <td class="text-right">${(r.replacement || 0).toLocaleString()}</td>
+              <td class="text-right">${(r.nsc || 0).toLocaleString()}</td>
+              <td class="text-right"><span class="badge badge-purple">${r.pct_share || 0}%</span></td>
             </tr>
           `).join('')}
         </tbody>

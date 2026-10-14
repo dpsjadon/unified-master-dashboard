@@ -8,6 +8,8 @@ Combines Master Cumulative Database (1.124M), Daily MI Reports, and ULA Metering
 import os
 import sys
 import json
+import math
+import re
 import time
 from datetime import datetime
 import urllib.parse
@@ -107,7 +109,32 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
 
     def send_json(self, data, status=200):
         try:
-            body = json.dumps(data, default=str).encode("utf-8")
+            def clean_nan(obj):
+                if isinstance(obj, float):
+                    if math.isnan(obj) or math.isinf(obj):
+                        return None
+                    return obj
+                elif isinstance(obj, dict):
+                    return {k: clean_nan(v) for k, v in obj.items()}
+                elif isinstance(obj, (list, tuple)):
+                    return [clean_nan(x) for x in obj]
+                try:
+                    if pd.isna(obj):
+                        return None
+                except Exception:
+                    pass
+                return obj
+
+            cleaned = clean_nan(data)
+            try:
+                raw_json = json.dumps(cleaned, default=str, allow_nan=False)
+            except ValueError:
+                raw_json = json.dumps(cleaned, default=str, allow_nan=True)
+                raw_json = re.sub(r':\s*NaN\b', ': null', raw_json)
+                raw_json = re.sub(r':\s*Infinity\b', ': null', raw_json)
+                raw_json = re.sub(r':\s*-Infinity\b', ': null', raw_json)
+
+            body = raw_json.encode("utf-8")
             self.send_response(status)
             self.send_header("Content-Type", "application/json")
             self.send_header("Content-Length", str(len(body)))
@@ -493,7 +520,7 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
             if table_type == "circle":
                 sql = f"""
                     SELECT 
-                        circle,
+                        coalesce(nullif(trim(circle), ''), 'UNKNOWN') as circle,
                         count(*) as total,
                         count(*) FILTER (WHERE installation_type = 'OldToSM') as old_to_sm,
                         count(*) FILTER (WHERE installation_type = 'NSC') as nsc,
@@ -510,15 +537,15 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
                         round(count(*) * 100.0 / (SELECT count(*) FROM meters {where_sql}), 2) as pct_share
                     FROM meters
                     {where_sql}
-                    GROUP BY circle
+                    GROUP BY 1
                     ORDER BY total DESC
                 """
             # 2. Division Wise Summary
             elif table_type == "division":
                 sql = f"""
                     SELECT 
-                        circle,
-                        division,
+                        coalesce(nullif(trim(circle), ''), 'UNKNOWN') as circle,
+                        coalesce(nullif(trim(division), ''), 'UNKNOWN') as division,
                         count(*) as total,
                         count(*) FILTER (WHERE phase = '1 PH') as phase_1ph,
                         count(*) FILTER (WHERE phase = '3PH WC') as phase_3ph_wc,
@@ -533,16 +560,16 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
                         round(count(*) * 100.0 / (SELECT count(*) FROM meters {where_sql}), 2) as pct_share
                     FROM meters
                     {where_sql}
-                    GROUP BY circle, division
+                    GROUP BY 1, 2
                     ORDER BY total DESC
                 """
             # 3. Sub-Division Wise Summary
             elif table_type == "subdivision":
                 sql = f"""
                     SELECT 
-                        circle,
-                        division,
-                        subdivision,
+                        coalesce(nullif(trim(circle), ''), 'UNKNOWN') as circle,
+                        coalesce(nullif(trim(division), ''), 'UNKNOWN') as division,
+                        coalesce(nullif(trim(subdivision), ''), 'UNKNOWN') as subdivision,
                         count(*) as total,
                         count(*) FILTER (WHERE phase = '1 PH') as phase_1ph,
                         count(*) FILTER (WHERE phase = '3PH WC') as phase_3ph_wc,
@@ -554,17 +581,17 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
                         round(count(*) * 100.0 / (SELECT count(*) FROM meters {where_sql}), 2) as pct_share
                     FROM meters
                     {where_sql}
-                    GROUP BY circle, division, subdivision
+                    GROUP BY 1, 2, 3
                     ORDER BY total DESC
                 """
             # 4. Section Wise Summary
             elif table_type == "section":
                 sql = f"""
                     SELECT 
-                        circle,
-                        division,
-                        subdivision,
-                        section,
+                        coalesce(nullif(trim(circle), ''), 'UNKNOWN') as circle,
+                        coalesce(nullif(trim(division), ''), 'UNKNOWN') as division,
+                        coalesce(nullif(trim(subdivision), ''), 'UNKNOWN') as subdivision,
+                        coalesce(nullif(trim(section), ''), 'UNKNOWN') as section,
                         count(*) as total,
                         count(*) FILTER (WHERE phase = '1 PH') as phase_1ph,
                         count(*) FILTER (WHERE phase = '3PH WC') as phase_3ph_wc,
@@ -575,14 +602,14 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
                         round(count(*) * 100.0 / (SELECT count(*) FROM meters {where_sql}), 2) as pct_share
                     FROM meters
                     {where_sql}
-                    GROUP BY circle, division, subdivision, section
+                    GROUP BY 1, 2, 3, 4
                     ORDER BY total DESC
                 """
             # 5. Agency Wise Summary
             elif table_type == "agency":
                 sql = f"""
                     SELECT 
-                        agency,
+                        coalesce(nullif(upper(trim(agency)), ''), 'UNASSIGNED') as agency,
                         count(*) as total,
                         count(DISTINCT entered_by) as installers,
                         count(DISTINCT circle) as circles,
@@ -593,14 +620,14 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
                         round(count(*) * 100.0 / (SELECT count(*) FROM meters {where_sql}), 2) as pct_share
                     FROM meters
                     {where_sql}
-                    GROUP BY agency
+                    GROUP BY 1
                     ORDER BY total DESC
                 """
             # 6. Phase Wise Summary
             elif table_type == "phase":
                 sql = f"""
                     SELECT 
-                        phase,
+                        coalesce(nullif(upper(trim(phase)), ''), 'UNKNOWN') as phase,
                         count(*) as total,
                         round(count(*) * 100.0 / (SELECT count(*) FROM meters {where_sql}), 2) as pct_share,
                         count(DISTINCT circle) as circles,
@@ -614,14 +641,14 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
                         count(*) FILTER (WHERE circle = 'MUNGER') as munger
                     FROM meters
                     {where_sql}
-                    GROUP BY phase
+                    GROUP BY 1
                     ORDER BY total DESC
                 """
             # 7. Tariff Wise Summary
             elif table_type == "tariff":
                 sql = f"""
                     SELECT 
-                        tariff,
+                        coalesce(nullif(upper(trim(tariff)), ''), 'UNCLASSIFIED / OTHER') as tariff,
                         count(*) as total,
                         round(count(*) * 100.0 / (SELECT count(*) FROM meters {where_sql}), 2) as pct_share,
                         count(*) FILTER (WHERE phase = '1 PH') as phase_1ph,
@@ -631,14 +658,14 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
                         count(DISTINCT division) as divisions
                     FROM meters
                     {where_sql}
-                    GROUP BY tariff
+                    GROUP BY 1
                     ORDER BY total DESC
                 """
             # 8. Installation Type Wise Summary
             elif table_type == "installation_type":
                 sql = f"""
                     SELECT 
-                        installation_type,
+                        coalesce(nullif(upper(trim(installation_type)), ''), 'UNKNOWN') as installation_type,
                         count(*) as total,
                         round(count(*) * 100.0 / (SELECT count(*) FROM meters {where_sql}), 2) as pct_share,
                         count(*) FILTER (WHERE phase = '1 PH') as phase_1ph,
@@ -653,7 +680,7 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
                         count(DISTINCT agency) as agencies
                     FROM meters
                     {where_sql}
-                    GROUP BY installation_type
+                    GROUP BY 1
                     ORDER BY total DESC
                 """
             else:
@@ -661,6 +688,7 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
                 return self.send_json({"success": False, "error": "Invalid table type"}, 400)
 
             df = con.execute(sql).fetchdf()
+            df = df.where(pd.notnull(df), None)
             total_records = con.execute(f"SELECT count(*) FROM meters {where_sql}").fetchone()[0]
             con.close()
 
@@ -717,7 +745,7 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
             if table_type == "circle":
                 sql = f"""
                     SELECT 
-                        Circle as circle,
+                        coalesce(nullif(trim(Circle), ''), 'UNKNOWN') as circle,
                         count(*) as total,
                         count(*) FILTER (WHERE Installation_Type = 'Replacement') as replacement,
                         count(*) FILTER (WHERE Installation_Type = 'NSC') as nsc,
@@ -728,14 +756,14 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
                         round(count(*) * 100.0 / (SELECT count(*) FROM installations {c_where}), 2) as pct_share
                     FROM installations
                     {c_where}
-                    GROUP BY Circle
+                    GROUP BY 1
                     ORDER BY total DESC
                 """
             elif table_type == "division":
                 sql = f"""
                     SELECT 
-                        Circle as circle,
-                        Division as division,
+                        coalesce(nullif(trim(Circle), ''), 'UNKNOWN') as circle,
+                        coalesce(nullif(trim(Division), ''), 'UNKNOWN') as division,
                         count(*) as total,
                         count(*) FILTER (WHERE Installation_Type = 'Replacement') as replacement,
                         count(*) FILTER (WHERE Installation_Type = 'NSC') as nsc,
@@ -746,15 +774,15 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
                         round(count(*) * 100.0 / (SELECT count(*) FROM installations {c_where}), 2) as pct_share
                     FROM installations
                     {c_where}
-                    GROUP BY Circle, Division
+                    GROUP BY 1, 2
                     ORDER BY total DESC
                 """
             elif table_type == "section":
                 sql = f"""
                     SELECT 
-                        Circle as circle,
-                        Division as division,
-                        Section as section,
+                        coalesce(nullif(trim(Circle), ''), 'UNKNOWN') as circle,
+                        coalesce(nullif(trim(Division), ''), 'UNKNOWN') as division,
+                        coalesce(nullif(trim(Section), ''), 'UNKNOWN') as section,
                         count(*) as total,
                         count(*) FILTER (WHERE Installation_Type = 'Replacement') as replacement,
                         count(*) FILTER (WHERE Installation_Type = 'NSC') as nsc,
@@ -762,13 +790,13 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
                         round(count(*) * 100.0 / (SELECT count(*) FROM installations {c_where}), 2) as pct_share
                     FROM installations
                     {c_where}
-                    GROUP BY Circle, Division, Section
+                    GROUP BY 1, 2, 3
                     ORDER BY total DESC
                 """
             elif table_type == "agency":
                 sql = f"""
                     SELECT 
-                        Agency as agency,
+                        coalesce(nullif(upper(trim(Agency)), ''), 'UNASSIGNED') as agency,
                         count(*) as total,
                         count(*) FILTER (WHERE Installation_Type = 'Replacement') as replacement,
                         count(*) FILTER (WHERE Installation_Type = 'NSC') as nsc,
@@ -777,48 +805,48 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
                         round(count(*) * 100.0 / (SELECT count(*) FROM installations {c_where}), 2) as pct_share
                     FROM installations
                     {c_where}
-                    GROUP BY Agency
+                    GROUP BY 1
                     ORDER BY total DESC
                 """
             elif table_type == "phase":
                 sql = f"""
                     SELECT 
-                        Phase as phase,
+                        coalesce(nullif(upper(trim(Phase)), ''), 'UNKNOWN') as phase,
                         count(*) as total,
                         count(*) FILTER (WHERE Installation_Type = 'Replacement') as replacement,
                         count(*) FILTER (WHERE Installation_Type = 'NSC') as nsc,
                         round(count(*) * 100.0 / (SELECT count(*) FROM installations {c_where}), 2) as pct_share
                     FROM installations
                     {c_where}
-                    GROUP BY Phase
+                    GROUP BY 1
                     ORDER BY total DESC
                 """
             elif table_type == "tariff":
                 sql = f"""
                     SELECT 
-                        Tariff as tariff,
+                        coalesce(nullif(upper(trim(Tariff)), ''), 'UNCLASSIFIED / OTHER') as tariff,
                         count(*) as total,
                         count(*) FILTER (WHERE Installation_Type = 'Replacement') as replacement,
                         count(*) FILTER (WHERE Installation_Type = 'NSC') as nsc,
                         round(count(*) * 100.0 / (SELECT count(*) FROM installations {c_where}), 2) as pct_share
                     FROM installations
                     {c_where}
-                    GROUP BY Tariff
+                    GROUP BY 1
                     ORDER BY total DESC
                 """
             elif table_type == "teams":
                 sql = f"""
                     SELECT 
-                        Entered_By as login_id,
-                        Agency as agency,
-                        Circle as circle,
-                        Division as division,
+                        coalesce(nullif(trim(Entered_By), ''), 'UNKNOWN') as login_id,
+                        coalesce(nullif(upper(trim(Agency)), ''), 'UNASSIGNED') as agency,
+                        coalesce(nullif(trim(Circle), ''), 'UNKNOWN') as circle,
+                        coalesce(nullif(trim(Division), ''), 'UNKNOWN') as division,
                         count(*) as total_installed,
                         count(*) FILTER (WHERE Installation_Type = 'Replacement') as replacement,
                         count(*) FILTER (WHERE Installation_Type = 'NSC') as nsc
                     FROM installations
                     {c_where}
-                    GROUP BY Entered_By, Agency, Circle, Division
+                    GROUP BY 1, 2, 3, 4
                     ORDER BY total_installed DESC
                 """
             else:
@@ -826,6 +854,7 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
                 return self.send_json({"success": False, "error": "Invalid daily table type"}, 400)
 
             df = con.execute(sql).fetchdf()
+            df = df.where(pd.notnull(df), None)
             total_records = con.execute(f"SELECT count(*) FROM installations {c_where}").fetchone()[0]
             repl_total = con.execute(f"SELECT count(*) FILTER (WHERE Installation_Type = 'Replacement') FROM installations {c_where}").fetchone()[0]
             nsc_total = con.execute(f"SELECT count(*) FILTER (WHERE Installation_Type = 'NSC') FROM installations {c_where}").fetchone()[0]
@@ -950,6 +979,7 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
                 return self.send_json({"success": False, "error": "Invalid ULA table type"}, 400)
 
             df = con.execute(sql).fetchdf()
+            df = df.where(pd.notnull(df), None)
             inst_filter = f"WHERE {get_circle_sql(circle, 'Circle')}" if circle else ""
             total_records = con.execute(f"SELECT count(*) FROM installations {inst_filter}").fetchone()[0]
             repl_total = con.execute(f"SELECT count(*) FILTER (WHERE Installation_Type = 'Replacement') FROM installations {inst_filter}").fetchone()[0]
@@ -984,7 +1014,9 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
                    OR entered_by LIKE '%{q}%'
                 LIMIT 50
             """
-            results = con.execute(sql).fetchdf().to_dict(orient="records")
+            df = con.execute(sql).fetchdf()
+            df = df.where(pd.notnull(df), None)
+            results = df.to_dict(orient="records")
             con.close()
             return self.send_json({"success": True, "query": q, "results": results})
         except Exception as e:
