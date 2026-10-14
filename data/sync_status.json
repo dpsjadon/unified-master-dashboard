@@ -6,175 +6,175 @@
   "message": "Pushing updated data to Cloud Dashboard (Render)...",
   "steps": [
     {
-      "time": "17:00:01",
+      "time": "17:33:54",
       "stage": "STARTING",
-      "message": "Starting automated hourly sync from MDM Portal...",
+      "message": "Initiating automated download of fresh Daily Installation Reports from MDM Portal...",
       "percent": 5,
       "status": "ok"
     },
     {
-      "time": "17:00:01",
+      "time": "17:33:54",
       "stage": "CLEANUP",
       "message": "Purging previous temporary download files to ensure fresh report retrieval...",
       "percent": 6,
       "status": "ok"
     },
     {
-      "time": "17:00:01",
+      "time": "17:33:54",
       "stage": "BROWSER",
       "message": "Starting background Chrome automation engine (Headless Mode)...",
       "percent": 12,
       "status": "ok"
     },
     {
-      "time": "17:00:03",
+      "time": "17:33:56",
       "stage": "AUTH",
       "message": "Connecting to MDM Portal & authenticating as MNG_DHARMENDRA...",
       "percent": 18,
       "status": "ok"
     },
     {
-      "time": "17:00:06",
+      "time": "17:33:59",
       "stage": "DEBUG",
       "message": "Page URL: https://mdm.sbpdclinfra.in/SSO/LoginPage | Title: Login Page",
       "percent": 20,
       "status": "ok"
     },
     {
-      "time": "17:00:13",
+      "time": "17:34:05",
       "stage": "SESSION",
       "message": "Authentication successful! Portal session established.",
       "percent": 26,
       "status": "ok"
     },
     {
-      "time": "17:00:13",
+      "time": "17:34:05",
       "stage": "QUERY",
       "message": "Checking installation reports for date: 14-10-2026...",
       "percent": 32,
       "status": "ok"
     },
     {
-      "time": "17:00:25",
+      "time": "17:34:15",
       "stage": "FOUND",
       "message": "Found 2 batches for 14-10-2026. Requesting downloads from MDM...",
       "percent": 40,
       "status": "ok"
     },
     {
-      "time": "17:00:25",
+      "time": "17:34:15",
       "stage": "REQUEST",
-      "message": "Triggering Replacement Batch download request (533 meters)...",
+      "message": "Triggering Replacement Batch download request (629 meters)...",
       "percent": 45,
       "status": "ok"
     },
     {
-      "time": "17:00:42",
+      "time": "17:34:30",
       "stage": "REQUEST",
-      "message": "Generated MDM Request ID #310870 for Replacement (533 records).",
+      "message": "Generated MDM Request ID #310901 for Replacement (629 records).",
       "percent": 45,
       "status": "ok"
     },
     {
-      "time": "17:00:44",
+      "time": "17:34:32",
       "stage": "REQUEST",
-      "message": "Triggering NSC Batch download request (454 meters)...",
+      "message": "Triggering NSC Batch download request (521 meters)...",
       "percent": 55,
       "status": "ok"
     },
     {
-      "time": "17:00:56",
+      "time": "17:34:44",
       "stage": "REQUEST",
-      "message": "Generated MDM Request ID #310871 for NSC (454 records).",
+      "message": "Generated MDM Request ID #310903 for NSC (521 records).",
       "percent": 55,
       "status": "ok"
     },
     {
-      "time": "17:00:58",
+      "time": "17:34:46",
       "stage": "QUEUE",
       "message": "Navigating to Download Requests queue (MIS/DownloadRequest)...",
       "percent": 64,
       "status": "ok"
     },
     {
-      "time": "17:01:03",
+      "time": "17:34:53",
       "stage": "QUEUE",
-      "message": "Tracking MDM Queue for Request IDs: ['310870', '310871']",
+      "message": "Tracking MDM Queue for Request IDs: ['310901', '310903']",
       "percent": 67,
       "status": "ok"
     },
     {
-      "time": "17:01:03",
+      "time": "17:34:53",
       "stage": "QUEUE",
       "message": "All 2 requested report packages are PROCESSED and ready in MDM queue!",
       "percent": 74,
       "status": "ok"
     },
     {
-      "time": "17:01:03",
+      "time": "17:34:53",
       "stage": "DOWNLOAD",
       "message": "Queue ready! Downloading fresh processed ZIP packages to repository...",
       "percent": 76,
       "status": "ok"
     },
     {
-      "time": "17:01:03",
+      "time": "17:34:53",
       "stage": "DOWNLOAD",
-      "message": "Downloading report package for Request #310870...",
+      "message": "Downloading report package for Request #310901...",
       "percent": 78,
       "status": "ok"
     },
     {
-      "time": "17:01:08",
+      "time": "17:34:55",
       "stage": "DOWNLOAD",
-      "message": "Package saved: Day Wise Meter Installation - ConsumerCount_310870_20261014_170042.zip (38,392 bytes)",
+      "message": "Package saved: Day Wise Meter Installation - ConsumerCount_310901_20261014_173431.zip (44,193 bytes)",
       "percent": 80,
       "status": "ok"
     },
     {
-      "time": "17:01:08",
+      "time": "17:34:55",
       "stage": "DOWNLOAD",
-      "message": "Downloading report package for Request #310871...",
+      "message": "Downloading report package for Request #310903...",
       "percent": 78,
       "status": "ok"
     },
     {
-      "time": "17:01:11",
+      "time": "17:34:57",
       "stage": "DOWNLOAD",
-      "message": "Package saved: Day Wise Meter Installation - ConsumerCount_310871_20261014_170057.zip (28,743 bytes)",
+      "message": "Package saved: Day Wise Meter Installation - ConsumerCount_310903_20261014_173443.zip (32,300 bytes)",
       "percent": 80,
       "status": "ok"
     },
     {
-      "time": "17:01:12",
+      "time": "17:34:57",
       "stage": "VERIFY",
       "message": "Waiting for ZIP file downloads to finalize...",
       "percent": 84,
       "status": "ok"
     },
     {
-      "time": "17:01:15",
+      "time": "17:35:00",
       "stage": "DOWNLOAD",
       "message": "Successfully downloaded 2 report packages from MDM portal.",
       "percent": 86,
       "status": "ok"
     },
     {
-      "time": "17:01:18",
+      "time": "17:35:03",
       "stage": "ETL",
       "message": "Executing vectorized DuckDB ETL compilation on fresh reports...",
       "percent": 88,
       "status": "ok"
     },
     {
-      "time": "17:01:22",
+      "time": "17:35:05",
       "stage": "ULA",
-      "message": "Cross-referencing 989 installations (534 Replacement + 455 NSC) against ULA scope...",
+      "message": "Cross-referencing 1,151 installations (629 Replacement + 522 NSC) against ULA scope...",
       "percent": 94,
       "status": "ok"
     },
     {
-      "time": "17:01:39",
+      "time": "17:35:47",
       "stage": "CLOUD",
       "message": "Pushing updated data to Cloud Dashboard (Render)...",
       "percent": 97,
@@ -182,9 +182,9 @@
     }
   ],
   "error": null,
-  "records_count": 973,
-  "timestamp": "2026-10-14 17:01:39",
-  "next_auto_sync": "05:00 PM",
+  "records_count": 989,
+  "timestamp": "2026-10-14 17:35:47",
+  "next_auto_sync": "06:00 PM",
   "auto_sync_active": true,
-  "last_auto_sync_msg": "Daily Sync Complete! Downloaded & compiled 973 meters (525 Replacement + 448 NSC)."
+  "last_auto_sync_msg": "Daily Sync Complete! Downloaded & compiled 989 meters (534 Replacement + 455 NSC)."
 }
