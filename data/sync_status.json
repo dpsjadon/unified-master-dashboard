@@ -1,9 +1,9 @@
 {
-  "running": true,
+  "running": false,
   "type": "daily",
-  "stage": "CLOUD",
-  "percent": 97,
-  "message": "Pushing updated data to Cloud Dashboard (Render)...",
+  "stage": "COMPLETE",
+  "percent": 100,
+  "message": "Daily Sync Complete! Downloaded & compiled 188 meters (86 Replacement + 102 NSC).",
   "steps": [
     {
       "time": "09:13:42",
@@ -179,9 +179,23 @@
       "message": "Pushing updated data to Cloud Dashboard (Render)...",
       "percent": 97,
       "status": "ok"
+    },
+    {
+      "time": "09:15:12",
+      "stage": "CLOUD",
+      "message": "Cloud Dashboard updated successfully on Render!",
+      "percent": 99,
+      "status": "ok"
+    },
+    {
+      "time": "09:15:12",
+      "stage": "COMPLETE",
+      "message": "Daily Sync Complete! Downloaded & compiled 188 meters (86 Replacement + 102 NSC).",
+      "percent": 100,
+      "status": "success"
     }
   ],
   "error": null,
-  "records_count": 1129496,
-  "timestamp": "2026-10-14 09:15:07"
+  "records_count": 188,
+  "timestamp": "2026-10-14 09:15:12"
 }
