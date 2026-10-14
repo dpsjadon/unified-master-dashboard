@@ -1617,6 +1617,12 @@ function renderUlaTable() {
   document.getElementById('ulaTableTitle').textContent = titles[type] || 'ULA Progress Table';
   document.getElementById('ulaTableRowCount').textContent = `${rows.length} Rows (91,033 ULA Scope)`;
 
+  const totalScope = rows.reduce((a,c) => a + (Number(c.scope) || 0), 0);
+  const totalCum = rows.reduce((a,c) => a + (Number(c.cumulative_installed) || 0), 0);
+  const totalToday = rows.reduce((a,c) => a + (Number(c.today_installed) || 0), 0);
+  const totalPending = rows.reduce((a,c) => a + (Number(c.pending) || 0), 0);
+  const totalRate = totalScope > 0 ? (totalCum * 100 / totalScope).toFixed(2) : '0.00';
+
   if (type === 'circle') {
     container.innerHTML = `
       <table class="styled-table" id="tableUlaCircle">
@@ -1634,10 +1640,10 @@ function renderUlaTable() {
           ${rows.map(r => `
             <tr>
               <td><strong>${r.circle}</strong></td>
-              <td class="text-right" style="color: var(--brand-cyan); font-weight:700;">${r.scope.toLocaleString()}</td>
-              <td class="text-right" style="color: #10b981; font-weight:700;">${r.cumulative_installed.toLocaleString()}</td>
-              <td class="text-right" style="color: #f59e0b; font-weight:700;">${r.today_installed.toLocaleString()}</td>
-              <td class="text-right" style="color: var(--text-muted);">${r.pending.toLocaleString()}</td>
+              <td class="text-right" style="color: var(--brand-cyan); font-weight:700;">${Number(r.scope || 0).toLocaleString()}</td>
+              <td class="text-right" style="color: #10b981; font-weight:700;">${Number(r.cumulative_installed || 0).toLocaleString()}</td>
+              <td class="text-right" style="color: #f59e0b; font-weight:700;">${Number(r.today_installed || 0).toLocaleString()}</td>
+              <td class="text-right" style="color: var(--text-muted);">${Number(r.pending || 0).toLocaleString()}</td>
               <td class="text-right"><span class="badge ${r.completion_pct > 2 ? 'badge-emerald' : 'badge-amber'}">${r.completion_pct}%</span></td>
             </tr>
           `).join('')}
@@ -1645,11 +1651,11 @@ function renderUlaTable() {
         <tfoot>
           <tr class="table-total-row">
             <td><strong>TOTAL ULA DISCOM SCOPE</strong></td>
-            <td class="text-right"><strong>91,033</strong></td>
-            <td class="text-right"><strong>${rows.reduce((a,c) => a + c.cumulative_installed, 0).toLocaleString()}</strong></td>
-            <td class="text-right"><strong>${rows.reduce((a,c) => a + c.today_installed, 0).toLocaleString()}</strong></td>
-            <td class="text-right"><strong>${rows.reduce((a,c) => a + c.pending, 0).toLocaleString()}</strong></td>
-            <td class="text-right"><strong>1.50%</strong></td>
+            <td class="text-right"><strong>${totalScope.toLocaleString()}</strong></td>
+            <td class="text-right"><strong>${totalCum.toLocaleString()}</strong></td>
+            <td class="text-right"><strong>${totalToday.toLocaleString()}</strong></td>
+            <td class="text-right"><strong>${totalPending.toLocaleString()}</strong></td>
+            <td class="text-right"><strong>${totalRate}%</strong></td>
           </tr>
         </tfoot>
       </table>
@@ -1673,14 +1679,25 @@ function renderUlaTable() {
             <tr>
               <td><strong>${r.division}</strong></td>
               <td><span class="badge badge-indigo">${r.circle}</span></td>
-              <td class="text-right" style="color: var(--brand-cyan); font-weight:700;">${r.scope.toLocaleString()}</td>
-              <td class="text-right" style="color: #10b981;">${r.cumulative_installed.toLocaleString()}</td>
-              <td class="text-right" style="color: #f59e0b;">${r.today_installed.toLocaleString()}</td>
-              <td class="text-right">${r.pending.toLocaleString()}</td>
+              <td class="text-right" style="color: var(--brand-cyan); font-weight:700;">${Number(r.scope || 0).toLocaleString()}</td>
+              <td class="text-right" style="color: #10b981;">${Number(r.cumulative_installed || 0).toLocaleString()}</td>
+              <td class="text-right" style="color: #f59e0b;">${Number(r.today_installed || 0).toLocaleString()}</td>
+              <td class="text-right">${Number(r.pending || 0).toLocaleString()}</td>
               <td class="text-right"><span class="badge badge-purple">${r.completion_pct}%</span></td>
             </tr>
           `).join('')}
         </tbody>
+        <tfoot>
+          <tr class="table-total-row">
+            <td><strong>TOTAL (${rows.length} DIVISIONS)</strong></td>
+            <td>-</td>
+            <td class="text-right"><strong>${totalScope.toLocaleString()}</strong></td>
+            <td class="text-right"><strong>${totalCum.toLocaleString()}</strong></td>
+            <td class="text-right"><strong>${totalToday.toLocaleString()}</strong></td>
+            <td class="text-right"><strong>${totalPending.toLocaleString()}</strong></td>
+            <td class="text-right"><strong>${totalRate}%</strong></td>
+          </tr>
+        </tfoot>
       </table>
     `;
   } else if (type === 'agency') {
@@ -1700,14 +1717,24 @@ function renderUlaTable() {
           ${rows.map(r => `
             <tr>
               <td><strong>${r.agency}</strong></td>
-              <td class="text-right" style="color: var(--brand-cyan); font-weight:700;">${r.scope.toLocaleString()}</td>
-              <td class="text-right" style="color: #10b981;">${r.cumulative_installed.toLocaleString()}</td>
-              <td class="text-right" style="color: #f59e0b;">${r.today_installed.toLocaleString()}</td>
-              <td class="text-right">${r.pending.toLocaleString()}</td>
+              <td class="text-right" style="color: var(--brand-cyan); font-weight:700;">${Number(r.scope || 0).toLocaleString()}</td>
+              <td class="text-right" style="color: #10b981;">${Number(r.cumulative_installed || 0).toLocaleString()}</td>
+              <td class="text-right" style="color: #f59e0b;">${Number(r.today_installed || 0).toLocaleString()}</td>
+              <td class="text-right">${Number(r.pending || 0).toLocaleString()}</td>
               <td class="text-right"><span class="badge badge-emerald">${r.completion_pct}%</span></td>
             </tr>
           `).join('')}
         </tbody>
+        <tfoot>
+          <tr class="table-total-row">
+            <td><strong>TOTAL (${rows.length} AGENCIES)</strong></td>
+            <td class="text-right"><strong>${totalScope.toLocaleString()}</strong></td>
+            <td class="text-right"><strong>${totalCum.toLocaleString()}</strong></td>
+            <td class="text-right"><strong>${totalToday.toLocaleString()}</strong></td>
+            <td class="text-right"><strong>${totalPending.toLocaleString()}</strong></td>
+            <td class="text-right"><strong>${totalRate}%</strong></td>
+          </tr>
+        </tfoot>
       </table>
     `;
   }
@@ -1718,17 +1745,40 @@ function renderUlaCharts() {
   const textColor = isDark ? '#94a3b8' : '#475569';
   const gridColor = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)';
 
+  let circleData = [];
+  if (state.data.ula && state.data.ula.rows) {
+    if (state.activeUlaType === 'circle') {
+      circleData = state.data.ula.rows;
+    } else {
+      const map = {};
+      state.data.ula.rows.forEach(r => {
+        const c = r.circle || 'UNKNOWN';
+        if (!map[c]) map[c] = { circle: c, scope: 0, cumulative_installed: 0, pending: 0 };
+        map[c].scope += (Number(r.scope) || 0);
+        map[c].cumulative_installed += (Number(r.cumulative_installed) || 0);
+        map[c].pending += (Number(r.pending) || 0);
+      });
+      circleData = Object.values(map);
+    }
+  }
+
+  const labels = circleData.map(r => r.circle);
+  const completed = circleData.map(r => r.cumulative_installed || 0);
+  const pending = circleData.map(r => r.pending || 0);
+  const scopes = circleData.map(r => r.scope || 0);
+  const totalScopeSum = scopes.reduce((a, b) => a + b, 0) || 1;
+
   const progCanvas = document.getElementById('chartUlaProgress');
-  if (progCanvas) {
+  if (progCanvas && labels.length > 0) {
     if (state.charts.ulaProg) state.charts.ulaProg.destroy();
     const ctx = progCanvas.getContext('2d');
     state.charts.ulaProg = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['BIHARSHARIF', 'SASARAM', 'AURANGABAD', 'ARRAH', 'PATNA', 'GAYA', 'MUNGER'],
+        labels: labels,
         datasets: [
-          { label: 'Completed', data: [146, 288, 102, 276, 156, 346, 54], backgroundColor: '#10b981' },
-          { label: 'Pending Scope', data: [40738, 13619, 12041, 8462, 6934, 6482, 1389], backgroundColor: '#8b5cf6' }
+          { label: 'Completed', data: completed, backgroundColor: '#10b981' },
+          { label: 'Pending Scope', data: pending, backgroundColor: '#8b5cf6' }
         ]
       },
       options: {
@@ -1744,15 +1794,16 @@ function renderUlaCharts() {
   }
 
   const shareCanvas = document.getElementById('chartUlaShare');
-  if (shareCanvas) {
+  if (shareCanvas && labels.length > 0) {
     if (state.charts.ulaShare) state.charts.ulaShare.destroy();
     const ctx = shareCanvas.getContext('2d');
+    const shareLabels = circleData.map(r => `${r.circle} (${((r.scope * 100) / totalScopeSum).toFixed(1)}%)`);
     state.charts.ulaShare = new Chart(ctx, {
       type: 'doughnut',
       data: {
-        labels: ['BIHARSHARIF (44.9%)', 'SASARAM (15.3%)', 'AURANGABAD (13.3%)', 'ARRAH (9.6%)', 'PATNA (7.8%)', 'GAYA (7.5%)', 'MUNGER (1.6%)'],
+        labels: shareLabels,
         datasets: [{
-          data: [40884, 13907, 12143, 8738, 7090, 6828, 1443],
+          data: scopes,
           backgroundColor: PALETTES.circles,
           borderColor: isDark ? '#0d1b2e' : '#ffffff',
           borderWidth: 2

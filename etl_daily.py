@@ -107,14 +107,21 @@ def compile_portal_reports():
     # Save to CSV
     compiled_df.to_csv(COMPILED_CSV, index=False)
     
-    # Save to DuckDB and Parquet
-    db = duckdb.connect(LOCAL_DB_PATH)
+    # Save to Parquet via in-memory DuckDB (avoids file lock collisions)
+    db = duckdb.connect(":memory:")
     db.register("df_comp", compiled_df)
     db.execute("CREATE OR REPLACE TABLE installations AS SELECT * FROM df_comp")
-    
     parquet_p = COMPILED_PARQUET.replace('\\', '/')
     db.execute(f"COPY installations TO '{parquet_p}' (FORMAT PARQUET)")
     db.close()
+    
+    try:
+        db_file = duckdb.connect(LOCAL_DB_PATH)
+        db_file.register("df_comp", compiled_df)
+        db_file.execute("CREATE OR REPLACE TABLE installations AS SELECT * FROM df_comp")
+        db_file.close()
+    except Exception:
+        pass
     
     print(f"[+] Compiled {len(compiled_df):,} total records ({len(compiled_df[compiled_df['Installation_Type']=='Replacement'])} Replacement, {len(compiled_df[compiled_df['Installation_Type']=='NSC'])} NSC).")
     return compiled_df
@@ -126,9 +133,18 @@ def build_ula_cache(compiled_df=None):
         return None
 
     if compiled_df is None:
-        db = duckdb.connect(LOCAL_DB_PATH)
-        compiled_df = db.execute("SELECT * FROM installations").df()
-        db.close()
+        if os.path.exists(COMPILED_PARQUET):
+            db = duckdb.connect(":memory:")
+            p_p = COMPILED_PARQUET.replace('\\', '/')
+            compiled_df = db.execute(f"SELECT * FROM '{p_p}'").df()
+            db.close()
+        elif os.path.exists(LOCAL_DB_PATH):
+            try:
+                db = duckdb.connect(LOCAL_DB_PATH, read_only=True)
+                compiled_df = db.execute("SELECT * FROM installations").df()
+                db.close()
+            except Exception:
+                pass
 
     # Extract today's replacement meters dictionary strictly from today's download
     today_installed = {}
@@ -212,21 +228,68 @@ def build_ula_cache(compiled_df=None):
         "phase", "tariff"
     ])
 
-    # Save to local DuckDB and Parquet
-    db = duckdb.connect(LOCAL_DB_PATH)
-    db.register("df_ula_final", df_ula_final)
-    db.execute("CREATE OR REPLACE TABLE ula_scope AS SELECT * FROM df_ula_final")
+    # Save to Parquet via in-memory DuckDB with pre-computed cumulative & daily flags
+    db = duckdb.connect(":memory:")
+    db.register("df_raw_ula", df_ula_final)
+    
+    master_p = os.path.join(DATA_DIR, "smart_meters.parquet")
+    master_db = os.path.join(DATA_DIR, "smart_meters.duckdb")
+    master_attached = False
+
+    if os.path.exists(master_db):
+        try:
+            db.execute(f"ATTACH '{master_db}' AS master (READ_ONLY);")
+            master_attached = True
+        except Exception:
+            pass
+    if not master_attached and os.path.exists(master_p):
+        try:
+            mp = master_p.replace('\\', '/')
+            db.execute("CREATE SCHEMA IF NOT EXISTS master;")
+            db.execute(f"CREATE OR REPLACE VIEW master.meters AS SELECT * FROM '{mp}'")
+            master_attached = True
+        except Exception:
+            pass
+
+    if master_attached:
+        db.execute("""
+            CREATE OR REPLACE TABLE ula_scope AS
+            SELECT 
+                u.*,
+                (m.consumer_number IS NOT NULL) as is_cumulative_installed,
+                (u.status = 'Installed') as is_today_installed
+            FROM df_raw_ula u
+            LEFT JOIN master.meters m ON cast(trim(m.consumer_number) as varchar) = cast(trim(u.consumer_id) as varchar)
+        """)
+    else:
+        db.execute("""
+            CREATE OR REPLACE TABLE ula_scope AS
+            SELECT 
+                u.*,
+                (u.status = 'Installed') as is_cumulative_installed,
+                (u.status = 'Installed') as is_today_installed
+            FROM df_raw_ula u
+        """)
     
     ula_parquet_p = ULA_CACHE_PARQUET.replace('\\', '/')
     db.execute(f"COPY ula_scope TO '{ula_parquet_p}' (FORMAT PARQUET)")
-    db.close()
     
     total_ula = len(df_ula_final)
+    cum_inst = db.execute("SELECT count(*) FILTER (WHERE is_cumulative_installed) FROM ula_scope").fetchone()[0]
     installed_today = (df_ula_final["status"] == "Installed").sum()
-    pending = (df_ula_final["status"] == "Pending").sum()
+    pending = total_ula - cum_inst
+    db.close()
+
+    try:
+        db_file = duckdb.connect(LOCAL_DB_PATH)
+        db_file.execute(f"CREATE OR REPLACE TABLE ula_scope AS SELECT * FROM '{ula_parquet_p}'")
+        db_file.close()
+    except Exception:
+        pass
     
     print(f"\n[+] ULA Today Tracking Cache Built Successfully!")
     print(f"    Total ULA Scope:          {total_ula:,}")
+    print(f"    Cumulative ULA Installed: {cum_inst:,}")
     print(f"    Installed TODAY in ULA:   {installed_today:,}")
     print(f"    Pending in ULA:           {pending:,}")
     print(f"    Today Non-ULA Installed:  {len(today_installed) - installed_today:,}")
