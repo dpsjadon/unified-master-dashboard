@@ -1,9 +1,9 @@
 {
   "running": true,
   "type": "daily",
-  "stage": "ULA",
-  "percent": 94,
-  "message": "Cross-referencing 573 installations (276 Replacement + 297 NSC) against ULA scope...",
+  "stage": "CLOUD",
+  "percent": 97,
+  "message": "Pushing updated data to Cloud Dashboard (Render)...",
   "steps": [
     {
       "time": "14:18:54",
@@ -172,9 +172,16 @@
       "message": "Cross-referencing 573 installations (276 Replacement + 297 NSC) against ULA scope...",
       "percent": 94,
       "status": "ok"
+    },
+    {
+      "time": "14:20:23",
+      "stage": "CLOUD",
+      "message": "Pushing updated data to Cloud Dashboard (Render)...",
+      "percent": 97,
+      "status": "ok"
     }
   ],
   "error": null,
   "records_count": 503,
-  "timestamp": "2026-10-14 14:20:05"
+  "timestamp": "2026-10-14 14:20:23"
 }
