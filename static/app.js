@@ -21,7 +21,10 @@ const state = {
     vendor: 'ALL',
     status_vendor: 'ALL',
     aging: 'ALL',
-    match_status: 'ALL'
+    match_status: 'ALL',
+    comm_type: 'ALL',
+    meter_type: 'ALL',
+    phase: 'ALL'
   },
   meterAvailFilters: {
     circle: 'ALL',
@@ -29,7 +32,10 @@ const state = {
     vendor: 'ALL',
     status_vendor: 'ALL',
     aging: 'ALL',
-    match_status: 'ALL'
+    match_status: 'ALL',
+    comm_type: 'ALL',
+    meter_type: 'ALL',
+    phase: 'ALL'
   },
   unsyncPage: 1,
   meterAvailPage: 1,
@@ -319,16 +325,46 @@ function setupNavigation() {
     });
   }
 
+  const filterUnsyncCommType = document.getElementById('filterUnsyncCommType');
+  if (filterUnsyncCommType) {
+    filterUnsyncCommType.addEventListener('change', (e) => {
+      state.unsyncFilters.comm_type = e.target.value;
+      state.unsyncPage = 1;
+      loadUnsyncDashboard();
+    });
+  }
+
+  const filterUnsyncMeterType = document.getElementById('filterUnsyncMeterType');
+  if (filterUnsyncMeterType) {
+    filterUnsyncMeterType.addEventListener('change', (e) => {
+      state.unsyncFilters.meter_type = e.target.value;
+      state.unsyncPage = 1;
+      loadUnsyncDashboard();
+    });
+  }
+
+  const filterUnsyncPhase = document.getElementById('filterUnsyncPhase');
+  if (filterUnsyncPhase) {
+    filterUnsyncPhase.addEventListener('change', (e) => {
+      state.unsyncFilters.phase = e.target.value;
+      state.unsyncPage = 1;
+      loadUnsyncDashboard();
+    });
+  }
+
   const btnResetUnsyncFilters = document.getElementById('btnResetUnsyncFilters');
   if (btnResetUnsyncFilters) {
     btnResetUnsyncFilters.addEventListener('click', () => {
-      state.unsyncFilters = { circle: 'ALL', division: 'ALL', vendor: 'ALL', status_vendor: 'ALL', aging: 'ALL', match_status: 'ALL' };
+      state.unsyncFilters = { circle: 'ALL', division: 'ALL', vendor: 'ALL', status_vendor: 'ALL', aging: 'ALL', match_status: 'ALL', comm_type: 'ALL', meter_type: 'ALL', phase: 'ALL' };
       if (filterUnsyncStatusVendor) filterUnsyncStatusVendor.value = 'ALL';
       if (filterUnsyncCircle) filterUnsyncCircle.value = 'ALL';
       if (filterUnsyncDivision) filterUnsyncDivision.value = 'ALL';
       if (filterUnsyncVendor) filterUnsyncVendor.value = 'ALL';
       if (filterUnsyncAging) filterUnsyncAging.value = 'ALL';
       if (filterUnsyncMatch) filterUnsyncMatch.value = 'ALL';
+      if (filterUnsyncCommType) filterUnsyncCommType.value = 'ALL';
+      if (filterUnsyncMeterType) filterUnsyncMeterType.value = 'ALL';
+      if (filterUnsyncPhase) filterUnsyncPhase.value = 'ALL';
       const s = document.getElementById('searchUnsync');
       if (s) s.value = '';
       state.searchFilters.unsync = '';
@@ -392,16 +428,46 @@ function setupNavigation() {
     });
   }
 
+  const filterMeterAvailCommType = document.getElementById('filterMeterAvailCommType');
+  if (filterMeterAvailCommType) {
+    filterMeterAvailCommType.addEventListener('change', (e) => {
+      state.meterAvailFilters.comm_type = e.target.value;
+      state.meterAvailPage = 1;
+      loadMeterAvailDashboard();
+    });
+  }
+
+  const filterMeterAvailMeterType = document.getElementById('filterMeterAvailMeterType');
+  if (filterMeterAvailMeterType) {
+    filterMeterAvailMeterType.addEventListener('change', (e) => {
+      state.meterAvailFilters.meter_type = e.target.value;
+      state.meterAvailPage = 1;
+      loadMeterAvailDashboard();
+    });
+  }
+
+  const filterMeterAvailPhase = document.getElementById('filterMeterAvailPhase');
+  if (filterMeterAvailPhase) {
+    filterMeterAvailPhase.addEventListener('change', (e) => {
+      state.meterAvailFilters.phase = e.target.value;
+      state.meterAvailPage = 1;
+      loadMeterAvailDashboard();
+    });
+  }
+
   const btnResetMeterAvailFilters = document.getElementById('btnResetMeterAvailFilters');
   if (btnResetMeterAvailFilters) {
     btnResetMeterAvailFilters.addEventListener('click', () => {
-      state.meterAvailFilters = { circle: 'ALL', division: 'ALL', vendor: 'ALL', status_vendor: 'ALL', aging: 'ALL', match_status: 'ALL' };
+      state.meterAvailFilters = { circle: 'ALL', division: 'ALL', vendor: 'ALL', status_vendor: 'ALL', aging: 'ALL', match_status: 'ALL', comm_type: 'ALL', meter_type: 'ALL', phase: 'ALL' };
       if (filterMeterAvailStatusVendor) filterMeterAvailStatusVendor.value = 'ALL';
       if (filterMeterAvailCircle) filterMeterAvailCircle.value = 'ALL';
       if (filterMeterAvailDivision) filterMeterAvailDivision.value = 'ALL';
       if (filterMeterAvailVendor) filterMeterAvailVendor.value = 'ALL';
       if (filterMeterAvailAging) filterMeterAvailAging.value = 'ALL';
       if (filterMeterAvailMatch) filterMeterAvailMatch.value = 'ALL';
+      if (filterMeterAvailCommType) filterMeterAvailCommType.value = 'ALL';
+      if (filterMeterAvailMeterType) filterMeterAvailMeterType.value = 'ALL';
+      if (filterMeterAvailPhase) filterMeterAvailPhase.value = 'ALL';
       const s = document.getElementById('searchMeterAvail');
       if (s) s.value = '';
       state.searchFilters.meter_available = '';
@@ -2262,6 +2328,9 @@ async function loadUnsyncFilters() {
     fillSelect('filterUnsyncCircle', json.circles || [], 'All Circles (SBPDCL Excluded)');
     fillSelect('filterUnsyncDivision', json.divisions || [], 'All HigherOffices');
     fillSelect('filterUnsyncVendor', json.vendors || [], 'All Vendors');
+    fillSelect('filterUnsyncCommType', json.comm_types || [], 'All Comm Types');
+    fillSelect('filterUnsyncMeterType', json.meter_types || [], 'All Meter Types');
+    fillSelect('filterUnsyncPhase', json.phases || [], 'All Phases');
   } catch (err) {
     console.error('Error loading unsync filters:', err);
   }
@@ -2286,6 +2355,9 @@ async function loadMeterAvailFilters() {
     fillSelect('filterMeterAvailCircle', json.circles || [], 'All Circles (Including SBPDCL)');
     fillSelect('filterMeterAvailDivision', json.divisions || [], 'All HigherOffices');
     fillSelect('filterMeterAvailVendor', json.vendors || [], 'All Vendors');
+    fillSelect('filterMeterAvailCommType', json.comm_types || [], 'All Comm Types');
+    fillSelect('filterMeterAvailMeterType', json.meter_types || [], 'All Meter Types');
+    fillSelect('filterMeterAvailPhase', json.phases || [], 'All Phases');
   } catch (err) {
     console.error('Error loading meter available filters:', err);
   }
@@ -2344,9 +2416,42 @@ function updateInventoryBreadcrumbs(dashboard) {
     }
   }
 
+  const chipComm = document.getElementById(isUnsync ? 'chipUnsyncCommType' : 'chipMeterAvailCommType');
+  if (chipComm) {
+    if (filters.comm_type && filters.comm_type !== 'ALL') {
+      chipComm.innerHTML = `<i class="fa-solid fa-satellite-dish" style="color: #0284c7;"></i> Comm: <strong>${filters.comm_type}</strong> <span class="chip-remove" onclick="window.clearInventoryFilter('${dashboard}', 'comm_type')" title="Remove Comm Type filter">&times;</span>`;
+      chipComm.style.display = 'inline-flex';
+      hasAny = true;
+    } else {
+      chipComm.style.display = 'none';
+    }
+  }
+
+  const chipMeterType = document.getElementById(isUnsync ? 'chipUnsyncMeterType' : 'chipMeterAvailMeterType');
+  if (chipMeterType) {
+    if (filters.meter_type && filters.meter_type !== 'ALL') {
+      chipMeterType.innerHTML = `<i class="fa-solid fa-gauge" style="color: #8b5cf6;"></i> Type: <strong>${filters.meter_type}</strong> <span class="chip-remove" onclick="window.clearInventoryFilter('${dashboard}', 'meter_type')" title="Remove Meter Type filter">&times;</span>`;
+      chipMeterType.style.display = 'inline-flex';
+      hasAny = true;
+    } else {
+      chipMeterType.style.display = 'none';
+    }
+  }
+
+  const chipPhase = document.getElementById(isUnsync ? 'chipUnsyncPhase' : 'chipMeterAvailPhase');
+  if (chipPhase) {
+    if (filters.phase && filters.phase !== 'ALL') {
+      chipPhase.innerHTML = `<i class="fa-solid fa-bolt" style="color: #f59e0b;"></i> Phase: <strong>${filters.phase}</strong> <span class="chip-remove" onclick="window.clearInventoryFilter('${dashboard}', 'phase')" title="Remove Phase filter">&times;</span>`;
+      chipPhase.style.display = 'inline-flex';
+      hasAny = true;
+    } else {
+      chipPhase.style.display = 'none';
+    }
+  }
+
   if (hintEl) {
     hintEl.innerHTML = hasAny
-      ? `<button type="button" class="btn btn-secondary" style="padding: 2px 8px; font-size: 0.70rem; border-radius: 4px;" onclick="window.clearInventoryAllFilters('${dashboard}')"><i class="fa-solid fa-rotate-left"></i> Reset Hierarchy</button>`
+      ? `<button type="button" class="btn btn-secondary" style="padding: 2px 8px; font-size: 0.70rem; border-radius: 4px;" onclick="window.clearInventoryAllFilters('${dashboard}')"><i class="fa-solid fa-rotate-left"></i> Reset Hierarchy & Filters</button>`
       : `<i class="fa-solid fa-lightbulb"></i> Tip: Click any row in Circle, Division or Agency summary to drill down!`;
   }
 }
@@ -2431,6 +2536,18 @@ window.clearInventoryFilter = function(dashboard, level) {
     filters.vendor = 'ALL';
     const vSel = document.getElementById(isUnsync ? 'filterUnsyncVendor' : 'filterMeterAvailVendor');
     if (vSel) vSel.value = 'ALL';
+  } else if (level === 'comm_type') {
+    filters.comm_type = 'ALL';
+    const sel = document.getElementById(isUnsync ? 'filterUnsyncCommType' : 'filterMeterAvailCommType');
+    if (sel) sel.value = 'ALL';
+  } else if (level === 'meter_type') {
+    filters.meter_type = 'ALL';
+    const sel = document.getElementById(isUnsync ? 'filterUnsyncMeterType' : 'filterMeterAvailMeterType');
+    if (sel) sel.value = 'ALL';
+  } else if (level === 'phase') {
+    filters.phase = 'ALL';
+    const sel = document.getElementById(isUnsync ? 'filterUnsyncPhase' : 'filterMeterAvailPhase');
+    if (sel) sel.value = 'ALL';
   }
   if (isUnsync) loadUnsyncDashboard();
   else loadMeterAvailDashboard();
@@ -2439,15 +2556,15 @@ window.clearInventoryFilter = function(dashboard, level) {
 window.clearInventoryAllFilters = function(dashboard) {
   const isUnsync = (dashboard === 'unsync');
   if (isUnsync) {
-    state.unsyncFilters = { circle: 'ALL', division: 'ALL', vendor: 'ALL', status_vendor: 'ALL', aging: 'ALL', match_status: 'ALL' };
-    ['filterUnsyncCircle', 'filterUnsyncDivision', 'filterUnsyncVendor', 'filterUnsyncStatusVendor', 'filterUnsyncAging', 'filterUnsyncMatch'].forEach(id => {
+    state.unsyncFilters = { circle: 'ALL', division: 'ALL', vendor: 'ALL', status_vendor: 'ALL', aging: 'ALL', match_status: 'ALL', comm_type: 'ALL', meter_type: 'ALL', phase: 'ALL' };
+    ['filterUnsyncCircle', 'filterUnsyncDivision', 'filterUnsyncVendor', 'filterUnsyncStatusVendor', 'filterUnsyncAging', 'filterUnsyncMatch', 'filterUnsyncCommType', 'filterUnsyncMeterType', 'filterUnsyncPhase'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.value = 'ALL';
     });
     loadUnsyncDashboard();
   } else {
-    state.meterAvailFilters = { circle: 'ALL', division: 'ALL', vendor: 'ALL', status_vendor: 'ALL', aging: 'ALL', match_status: 'ALL' };
-    ['filterMeterAvailCircle', 'filterMeterAvailDivision', 'filterMeterAvailVendor', 'filterMeterAvailStatusVendor', 'filterMeterAvailAging', 'filterMeterAvailMatch'].forEach(id => {
+    state.meterAvailFilters = { circle: 'ALL', division: 'ALL', vendor: 'ALL', status_vendor: 'ALL', aging: 'ALL', match_status: 'ALL', comm_type: 'ALL', meter_type: 'ALL', phase: 'ALL' };
+    ['filterMeterAvailCircle', 'filterMeterAvailDivision', 'filterMeterAvailVendor', 'filterMeterAvailStatusVendor', 'filterMeterAvailAging', 'filterMeterAvailMatch', 'filterMeterAvailCommType', 'filterMeterAvailMeterType', 'filterMeterAvailPhase'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.value = 'ALL';
     });
@@ -2485,6 +2602,9 @@ async function loadUnsyncDashboard() {
     if (state.unsyncFilters.status_vendor !== 'ALL') params.append('status_vendor', state.unsyncFilters.status_vendor);
     if (state.unsyncFilters.aging !== 'ALL') params.append('aging', state.unsyncFilters.aging);
     if (state.unsyncFilters.match_status !== 'ALL') params.append('match_status', state.unsyncFilters.match_status);
+    if (state.unsyncFilters.comm_type !== 'ALL') params.append('comm_type', state.unsyncFilters.comm_type);
+    if (state.unsyncFilters.meter_type !== 'ALL') params.append('meter_type', state.unsyncFilters.meter_type);
+    if (state.unsyncFilters.phase !== 'ALL') params.append('phase', state.unsyncFilters.phase);
 
     const res = await fetch(`/api/inventory/summary?${params.toString()}`);
     const json = await res.json();
@@ -2526,6 +2646,9 @@ async function loadMeterAvailDashboard() {
     if (state.meterAvailFilters.status_vendor !== 'ALL') params.append('status_vendor', state.meterAvailFilters.status_vendor);
     if (state.meterAvailFilters.aging !== 'ALL') params.append('aging', state.meterAvailFilters.aging);
     if (state.meterAvailFilters.match_status !== 'ALL') params.append('match_status', state.meterAvailFilters.match_status);
+    if (state.meterAvailFilters.comm_type !== 'ALL') params.append('comm_type', state.meterAvailFilters.comm_type);
+    if (state.meterAvailFilters.meter_type !== 'ALL') params.append('meter_type', state.meterAvailFilters.meter_type);
+    if (state.meterAvailFilters.phase !== 'ALL') params.append('phase', state.meterAvailFilters.phase);
 
     const res = await fetch(`/api/inventory/summary?${params.toString()}`);
     const json = await res.json();
@@ -2854,6 +2977,9 @@ async function renderUnsyncMetersTable() {
     if (state.unsyncFilters.status_vendor !== 'ALL') params.append('status_vendor', state.unsyncFilters.status_vendor);
     if (state.unsyncFilters.aging !== 'ALL') params.append('aging', state.unsyncFilters.aging);
     if (state.unsyncFilters.match_status !== 'ALL') params.append('match_status', state.unsyncFilters.match_status);
+    if (state.unsyncFilters.comm_type !== 'ALL') params.append('comm_type', state.unsyncFilters.comm_type);
+    if (state.unsyncFilters.meter_type !== 'ALL') params.append('meter_type', state.unsyncFilters.meter_type);
+    if (state.unsyncFilters.phase !== 'ALL') params.append('phase', state.unsyncFilters.phase);
 
     const res = await fetch(`/api/inventory/table?${params.toString()}`);
     const json = await res.json();
@@ -2948,6 +3074,9 @@ async function renderMeterAvailMetersTable() {
     if (state.meterAvailFilters.status_vendor !== 'ALL') params.append('status_vendor', state.meterAvailFilters.status_vendor);
     if (state.meterAvailFilters.aging !== 'ALL') params.append('aging', state.meterAvailFilters.aging);
     if (state.meterAvailFilters.match_status !== 'ALL') params.append('match_status', state.meterAvailFilters.match_status);
+    if (state.meterAvailFilters.comm_type !== 'ALL') params.append('comm_type', state.meterAvailFilters.comm_type);
+    if (state.meterAvailFilters.meter_type !== 'ALL') params.append('meter_type', state.meterAvailFilters.meter_type);
+    if (state.meterAvailFilters.phase !== 'ALL') params.append('phase', state.meterAvailFilters.phase);
 
     const res = await fetch(`/api/inventory/table?${params.toString()}`);
     const json = await res.json();
@@ -3259,6 +3388,9 @@ function exportUnsyncCsv() {
   if (state.unsyncFilters.status_vendor !== 'ALL') params.append('status_vendor', state.unsyncFilters.status_vendor);
   if (state.unsyncFilters.aging !== 'ALL') params.append('aging', state.unsyncFilters.aging);
   if (state.unsyncFilters.match_status !== 'ALL') params.append('match_status', state.unsyncFilters.match_status);
+  if (state.unsyncFilters.comm_type !== 'ALL') params.append('comm_type', state.unsyncFilters.comm_type);
+  if (state.unsyncFilters.meter_type !== 'ALL') params.append('meter_type', state.unsyncFilters.meter_type);
+  if (state.unsyncFilters.phase !== 'ALL') params.append('phase', state.unsyncFilters.phase);
   window.location.href = `/api/inventory/export?${params.toString()}`;
 }
 
@@ -3270,6 +3402,9 @@ function exportMeterAvailCsv() {
   if (state.meterAvailFilters.status_vendor !== 'ALL') params.append('status_vendor', state.meterAvailFilters.status_vendor);
   if (state.meterAvailFilters.aging !== 'ALL') params.append('aging', state.meterAvailFilters.aging);
   if (state.meterAvailFilters.match_status !== 'ALL') params.append('match_status', state.meterAvailFilters.match_status);
+  if (state.meterAvailFilters.comm_type !== 'ALL') params.append('comm_type', state.meterAvailFilters.comm_type);
+  if (state.meterAvailFilters.meter_type !== 'ALL') params.append('meter_type', state.meterAvailFilters.meter_type);
+  if (state.meterAvailFilters.phase !== 'ALL') params.append('phase', state.meterAvailFilters.phase);
   window.location.href = `/api/inventory/export?${params.toString()}`;
 }
 

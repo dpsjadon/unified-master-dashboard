@@ -1146,7 +1146,7 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
         phase = query.get("phase", [None])[0]
         if phase and phase.strip().upper() not in ("ALL", "NONE", ""):
             ph_clean = phase.strip().replace("'", "''")
-            where_clauses.append(f"phase = '{ph_clean}'")
+            where_clauses.append(f"upper(trim(phase)) = '{ph_clean.upper()}'")
             
         comm_type = query.get("comm_type", [None])[0]
         if comm_type and comm_type.strip().upper() not in ("ALL", "NONE", ""):
