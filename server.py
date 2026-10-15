@@ -1546,15 +1546,8 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
             self.send_error(500, str(e))
 
     def trigger_inventory_sync(self):
-        def _run_bg():
-            try:
-                import etl_inventory
-                etl_inventory.run_inventory_etl()
-            except Exception as e:
-                print(f"[-] Background inventory sync error: {e}")
-        t = threading.Thread(target=_run_bg, daemon=True)
-        t.start()
-        return self.send_json({"success": True, "message": "Inventory reconciliation ETL triggered in background."})
+        started, msg = sync_manager.start_inventory_sync()
+        return self.send_json({"success": started, "message": msg, "data": sync_manager.tracker.get_status()})
 
     # --- MDM SYNC CONTROLS ---
 

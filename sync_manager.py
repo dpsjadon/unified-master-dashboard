@@ -156,6 +156,25 @@ def start_master_sync():
     t.start()
     return True, "Master DB MDM report download initiated successfully."
 
+def start_inventory_sync():
+    if tracker.state.get("running"):
+        return False, "A synchronization is already actively in progress."
+
+    tracker.start_sync("inventory", "Initiating Unsync & Meter Available Reconciliation against Master DB...")
+
+    def worker():
+        try:
+            sys.path.insert(0, WORKSPACE_DIR)
+            import etl_inventory
+            importlib.reload(etl_inventory)
+            etl_inventory.run_inventory_sync_with_tracker(tracker)
+        except Exception as e:
+            tracker.fail_sync(f"Inventory sync encountered an unexpected exception: {str(e)}")
+
+    t = threading.Thread(target=worker, daemon=True)
+    t.start()
+    return True, "Inventory reconciliation initiated successfully."
+
 def start_hourly_scheduler():
     """
     Background daemon thread that runs hourly between 8:00 AM and 8:00 PM.

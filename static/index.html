@@ -1312,6 +1312,10 @@
           <i class="fa-solid fa-database" id="iconSyncMaster"></i> <span class="btn-text-desktop">Sync Master (MDM)</span><span class="btn-text-mobile">Master</span>
         </button>
 
+        <button id="btnSyncInventoryHeader" class="btn btn-primary" style="background: linear-gradient(135deg, #0284c7, #0369a1); border-color: #0284c7; color: #fff;" title="Reconcile and Sync Unsync & Meter Available Inventory immediately">
+          <i class="fa-solid fa-rotate" id="iconSyncInventory"></i> <span class="btn-text-desktop">Sync Inventory</span><span class="btn-text-mobile">Inventory</span>
+        </button>
+
         <!-- Theme Toggle (Accessible Day/Night switcher) -->
         <button id="btnThemeToggle" class="btn-icon theme-toggle-btn" title="Toggle Light / Dark Mode" aria-label="Toggle Theme">
           <i class="fa-solid fa-moon" id="themeIcon"></i>
@@ -1887,6 +1891,9 @@
 
       <!-- Action Buttons -->
       <div class="toolbar-actions-group" style="display: flex; gap: 8px; align-items: flex-end;">
+        <button id="btnSyncUnsync" class="btn btn-primary" style="background: linear-gradient(135deg, #0284c7, #0369a1); border-color: #0284c7; color: #fff; font-weight: 600;" title="Sync and reconcile Unsync data immediately with latest report">
+          <i class="fa-solid fa-rotate" id="iconSyncUnsync"></i> Sync Unsync Data
+        </button>
         <button id="btnResetUnsyncFilters" class="btn btn-secondary" title="Reset all Unsync filters">
           <i class="fa-solid fa-rotate-left"></i> Reset
         </button>
@@ -2146,6 +2153,9 @@
 
       <!-- Action Buttons -->
       <div class="toolbar-actions-group" style="display: flex; gap: 8px; align-items: flex-end;">
+        <button id="btnSyncMeterAvail" class="btn btn-primary" style="background: linear-gradient(135deg, #10b981, #047857); border-color: #10b981; color: #fff; font-weight: 600;" title="Sync and reconcile Meter Available data immediately with latest report">
+          <i class="fa-solid fa-rotate" id="iconSyncMeterAvail"></i> Sync Available Data
+        </button>
         <button id="btnResetMeterAvailFilters" class="btn btn-secondary" title="Reset all filters">
           <i class="fa-solid fa-rotate-left"></i> Reset
         </button>

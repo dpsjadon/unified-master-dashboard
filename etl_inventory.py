@@ -23,13 +23,16 @@ MASTER_PARQUET = os.path.join(DATA_DIR, "smart_meters.parquet")
 UNSYNC_PARQUET = os.path.join(DATA_DIR, "unsync_cache.parquet")
 METER_AVAIL_PARQUET = os.path.join(DATA_DIR, "meter_available_cache.parquet")
 
-def run_inventory_etl(source_file=None):
+def run_inventory_sync_with_tracker(tracker=None, source_file=None):
     t0 = time.time()
     if source_file is None:
         source_file = SOURCE_FILE
         
     os.makedirs(DATA_DIR, exist_ok=True)
     
+    if tracker:
+        tracker.log_step("SOURCE_CHECK", f"Verifying source inventory report: {os.path.basename(source_file)}...", 15)
+        
     # 1. Check if source exists, if not check for temp or existing
     if not os.path.exists(source_file):
         print(f"[!] Warning: Source file not found at {source_file}")
@@ -37,12 +40,16 @@ def run_inventory_etl(source_file=None):
             source_file = TEMP_COPY
             print(f"[*] Falling back to cached copy: {TEMP_COPY}")
         else:
-            print("[!] No source file available to run inventory ETL.")
+            msg = f"No source file available at {source_file}"
+            print(f"[!] {msg}")
+            if tracker: tracker.fail_sync(msg)
             return False
 
     # 2. Copy source file safely via PowerShell to avoid file locks if open in Excel
     if source_file != TEMP_COPY:
         try:
+            if tracker:
+                tracker.log_step("SHADOW_COPY", "Creating safe shadow copy of MSN With User Report.xlsb to prevent Excel file locks...", 30)
             print(f"[*] Copying {os.path.basename(source_file)} to temp copy to avoid Excel locks...")
             import subprocess
             cmd = f'powershell -NoProfile -Command "Copy-Item -LiteralPath \'{source_file}\' -Destination \'{TEMP_COPY}\' -Force"'
@@ -59,17 +66,26 @@ def run_inventory_etl(source_file=None):
     else:
         read_target = source_file
 
+    if tracker:
+        tracker.log_step("READ_XLSB", f"Reading Sheet1 from {os.path.basename(read_target)} via pyxlsb...", 45)
     print(f"[*] Reading Sheet1 from {read_target} via pyxlsb...")
-    df = pd.read_excel(read_target, sheet_name="Sheet1", engine="pyxlsb")
+    try:
+        df = pd.read_excel(read_target, sheet_name="Sheet1", engine="pyxlsb")
+    except Exception as read_err:
+        msg = f"Failed to read Excel workbook: {str(read_err)}"
+        print(f"[!] {msg}")
+        if tracker: tracker.fail_sync(msg)
+        return False
     print(f"[*] Loaded {len(df):,} raw rows in {time.time()-t0:.2f}s.")
 
+    if tracker:
+        tracker.log_step("NORMALIZE", f"Normalizing {len(df):,} records (Phase, Aging Buckets, Status)...", 65)
+
     # 3. Clean and normalize columns
-    # Ensure string types for text/date fields to prevent DuckDB type collisions
     for col in df.columns:
         if col not in ['Date_Gap_Num']:
             df[col] = df[col].astype(str).str.strip().replace({'nan': '', 'None': '', 'NaT': ''})
 
-    # Normalize Phase
     def norm_phase(p):
         s = str(p).strip().upper()
         if "3" in s: return "3-Phase"
@@ -78,8 +94,6 @@ def run_inventory_etl(source_file=None):
             
     df['Phase_Norm'] = df['Phase'].apply(norm_phase)
 
-    # Normalize Date_Gap & Aging Bucket
-    # User requirement: "aging (0-7 days, 8-15 days, 15-30 days, >30 days)"
     def get_aging_bucket(g):
         try:
             v = float(g)
@@ -95,6 +109,8 @@ def run_inventory_etl(source_file=None):
     df['Aging_Bucket'] = df['Date_Gap_Num'].apply(get_aging_bucket)
 
     # 4. Lookup against Total smart meters installed (smart_meters.parquet)
+    if tracker:
+        tracker.log_step("RECONCILE_LOOKUP", "Executing vectorized DuckDB lookup against 1.124M installed Master records...", 80)
     print("[*] Performing DuckDB vectorized lookup against Total Smart Meters Installed...")
     con = duckdb.connect()
     con.register('raw_df', df)
@@ -148,6 +164,8 @@ def run_inventory_etl(source_file=None):
     con.execute(lookup_sql)
     
     # 5. Export Unsync cache
+    if tracker:
+        tracker.log_step("EXPORT_CACHE", "Compiling unsync_cache.parquet and meter_available_cache.parquet...", 92)
     print("[*] Exporting unsync_cache.parquet...")
     u_path = UNSYNC_PARQUET.replace('\\', '/')
     con.execute(f"""
@@ -171,8 +189,15 @@ def run_inventory_etl(source_file=None):
     avail_count = con.execute(f"SELECT count(*) FROM read_parquet('{m_path}')").fetchone()[0]
     print(f"[*] meter_available_cache.parquet saved with {avail_count:,} records.")
 
-    print(f"[+] Inventory ETL completed successfully in {time.time()-t0:.2f}s!")
+    elapsed = time.time() - t0
+    msg = f"Inventory Reconciliation complete in {elapsed:.1f}s! Unsync: {unsync_count:,} records | Available: {avail_count:,} records."
+    print(f"[+] {msg}")
+    if tracker:
+        tracker.complete_sync(msg, unsync_count + avail_count)
     return True
+
+def run_inventory_etl(source_file=None):
+    return run_inventory_sync_with_tracker(tracker=None, source_file=source_file)
 
 if __name__ == "__main__":
     run_inventory_etl()

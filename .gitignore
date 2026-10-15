@@ -26,6 +26,8 @@ references/InstallerWiseMeterInstallation.xlsx
 *.log
 *.png
 data/*.csv
+data/temp_*.xlsb
+data/*.xlsb
 
 # Secrets and local environment
 config.env

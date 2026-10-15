@@ -3542,6 +3542,8 @@ function setupSync() {
       if (state.activeTab === 'tabDaily') loadDailyTable();
       else if (state.activeTab === 'tabCumulative') loadCumulativeTable();
       else if (state.activeTab === 'tabUla') loadUlaTable();
+      else if (state.activeTab === 'tabUnsync') { loadUnsyncFilters(); loadUnsyncDashboard(); }
+      else if (state.activeTab === 'tabMeterAvailable') { loadMeterAvailFilters(); loadMeterAvailDashboard(); }
     });
   }
 
@@ -3644,6 +3646,8 @@ function setupSync() {
           if (state.activeTab === 'tabDaily') loadDailyTable();
           else if (state.activeTab === 'tabCumulative') loadCumulativeTable();
           else if (state.activeTab === 'tabUla') loadUlaTable();
+          else if (state.activeTab === 'tabUnsync') { loadUnsyncFilters(); loadUnsyncDashboard(); }
+          else if (state.activeTab === 'tabMeterAvailable') { loadMeterAvailFilters(); loadMeterAvailDashboard(); }
         } else if (d.stage === 'ERROR') {
           clearInterval(pollInterval);
           icon.className = 'fa-solid fa-triangle-exclamation';
@@ -3663,14 +3667,34 @@ function setupSync() {
   }
 
   // 1. Daily Reports Sync Button
-  document.getElementById('btnSyncDaily').addEventListener('click', () => {
-    startSyncFlow('/api/sync/daily', 'Daily Reports MDM Live Downloader', 'fa-solid fa-cloud-arrow-down', 'Daily Installation');
-  });
+  const btnSyncD = document.getElementById('btnSyncDaily');
+  if (btnSyncD) {
+    btnSyncD.addEventListener('click', () => {
+      startSyncFlow('/api/sync/daily', 'Daily Reports MDM Live Downloader', 'fa-solid fa-cloud-arrow-down', 'Daily Installation');
+    });
+  }
 
   // 2. Cumulative Master DB Sync Button
-  document.getElementById('btnSyncMaster').addEventListener('click', () => {
-    startSyncFlow('/api/sync/master', 'Master Database MDM Live Downloader', 'fa-solid fa-database', 'Master Database');
-  });
+  const btnSyncM = document.getElementById('btnSyncMaster');
+  if (btnSyncM) {
+    btnSyncM.addEventListener('click', () => {
+      startSyncFlow('/api/sync/master', 'Master Database MDM Live Downloader', 'fa-solid fa-database', 'Master Database');
+    });
+  }
+
+  // 3. Unsync & Meter Available Inventory Sync Buttons
+  const triggerInventorySync = () => {
+    startSyncFlow('/api/sync/inventory', 'Unsync & Meter Available Live Reconciliation', 'fa-solid fa-rotate', 'Unsync & Meter Available Inventory');
+  };
+
+  const btnSyncInvHeader = document.getElementById('btnSyncInventoryHeader');
+  if (btnSyncInvHeader) btnSyncInvHeader.addEventListener('click', triggerInventorySync);
+
+  const btnSyncUnsync = document.getElementById('btnSyncUnsync');
+  if (btnSyncUnsync) btnSyncUnsync.addEventListener('click', triggerInventorySync);
+
+  const btnSyncMeterAvail = document.getElementById('btnSyncMeterAvail');
+  if (btnSyncMeterAvail) btnSyncMeterAvail.addEventListener('click', triggerInventorySync);
 }
 
 function resizeAllCharts() {
@@ -3714,6 +3738,8 @@ setInterval(async () => {
       if (state.activeTab === 'tabDaily') loadDailyTable();
       else if (state.activeTab === 'tabCumulative') loadCumulativeTable();
       else if (state.activeTab === 'tabUla') loadUlaTable();
+      else if (state.activeTab === 'tabUnsync') { loadUnsyncFilters(); loadUnsyncDashboard(); }
+      else if (state.activeTab === 'tabMeterAvailable') { loadMeterAvailFilters(); loadMeterAvailDashboard(); }
     }
     lastKnownDataTimestamp = currentTimestamp;
     updateOverallMetrics(json);
