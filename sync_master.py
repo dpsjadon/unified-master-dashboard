@@ -221,12 +221,20 @@ def run_master_sync_with_tracker(tracker=None):
                 z.extract(item, EXTRACT_DIR)
 
         # Step 5: Run Vectorized DuckDB ETL Pipeline
-        log("ETL", "Running Vectorized DuckDB ETL Pipeline (1.13M records)...", 94)
+        log("ETL", "Running Vectorized DuckDB ETL Pipeline (1.13M records)...", 93)
         sys.path.insert(0, WORKSPACE_DIR)
         import etl_master
         count = etl_master.run_etl()
 
-        # Step 6: Automatically reconcile Unsync & Meter Available Inventory with fresh Master data
+        # Step 6: Automatically reconcile ULA Scope with fresh Master data
+        try:
+            log("ULA", "Auto-reconciling ULA Scope with latest Master data...", 95)
+            import etl_daily
+            etl_daily.build_ula_cache()
+        except Exception as ue:
+            print(f"[-] Auto ULA reconciliation notice: {ue}", flush=True)
+
+        # Step 7: Automatically reconcile Unsync & Meter Available Inventory with fresh Master data
         try:
             log("INVENTORY", "Auto-reconciling Unsync & Meter Available Inventory with latest Master data...", 96)
             import etl_inventory

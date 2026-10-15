@@ -175,6 +175,25 @@ def start_inventory_sync():
     t.start()
     return True, "Inventory reconciliation initiated successfully."
 
+def start_ula_sync():
+    if tracker.state.get("running"):
+        return False, "A synchronization is already actively in progress."
+
+    tracker.start_sync("ula", "Initiating ULA Metering Reconciliation against Master DB and Daily Installs...")
+
+    def worker():
+        try:
+            sys.path.insert(0, WORKSPACE_DIR)
+            import etl_daily
+            importlib.reload(etl_daily)
+            etl_daily.build_ula_cache_with_tracker(tracker)
+        except Exception as e:
+            tracker.fail_sync(f"ULA sync encountered an unexpected exception: {str(e)}")
+
+    t = threading.Thread(target=worker, daemon=True)
+    t.start()
+    return True, "ULA Metering reconciliation initiated successfully."
+
 def start_hourly_scheduler():
     """
     Background daemon thread that runs hourly between 8:00 AM and 8:00 PM.

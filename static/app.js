@@ -3666,23 +3666,34 @@ function setupSync() {
     }, 600);
   }
 
-  // 1. Daily Reports Sync Button
+  // 1. Daily Reports Sync Buttons (Header & Tab)
+  const triggerDailySync = () => {
+    startSyncFlow('/api/sync/daily', 'Daily Reports MDM Live Downloader', 'fa-solid fa-cloud-arrow-down', 'Daily Installation');
+  };
   const btnSyncD = document.getElementById('btnSyncDaily');
-  if (btnSyncD) {
-    btnSyncD.addEventListener('click', () => {
-      startSyncFlow('/api/sync/daily', 'Daily Reports MDM Live Downloader', 'fa-solid fa-cloud-arrow-down', 'Daily Installation');
-    });
-  }
+  if (btnSyncD) btnSyncD.addEventListener('click', triggerDailySync);
+  const btnSyncDTab = document.getElementById('btnSyncDailyTab');
+  if (btnSyncDTab) btnSyncDTab.addEventListener('click', triggerDailySync);
 
-  // 2. Cumulative Master DB Sync Button
+  // 2. Cumulative Master DB Sync Buttons (Header & Tab)
+  const triggerMasterSync = () => {
+    startSyncFlow('/api/sync/master', 'Master Database MDM Live Downloader', 'fa-solid fa-database', 'Master Database');
+  };
   const btnSyncM = document.getElementById('btnSyncMaster');
-  if (btnSyncM) {
-    btnSyncM.addEventListener('click', () => {
-      startSyncFlow('/api/sync/master', 'Master Database MDM Live Downloader', 'fa-solid fa-database', 'Master Database');
-    });
-  }
+  if (btnSyncM) btnSyncM.addEventListener('click', triggerMasterSync);
+  const btnSyncMTab = document.getElementById('btnSyncMasterTab');
+  if (btnSyncMTab) btnSyncMTab.addEventListener('click', triggerMasterSync);
 
-  // 3. Unsync & Meter Available Inventory Sync Buttons
+  // 3. ULA Metering Sync Buttons (Header & Tab)
+  const triggerUlaSync = () => {
+    startSyncFlow('/api/sync/ula', 'ULA Metering Reconciliation Live Engine', 'fa-solid fa-rotate', 'ULA Scope & Installs');
+  };
+  const btnSyncUlaH = document.getElementById('btnSyncUlaHeader');
+  if (btnSyncUlaH) btnSyncUlaH.addEventListener('click', triggerUlaSync);
+  const btnSyncUlaT = document.getElementById('btnSyncUlaTab');
+  if (btnSyncUlaT) btnSyncUlaT.addEventListener('click', triggerUlaSync);
+
+  // 4. Unsync & Meter Available Inventory Sync Buttons
   const triggerInventorySync = () => {
     startSyncFlow('/api/sync/inventory', 'Unsync & Meter Available Live Reconciliation', 'fa-solid fa-rotate', 'Unsync & Meter Available Inventory');
   };

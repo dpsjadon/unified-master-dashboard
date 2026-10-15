@@ -208,6 +208,8 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
             return self.handle_inventory_export(query)
         elif path == "/api/sync/inventory":
             return self.trigger_inventory_sync()
+        elif path == "/api/sync/ula":
+            return self.trigger_ula_sync()
 
         # 6. Global Search
         elif path == "/api/search":
@@ -1547,6 +1549,10 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
 
     def trigger_inventory_sync(self):
         started, msg = sync_manager.start_inventory_sync()
+        return self.send_json({"success": started, "message": msg, "data": sync_manager.tracker.get_status()})
+
+    def trigger_ula_sync(self):
+        started, msg = sync_manager.start_ula_sync()
         return self.send_json({"success": started, "message": msg, "data": sync_manager.tracker.get_status()})
 
     # --- MDM SYNC CONTROLS ---

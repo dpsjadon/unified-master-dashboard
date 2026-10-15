@@ -1316,6 +1316,10 @@
           <i class="fa-solid fa-rotate" id="iconSyncInventory"></i> <span class="btn-text-desktop">Sync Inventory</span><span class="btn-text-mobile">Inventory</span>
         </button>
 
+        <button id="btnSyncUlaHeader" class="btn btn-primary" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9); border-color: #8b5cf6; color: #fff;" title="Reconcile and Sync ULA Metering Scope immediately">
+          <i class="fa-solid fa-rotate" id="iconSyncUlaHeader"></i> <span class="btn-text-desktop">Sync ULA</span><span class="btn-text-mobile">ULA</span>
+        </button>
+
         <!-- Theme Toggle (Accessible Day/Night switcher) -->
         <button id="btnThemeToggle" class="btn-icon theme-toggle-btn" title="Toggle Light / Dark Mode" aria-label="Toggle Theme">
           <i class="fa-solid fa-moon" id="themeIcon"></i>
@@ -1532,6 +1536,9 @@
 
       <div class="toolbar-actions-group">
         <span class="badge badge-cyan" id="activeFilterBadge">All Time Cumulative (1,124,022 Meters)</span>
+        <button id="btnSyncMasterTab" class="btn btn-primary" style="background: linear-gradient(135deg, #0284c7, #0369a1); border-color: #0284c7; color: #fff; font-weight: 600; padding: 6px 14px; border-radius: 8px;" title="Sync Master Meter Installation Database from MDM">
+          <i class="fa-solid fa-database" id="iconSyncMasterTab"></i> Sync Master Data
+        </button>
         <button id="btnExportCumulativeCsv" class="btn btn-export">
           <i class="fa-solid fa-file-excel"></i> Export Active Table to CSV
         </button>
@@ -1626,6 +1633,9 @@
       </div>
 
       <div class="toolbar-actions-group">
+        <button id="btnSyncDailyTab" class="btn btn-primary" style="background: linear-gradient(135deg, #10b981, #047857); border-color: #10b981; color: #fff; font-weight: 600; padding: 6px 14px; border-radius: 8px;" title="Download & Compile fresh Daily Installation Reports from MDM">
+          <i class="fa-solid fa-cloud-arrow-down" id="iconSyncDailyTab"></i> Sync Daily Data
+        </button>
         <button id="btnExportDailyCsv" class="btn btn-export">
           <i class="fa-solid fa-file-excel"></i> Export Daily Table to CSV
         </button>
@@ -1702,6 +1712,9 @@
       </div>
 
       <div class="toolbar-actions-group">
+        <button id="btnSyncUlaTab" class="btn btn-primary" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9); border-color: #8b5cf6; color: #fff; font-weight: 600; padding: 6px 14px; border-radius: 8px;" title="Reconcile ULA Metering Scope with Master DB & Daily Installs">
+          <i class="fa-solid fa-rotate" id="iconSyncUlaTab"></i> Sync ULA Data
+        </button>
         <button id="btnExportUlaCsv" class="btn btn-export">
           <i class="fa-solid fa-file-excel"></i> Export ULA Table to CSV
         </button>
