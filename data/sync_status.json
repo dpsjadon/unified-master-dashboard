@@ -151,11 +151,123 @@
       "message": "Pushing updated data to Cloud Dashboard (Render)...",
       "percent": 97,
       "status": "ok"
+    },
+    {
+      "time": "18:57:39",
+      "stage": "QUEUE",
+      "message": "Navigating to Download Requests queue (MIS/DownloadRequest)...",
+      "percent": 64,
+      "status": "ok"
+    },
+    {
+      "time": "18:57:45",
+      "stage": "CLOUD",
+      "message": "Cloud Dashboard updated successfully on Render!",
+      "percent": 99,
+      "status": "ok"
+    },
+    {
+      "time": "18:57:45",
+      "stage": "COMPLETE",
+      "message": "Daily Sync Complete! Downloaded & compiled 1,376 meters (816 Replacement + 560 NSC).",
+      "percent": 100,
+      "status": "success"
+    },
+    {
+      "time": "18:57:45",
+      "stage": "QUEUE",
+      "message": "Tracking MDM Queue for Request IDs: ['311474', '311475']",
+      "percent": 67,
+      "status": "ok"
+    },
+    {
+      "time": "18:57:46",
+      "stage": "QUEUE",
+      "message": "All 2 requested report packages are PROCESSED and ready in MDM queue!",
+      "percent": 74,
+      "status": "ok"
+    },
+    {
+      "time": "18:57:46",
+      "stage": "DOWNLOAD",
+      "message": "Queue ready! Downloading fresh processed ZIP packages to repository...",
+      "percent": 76,
+      "status": "ok"
+    },
+    {
+      "time": "18:57:46",
+      "stage": "DOWNLOAD",
+      "message": "Downloading report package for Request #311474...",
+      "percent": 78,
+      "status": "ok"
+    },
+    {
+      "time": "18:57:49",
+      "stage": "DOWNLOAD",
+      "message": "Package saved: Day Wise Meter Installation - ConsumerCount_311471_20261015_185549.zip (52,904 bytes)",
+      "percent": 80,
+      "status": "ok"
+    },
+    {
+      "time": "18:57:49",
+      "stage": "DOWNLOAD",
+      "message": "Downloading report package for Request #311475...",
+      "percent": 78,
+      "status": "ok"
+    },
+    {
+      "time": "18:57:51",
+      "stage": "DOWNLOAD",
+      "message": "Package saved: Day Wise Meter Installation - ConsumerCount_311472_20261015_185604.zip (35,417 bytes)",
+      "percent": 80,
+      "status": "ok"
+    },
+    {
+      "time": "18:57:51",
+      "stage": "VERIFY",
+      "message": "Waiting for ZIP file downloads to finalize...",
+      "percent": 84,
+      "status": "ok"
+    },
+    {
+      "time": "18:57:54",
+      "stage": "DOWNLOAD",
+      "message": "Successfully downloaded 4 report packages from MDM portal.",
+      "percent": 86,
+      "status": "ok"
+    },
+    {
+      "time": "18:57:58",
+      "stage": "ETL",
+      "message": "Executing vectorized DuckDB ETL compilation on fresh reports...",
+      "percent": 88,
+      "status": "ok"
+    },
+    {
+      "time": "18:57:59",
+      "stage": "ULA",
+      "message": "Cross-referencing 1,376 installations (816 Replacement + 560 NSC) against ULA scope...",
+      "percent": 94,
+      "status": "ok"
+    },
+    {
+      "time": "18:58:06",
+      "stage": "INVENTORY",
+      "message": "Auto-reconciling Unsync & Meter Available Inventory with fresh Daily installs...",
+      "percent": 96,
+      "status": "ok"
+    },
+    {
+      "time": "18:58:46",
+      "stage": "CLOUD",
+      "message": "Pushing updated data to Cloud Dashboard (Render)...",
+      "percent": 97,
+      "status": "ok"
     }
   ],
   "error": null,
-  "records_count": 1288,
-  "timestamp": "2026-10-15 18:57:38",
+  "records_count": 1376,
+  "timestamp": "2026-10-15 18:58:46",
   "next_auto_sync": "07:00 PM",
   "auto_sync_active": true,
   "last_auto_sync_msg": "Daily Sync Complete! Downloaded & compiled 1,134 meters (667 Replacement + 467 NSC)."
