@@ -341,6 +341,14 @@ def run_sync_with_tracker(tracker=None):
         log("ULA", f"Cross-referencing {total_c:,} installations ({repl_c:,} Replacement + {nsc_c:,} NSC) against ULA scope...", 94)
         etl.build_ula_cache(compiled)
 
+        # Step 8: Automatically reconcile Unsync & Meter Available Inventory with fresh Daily installs
+        try:
+            log("INVENTORY", "Auto-reconciling Unsync & Meter Available Inventory with fresh Daily installs...", 96)
+            import etl_inventory
+            etl_inventory.run_inventory_sync_with_tracker(tracker=None)
+        except Exception as ie:
+            print(f"[-] Auto inventory reconciliation notice: {ie}", flush=True)
+
         # Auto-push updated data to Render cloud if running locally
         try:
             git_cmd = r"C:\Users\Dharmendra Pal Singh\AppData\Local\Programs\Git\cmd\git.exe"

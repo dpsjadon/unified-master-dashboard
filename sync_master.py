@@ -221,10 +221,18 @@ def run_master_sync_with_tracker(tracker=None):
                 z.extract(item, EXTRACT_DIR)
 
         # Step 5: Run Vectorized DuckDB ETL Pipeline
-        log("ETL", "Running Vectorized DuckDB ETL Pipeline (1.124M records)...", 94)
+        log("ETL", "Running Vectorized DuckDB ETL Pipeline (1.13M records)...", 94)
         sys.path.insert(0, WORKSPACE_DIR)
         import etl_master
         count = etl_master.run_etl()
+
+        # Step 6: Automatically reconcile Unsync & Meter Available Inventory with fresh Master data
+        try:
+            log("INVENTORY", "Auto-reconciling Unsync & Meter Available Inventory with latest Master data...", 96)
+            import etl_inventory
+            etl_inventory.run_inventory_sync_with_tracker(tracker=None)
+        except Exception as ie:
+            print(f"[-] Auto inventory reconciliation notice: {ie}", flush=True)
 
         # Auto-push updated data to Render cloud if running locally
         try:

@@ -108,16 +108,49 @@ def run_inventory_sync_with_tracker(tracker=None, source_file=None):
     df['Date_Gap_Num'] = pd.to_numeric(df['Date_Gap'], errors='coerce').fillna(999).astype(int)
     df['Aging_Bucket'] = df['Date_Gap_Num'].apply(get_aging_bucket)
 
-    # 4. Lookup against Total smart meters installed (smart_meters.parquet)
+    # 4. Lookup against Total smart meters installed (smart_meters.parquet) + Daily installations (compiled_installations.parquet)
     if tracker:
-        tracker.log_step("RECONCILE_LOOKUP", "Executing vectorized DuckDB lookup against 1.124M installed Master records...", 80)
-    print("[*] Performing DuckDB vectorized lookup against Total Smart Meters Installed...")
+        tracker.log_step("RECONCILE_LOOKUP", "Executing vectorized DuckDB lookup against Master (1.13M) & Daily installations...", 80)
+    print("[*] Performing DuckDB vectorized lookup against Total Smart Meters Installed & Daily Installations...")
     con = duckdb.connect()
     con.register('raw_df', df)
 
-    p_path = MASTER_PARQUET.replace('\\', '/')
+    p_master = MASTER_PARQUET.replace('\\', '/')
+    daily_parquet = os.path.join(DATA_DIR, "compiled_installations.parquet")
+    p_daily = daily_parquet.replace('\\', '/')
+    
+    daily_union_sql = ""
+    if os.path.exists(daily_parquet):
+        daily_union_sql = f"""
+            UNION ALL
+            SELECT 
+                upper(trim(cast(New_Meter_No as varchar))) as match_key,
+                cast(Install_Date as date) as install_date,
+                cast(Install_Date as timestamp) as install_timestamp,
+                cast(Consumer_ID as varchar) as consumer_number,
+                cast(Consumer_Name as varchar) as consumer_name
+            FROM read_parquet('{p_daily}')
+            WHERE New_Meter_No IS NOT NULL AND trim(cast(New_Meter_No as varchar)) != ''
+        """
+
     lookup_sql = f"""
         CREATE OR REPLACE TABLE enriched_inventory AS
+        WITH all_installed AS (
+            SELECT 
+                upper(trim(cast(new_msn as varchar))) as match_key,
+                install_date,
+                install_timestamp,
+                cast(consumer_number as varchar) as consumer_number,
+                cast(consumer_name as varchar) as consumer_name
+            FROM read_parquet('{p_master}')
+            WHERE new_msn IS NOT NULL AND trim(cast(new_msn as varchar)) != ''
+            {daily_union_sql}
+        ),
+        dedup_installed AS (
+            SELECT match_key, install_date, install_timestamp, consumer_number, consumer_name
+            FROM all_installed
+            QUALIFY row_number() OVER (PARTITION BY match_key ORDER BY install_date DESC NULLS LAST) = 1
+        )
         SELECT 
             raw_df.Meter_No AS msn,
             raw_df.Circle AS circle,
@@ -140,26 +173,24 @@ def run_inventory_sync_with_tracker(tracker=None, source_file=None):
             raw_df.ReceivedDatetime AS received_datetime,
             raw_df.Created_FirstComm AS created_firstcomm,
             raw_df.Latest_LastComm AS latest_lastcomm,
-            CASE WHEN p.new_msn IS NOT NULL THEN 1 ELSE 0 END AS is_installed,
+            CASE WHEN p.match_key IS NOT NULL THEN 1 ELSE 0 END AS is_installed,
             p.install_date,
             p.install_timestamp,
             p.consumer_number,
             p.consumer_name,
             -- For Unsync: Closed if installed, else Unsync
             CASE 
-                WHEN p.new_msn IS NOT NULL THEN 'Closed'
+                WHEN p.match_key IS NOT NULL THEN 'Closed'
                 ELSE 'Unsync'
             END AS unsync_status,
             -- For Meter Available (Not Installed): Installed if installed, else Available
             CASE 
-                WHEN p.new_msn IS NOT NULL THEN 'Installed'
+                WHEN p.match_key IS NOT NULL THEN 'Installed'
                 ELSE 'Available'
             END AS avail_status
         FROM raw_df
-        LEFT JOIN (
-            SELECT DISTINCT new_msn, install_date, install_timestamp, consumer_number, consumer_name 
-            FROM read_parquet('{p_path}')
-        ) p ON trim(cast(raw_df.Meter_No as varchar)) = p.new_msn
+        LEFT JOIN dedup_installed p 
+          ON upper(trim(cast(raw_df.Meter_No as varchar))) = p.match_key
     """
     con.execute(lookup_sql)
     
