@@ -388,6 +388,10 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
                 db_mtime = datetime.fromtimestamp(os.path.getmtime(MI_DB_PATH)).strftime("%Y-%m-%d %H:%M:%S")
                 if not daily_dl_time or db_mtime > daily_dl_time:
                     daily_dl_time = db_mtime
+            elif os.path.exists(COMPILED_PARQUET_PATH):
+                p_mtime = datetime.fromtimestamp(os.path.getmtime(COMPILED_PARQUET_PATH)).strftime("%Y-%m-%d %H:%M:%S")
+                if not daily_dl_time or p_mtime > daily_dl_time:
+                    daily_dl_time = p_mtime
         except Exception:
             pass
 
@@ -406,10 +410,12 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
         try:
             if os.path.exists(MASTER_DB_PATH):
                 master_dl_time = datetime.fromtimestamp(os.path.getmtime(MASTER_DB_PATH)).strftime("%Y-%m-%d %H:%M:%S")
+            elif os.path.exists(MASTER_PARQUET_PATH):
+                master_dl_time = datetime.fromtimestamp(os.path.getmtime(MASTER_PARQUET_PATH)).strftime("%Y-%m-%d %H:%M:%S")
             else:
-                master_dl_time = "2026-10-10 20:33:00"
+                master_dl_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         except Exception:
-            master_dl_time = "2026-10-10 20:33:00"
+            master_dl_time = "2026-10-15 18:09:00"
 
         # 4. Inventory: Unsync & Meter Available Stats
         unsync_stats = {}

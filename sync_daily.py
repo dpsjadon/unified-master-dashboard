@@ -349,6 +349,12 @@ def run_sync_with_tracker(tracker=None):
         except Exception as ie:
             print(f"[-] Auto inventory reconciliation notice: {ie}", flush=True)
 
+        msg = f"Daily Sync Complete! Downloaded & compiled {total_c:,} meters ({repl_c:,} Replacement + {nsc_c:,} NSC)."
+        if tracker:
+            tracker.complete_sync(msg, total_c)
+        else:
+            log("COMPLETE", msg, 100, "success")
+
         # Auto-push updated data to Render cloud if running locally
         try:
             git_cmd = r"C:\Users\Dharmendra Pal Singh\AppData\Local\Programs\Git\cmd\git.exe"
@@ -356,20 +362,15 @@ def run_sync_with_tracker(tracker=None):
                 import shutil
                 git_cmd = shutil.which("git")
             if git_cmd and os.path.exists(os.path.join(WORKSPACE_DIR, ".git")):
-                log("CLOUD", "Pushing updated data to Cloud Dashboard (Render)...", 97)
+                log("CLOUD", "Pushing updated data to Cloud Dashboard (Render)...", 100)
                 import subprocess
                 subprocess.run([git_cmd, "add", "data/"], cwd=WORKSPACE_DIR, capture_output=True, timeout=30)
                 subprocess.run([git_cmd, "commit", "-m", f"Auto-sync data update {datetime.now().strftime('%Y-%m-%d %H:%M')}"], cwd=WORKSPACE_DIR, capture_output=True, timeout=30)
                 subprocess.run([git_cmd, "push", "origin", "main"], cwd=WORKSPACE_DIR, capture_output=True, timeout=60)
-                log("CLOUD", "Cloud Dashboard updated successfully on Render!", 99, "ok")
+                log("CLOUD", "Cloud Dashboard updated successfully on Render!", 100, "ok")
         except Exception as pe:
             print(f"[-] Auto-push to cloud notice: {pe}", flush=True)
 
-        msg = f"Daily Sync Complete! Downloaded & compiled {total_c:,} meters ({repl_c:,} Replacement + {nsc_c:,} NSC)."
-        if tracker:
-            tracker.complete_sync(msg, total_c)
-        else:
-            log("COMPLETE", msg, 100, "success")
         return True
 
     except Exception as e:
