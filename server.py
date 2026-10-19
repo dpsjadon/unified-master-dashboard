@@ -1114,51 +1114,34 @@ class UnifiedDashboardHandler(SimpleHTTPRequestHandler):
         if is_unsync:
             # Exclude calculation for circle 'SBPDCL' for unsync calculation as requested!
             where_clauses.append("upper(trim(circle)) != 'SBPDCL'")
-            
-        circle = query.get("circle", [None])[0]
-        if circle and circle.strip().upper() not in ("ALL", "NONE", ""):
-            c_clean = circle.strip().upper().replace("'", "''")
-            where_clauses.append(f"upper(trim(circle)) = '{c_clean}'")
-            
-        division = query.get("division", [None])[0]
-        if division and division.strip().upper() not in ("ALL", "NONE", ""):
-            d_clean = division.strip().replace("'", "''")
-            where_clauses.append(f"upper(trim(division)) = '{d_clean.upper()}'")
-            
-        vendor = query.get("vendor", [None])[0]
-        if vendor and vendor.strip().upper() not in ("ALL", "NONE", ""):
-            v_clean = vendor.strip().replace("'", "''")
-            where_clauses.append(f"upper(trim(vendor)) = '{v_clean.upper()}'")
-            
-        status_vendor = query.get("status_vendor", [None])[0]
-        if status_vendor and status_vendor.strip().upper() not in ("ALL", "NONE", ""):
-            sv_clean = status_vendor.strip().replace("'", "''")
-            where_clauses.append(f"upper(trim(status_vendor)) = '{sv_clean.upper()}'")
-            
-        aging = query.get("aging", [None])[0]
-        if aging and aging.strip().upper() not in ("ALL", "NONE", ""):
-            ag_clean = aging.strip().replace("'", "''")
-            where_clauses.append(f"aging_bucket = '{ag_clean}'")
-            
-        meter_type = query.get("meter_type", [None])[0]
-        if meter_type and meter_type.strip().upper() not in ("ALL", "NONE", ""):
-            mt_clean = meter_type.strip().replace("'", "''")
-            where_clauses.append(f"upper(trim(meter_type)) = '{mt_clean.upper()}'")
-            
-        phase = query.get("phase", [None])[0]
-        if phase and phase.strip().upper() not in ("ALL", "NONE", ""):
-            ph_clean = phase.strip().replace("'", "''")
-            where_clauses.append(f"upper(trim(phase)) = '{ph_clean.upper()}'")
-            
-        comm_type = query.get("comm_type", [None])[0]
-        if comm_type and comm_type.strip().upper() not in ("ALL", "NONE", ""):
-            ct_clean = comm_type.strip().replace("'", "''")
-            where_clauses.append(f"upper(trim(comm_type)) = '{ct_clean.upper()}'")
 
-        match_status = query.get("match_status", [None])[0]
-        if match_status and match_status.strip().upper() not in ("ALL", "NONE", ""):
-            ms_clean = match_status.strip().replace("'", "''")
-            where_clauses.append(f"upper(trim({status_col})) = '{ms_clean.upper()}'")
+        def _add_multi_filter(param_name, col_expr, upper=True):
+            raw_vals = query.get(param_name, [])
+            vals = []
+            for item in raw_vals:
+                if item:
+                    for v in str(item).split(','):
+                        v_str = v.strip()
+                        if v_str and v_str.upper() not in ("ALL", "NONE", ""):
+                            vals.append(v_str.upper() if upper else v_str)
+            # Deduplicate preserving order
+            vals = list(dict.fromkeys(vals))
+            if vals:
+                escaped = [f"'{v.replace(chr(39), chr(39)+chr(39))}'" for v in vals]
+                if len(escaped) == 1:
+                    where_clauses.append(f"{col_expr} = {escaped[0]}")
+                else:
+                    where_clauses.append(f"{col_expr} IN ({', '.join(escaped)})")
+
+        _add_multi_filter("circle", "upper(trim(circle))", upper=True)
+        _add_multi_filter("division", "upper(trim(division))", upper=True)
+        _add_multi_filter("vendor", "upper(trim(vendor))", upper=True)
+        _add_multi_filter("status_vendor", "upper(trim(status_vendor))", upper=True)
+        _add_multi_filter("aging", "aging_bucket", upper=False)
+        _add_multi_filter("meter_type", "upper(trim(meter_type))", upper=True)
+        _add_multi_filter("phase", "upper(trim(phase))", upper=True)
+        _add_multi_filter("comm_type", "upper(trim(comm_type))", upper=True)
+        _add_multi_filter("match_status", f"upper(trim({status_col}))", upper=True)
 
         return ("WHERE " + " AND ".join(where_clauses)) if where_clauses else ""
 

@@ -76,12 +76,26 @@ const PALETTES = {
 
 document.addEventListener('DOMContentLoaded', () => {
   setupTheme();
+  setupSidebar();
   setupNavigation();
   setupDateFilters();
   setupSearch();
   setupSync();
   setupCircleSlicer();
+  setupInventoryMultiSelects();
   loadInitialData();
+});
+
+// Dismiss any open multi-select dropdown on click outside or Escape
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.inv-ms-wrapper')) {
+    document.querySelectorAll('.inv-ms-wrapper.open').forEach(w => w.classList.remove('open'));
+  }
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.inv-ms-wrapper.open').forEach(w => w.classList.remove('open'));
+  }
 });
 
 
@@ -173,10 +187,16 @@ function setupTheme() {
 
   if (toggleBtn) toggleBtn.addEventListener('click', toggle);
   if (mobileToggleBtn) mobileToggleBtn.addEventListener('click', toggle);
+  const sidebarThemeBtn = document.getElementById('btnThemeToggleSidebar');
+  if (sidebarThemeBtn) sidebarThemeBtn.addEventListener('click', toggle);
 }
 
 function updateThemeIcon(theme) {
-  const icons = [document.getElementById('themeIcon'), document.getElementById('mobileThemeIcon')];
+  const icons = [
+    document.getElementById('themeIcon'),
+    document.getElementById('mobileThemeIcon'),
+    document.querySelector('#btnThemeToggleSidebar i')
+  ];
   icons.forEach(icon => {
     if (icon) {
       icon.className = theme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
@@ -184,6 +204,379 @@ function updateThemeIcon(theme) {
     }
   });
 }
+
+// --- SIDEBAR NAVIGATION CONTROLS ---
+function setupSidebar() {
+  const layout = document.getElementById('appLayout');
+  const sidebar = document.getElementById('appSidebar');
+  const collapseBtn = document.getElementById('sidebarCollapseBtn');
+  const mobileToggleBtn = document.getElementById('btnSidebarToggle');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  const fullscreenBtn = document.getElementById('btnFullscreenToggle');
+
+  // Load saved collapsed state
+  const isCollapsed = localStorage.getItem('sbpdcl_sidebar_collapsed') === 'true';
+  if (isCollapsed && layout) {
+    layout.classList.add('sidebar-collapsed');
+  }
+
+  function toggleCollapse() {
+    if (!layout) return;
+    const nowCollapsed = layout.classList.toggle('sidebar-collapsed');
+    localStorage.setItem('sbpdcl_sidebar_collapsed', nowCollapsed ? 'true' : 'false');
+    setTimeout(() => resizeAllCharts(), 280);
+  }
+
+  if (collapseBtn) collapseBtn.addEventListener('click', toggleCollapse);
+
+  if (mobileToggleBtn) {
+    mobileToggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (window.innerWidth <= 992) {
+        if (sidebar) sidebar.classList.toggle('mobile-open');
+        if (backdrop) backdrop.classList.toggle('active');
+      } else {
+        toggleCollapse();
+      }
+    });
+  }
+
+  if (backdrop) {
+    backdrop.addEventListener('click', () => {
+      if (sidebar) sidebar.classList.remove('mobile-open');
+      backdrop.classList.remove('active');
+    });
+  }
+
+  // Keyboard shortcut: Ctrl + B or Cmd + B
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
+      e.preventDefault();
+      toggleCollapse();
+    }
+  });
+
+  // Fullscreen toggle
+  if (fullscreenBtn) {
+    fullscreenBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+        fullscreenBtn.innerHTML = '<i class="fa-solid fa-compress"></i>';
+      } else {
+        document.exitFullscreen().catch(() => {});
+        fullscreenBtn.innerHTML = '<i class="fa-solid fa-expand"></i>';
+      }
+    });
+  }
+}
+
+// --- MODERN TOAST NOTIFICATIONS ---
+function showToast(type, title, message) {
+  let container = document.getElementById('toastContainer');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'toastContainer';
+    container.className = 'toast-container';
+    document.body.appendChild(container);
+  }
+
+  const icons = {
+    success: 'fa-solid fa-circle-check text-emerald',
+    info: 'fa-solid fa-circle-info text-cyan',
+    warning: 'fa-solid fa-triangle-exclamation text-amber',
+    error: 'fa-solid fa-circle-xmark text-rose'
+  };
+
+  const toast = document.createElement('div');
+  toast.className = 'executive-toast';
+  toast.innerHTML = `
+    <div class="toast-icon"><i class="${icons[type] || icons.info}"></i></div>
+    <div class="toast-content">
+      <div class="toast-title">${escapeAttr(title)}</div>
+      <div class="toast-message">${escapeAttr(message)}</div>
+    </div>
+  `;
+
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(10px) scale(0.95)';
+    setTimeout(() => toast.remove(), 250);
+  }, 4200);
+}
+
+function downloadBlobAsPng(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename || `SBPDCL_Report_${Date.now()}.png`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+// --- SHARABLE TABLE PICTURE EXPORT (HTML2CANVAS) ---
+window.copyTableAsPicture = async function(targetId, reportTitle) {
+  const target = document.getElementById(targetId);
+  if (!target) {
+    showToast('error', 'Table Error', `Could not find table element: ${targetId}`);
+    return;
+  }
+
+  const btn = window.event ? window.event.currentTarget : null;
+  const originalHtml = btn ? btn.innerHTML : '';
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Capturing...</span>';
+  }
+
+  try {
+    if (typeof html2canvas === 'undefined') {
+      throw new Error('Capture library not loaded. Please refresh the page.');
+    }
+
+    const clone = target.cloneNode(true);
+    const targetWidth = Math.max(target.scrollWidth, 1080);
+    clone.style.width = `${targetWidth}px`;
+    clone.style.position = 'fixed';
+    clone.style.left = '-9999px';
+    clone.style.top = '0';
+    clone.style.zIndex = '-9999';
+    clone.style.boxShadow = 'none';
+    clone.style.borderRadius = '14px';
+    clone.style.padding = '22px';
+
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    clone.style.background = isDark ? '#091322' : '#ffffff';
+    clone.style.color = isDark ? '#f8fafc' : '#0f172a';
+
+    clone.querySelectorAll('.table-actions-cluster, .btn, input, .slicer-clear-btn, .pagination-controls, .inv-filter-panel, .interactive-breadcrumb-bar, .inventory-top-actions').forEach(el => el.remove());
+
+    clone.querySelectorAll('.table-responsive, .table-wrapper').forEach(node => {
+      node.style.overflow = 'visible';
+      node.style.maxHeight = 'none';
+    });
+
+    const circleName = (state.activeCircle && state.activeCircle !== 'ALL') ? `${state.activeCircle} Circle` : 'Entire Discom (7 Circles)';
+    const nowStr = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'medium', timeStyle: 'short' });
+
+    const headerBanner = document.createElement('div');
+    headerBanner.style.cssText = `
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 14px;
+      margin-bottom: 16px;
+      border-bottom: 2px solid ${isDark ? 'rgba(56, 189, 248, 0.4)' : '#0284c7'};
+    `;
+    headerBanner.innerHTML = `
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="width: 36px; height: 36px; border-radius: 9px; background: linear-gradient(135deg, #0284c7, #0369a1); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.1rem; font-weight: 800;">
+          ⚡
+        </div>
+        <div>
+          <div style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 800; color: ${isDark ? '#38bdf8' : '#0284c7'}; line-height: 1.2;">
+            IntelliSmart SBPDCL
+          </div>
+          <div style="font-size: 0.72rem; font-weight: 700; color: ${isDark ? '#94a3b8' : '#64748b'}; text-transform: uppercase; letter-spacing: 0.4px;">
+            ${escapeAttr(reportTitle || 'Smart Meter Executive Report')}
+          </div>
+        </div>
+      </div>
+      <div style="text-align: right;">
+        <div style="font-size: 0.74rem; font-weight: 700; color: ${isDark ? '#34d399' : '#059669'}; background: ${isDark ? 'rgba(52,211,153,0.12)' : '#ecfdf5'}; padding: 3px 10px; border-radius: 20px; display: inline-block; margin-bottom: 3px;">
+          📍 Scope: ${circleName}
+        </div>
+        <div style="font-size: 0.68rem; color: ${isDark ? '#64748b' : '#94a3b8'};">
+          Generated: ${nowStr} IST &bull; MDM Live DuckDB
+        </div>
+      </div>
+    `;
+
+    const footerBanner = document.createElement('div');
+    footerBanner.style.cssText = `
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px dashed ${isDark ? 'rgba(255,255,255,0.1)' : '#cbd5e1'};
+      font-size: 0.68rem;
+      color: ${isDark ? '#64748b' : '#94a3b8'};
+    `;
+    footerBanner.innerHTML = `
+      <div>CONFIDENTIAL &bull; SBPDCL &amp; INTELLISMART JOINT AMI EXECUTIVE DASHBOARD</div>
+      <div>Source: SBPDCL MDMS DuckDB Analytics Engine &bull; Port 8095</div>
+    `;
+
+    clone.insertBefore(headerBanner, clone.firstChild);
+    clone.appendChild(footerBanner);
+    document.body.appendChild(clone);
+
+    const canvas = await html2canvas(clone, {
+      scale: 2,
+      useCORS: true,
+      logging: false,
+      backgroundColor: isDark ? '#091322' : '#ffffff'
+    });
+
+    document.body.removeChild(clone);
+
+    canvas.toBlob(async (blob) => {
+      if (!blob) throw new Error('Failed to generate picture blob.');
+
+      let copied = false;
+      if (navigator.clipboard && navigator.clipboard.write && window.isSecureContext) {
+        try {
+          const item = new ClipboardItem({ 'image/png': blob });
+          await navigator.clipboard.write([item]);
+          copied = true;
+          showToast('success', '📷 Table Copied as Picture!', 'Ready to paste (Ctrl+V) directly into WhatsApp, Email, or PowerPoint.');
+        } catch (clipErr) {
+          console.warn('Clipboard write disallowed, downloading file fallback:', clipErr);
+        }
+      }
+
+      if (!copied) {
+        const cleanTitle = (reportTitle || 'SBPDCL_Table_Report').replace(/[^a-zA-Z0-9_-]/g, '_');
+        downloadBlobAsPng(blob, `${cleanTitle}_${Date.now()}.png`);
+        showToast('info', '💾 Picture Downloaded', 'Direct clipboard copy was restricted; the image has been saved to your Downloads folder.');
+      }
+    }, 'image/png');
+
+  } catch (err) {
+    console.error('Copy table as picture error:', err);
+    showToast('error', 'Capture Failed', err.message);
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = originalHtml;
+    }
+  }
+};
+
+window.downloadTableAsPicture = async function(targetId, reportTitle) {
+  const target = document.getElementById(targetId);
+  if (!target) return;
+
+  const btn = window.event ? window.event.currentTarget : null;
+  const originalHtml = btn ? btn.innerHTML : '';
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+  }
+
+  try {
+    if (typeof html2canvas === 'undefined') {
+      throw new Error('Capture library not loaded. Please refresh the page.');
+    }
+
+    const clone = target.cloneNode(true);
+    const targetWidth = Math.max(target.scrollWidth, 1080);
+    clone.style.width = `${targetWidth}px`;
+    clone.style.position = 'fixed';
+    clone.style.left = '-9999px';
+    clone.style.top = '0';
+    clone.style.zIndex = '-9999';
+    clone.style.boxShadow = 'none';
+    clone.style.borderRadius = '14px';
+    clone.style.padding = '22px';
+
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    clone.style.background = isDark ? '#091322' : '#ffffff';
+    clone.style.color = isDark ? '#f8fafc' : '#0f172a';
+
+    clone.querySelectorAll('.table-actions-cluster, .btn, input, .slicer-clear-btn, .pagination-controls, .inv-filter-panel, .interactive-breadcrumb-bar, .inventory-top-actions').forEach(el => el.remove());
+
+    clone.querySelectorAll('.table-responsive, .table-wrapper').forEach(node => {
+      node.style.overflow = 'visible';
+      node.style.maxHeight = 'none';
+    });
+
+    const circleName = (state.activeCircle && state.activeCircle !== 'ALL') ? `${state.activeCircle} Circle` : 'Entire Discom (7 Circles)';
+    const nowStr = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'medium', timeStyle: 'short' });
+
+    const headerBanner = document.createElement('div');
+    headerBanner.style.cssText = `
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 14px;
+      margin-bottom: 16px;
+      border-bottom: 2px solid ${isDark ? 'rgba(56, 189, 248, 0.4)' : '#0284c7'};
+    `;
+    headerBanner.innerHTML = `
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="width: 36px; height: 36px; border-radius: 9px; background: linear-gradient(135deg, #0284c7, #0369a1); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.1rem; font-weight: 800;">
+          ⚡
+        </div>
+        <div>
+          <div style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 800; color: ${isDark ? '#38bdf8' : '#0284c7'}; line-height: 1.2;">
+            IntelliSmart SBPDCL
+          </div>
+          <div style="font-size: 0.72rem; font-weight: 700; color: ${isDark ? '#94a3b8' : '#64748b'}; text-transform: uppercase; letter-spacing: 0.4px;">
+            ${escapeAttr(reportTitle || 'Smart Meter Executive Report')}
+          </div>
+        </div>
+      </div>
+      <div style="text-align: right;">
+        <div style="font-size: 0.74rem; font-weight: 700; color: ${isDark ? '#34d399' : '#059669'}; background: ${isDark ? 'rgba(52,211,153,0.12)' : '#ecfdf5'}; padding: 3px 10px; border-radius: 20px; display: inline-block; margin-bottom: 3px;">
+          📍 Scope: ${circleName}
+        </div>
+        <div style="font-size: 0.68rem; color: ${isDark ? '#64748b' : '#94a3b8'};">
+          Generated: ${nowStr} IST &bull; MDM Live DuckDB
+        </div>
+      </div>
+    `;
+
+    const footerBanner = document.createElement('div');
+    footerBanner.style.cssText = `
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px dashed ${isDark ? 'rgba(255,255,255,0.1)' : '#cbd5e1'};
+      font-size: 0.68rem;
+      color: ${isDark ? '#64748b' : '#94a3b8'};
+    `;
+    footerBanner.innerHTML = `
+      <div>CONFIDENTIAL &bull; SBPDCL &amp; INTELLISMART JOINT AMI EXECUTIVE DASHBOARD</div>
+      <div>Source: SBPDCL MDMS DuckDB Analytics Engine &bull; Port 8095</div>
+    `;
+
+    clone.insertBefore(headerBanner, clone.firstChild);
+    clone.appendChild(footerBanner);
+    document.body.appendChild(clone);
+
+    const canvas = await html2canvas(clone, {
+      scale: 2,
+      useCORS: true,
+      logging: false,
+      backgroundColor: isDark ? '#091322' : '#ffffff'
+    });
+
+    document.body.removeChild(clone);
+
+    canvas.toBlob((blob) => {
+      if (!blob) throw new Error('Failed to generate picture blob.');
+      const cleanTitle = (reportTitle || 'SBPDCL_Table_Report').replace(/[^a-zA-Z0-9_-]/g, '_');
+      downloadBlobAsPng(blob, `${cleanTitle}_${Date.now()}.png`);
+      showToast('success', '💾 Picture Downloaded!', 'High-resolution table image saved to your Downloads folder.');
+    }, 'image/png');
+
+  } catch (err) {
+    console.error('Download table as picture error:', err);
+    showToast('error', 'Download Failed', err.message);
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = originalHtml;
+    }
+  }
+};
 
 // --- NAVIGATION ---
 function setupNavigation() {
@@ -194,17 +587,46 @@ function setupNavigation() {
       mainTabs.forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(p => p.classList.remove('active'));
 
-      btn.classList.add('active');
       const targetId = btn.getAttribute('data-tab');
       state.activeTab = targetId;
+
+      // Sync active state on all buttons targeting this tab
+      document.querySelectorAll(`.main-tab-btn[data-tab="${targetId}"]`).forEach(b => b.classList.add('active'));
+
       const targetPane = document.getElementById(targetId);
       if (targetPane) targetPane.classList.add('active');
+
+      // Update header breadcrumb title dynamically
+      const tabInfo = {
+        tabCumulative: { title: 'Cumulative Master Analytics', icon: 'fa-solid fa-chart-pie' },
+        tabDaily: { title: 'Daily Installation & Field Status', icon: 'fa-solid fa-bolt-lightning' },
+        tabUla: { title: 'ULA Metering Tracker', icon: 'fa-solid fa-arrows-to-dot' },
+        tabUnsync: { title: 'Unsync Report & Resolution', icon: 'fa-solid fa-arrows-rotate' },
+        tabMeterAvailable: { title: 'Meter Available Stock Ledger', icon: 'fa-solid fa-boxes-stacked' },
+        tabSearch: { title: 'Smart Meter & MSN Search', icon: 'fa-solid fa-magnifying-glass' }
+      };
+      const info = tabInfo[targetId];
+      const breadcrumbEl = document.getElementById('headerActiveTabTitle');
+      if (breadcrumbEl && info) {
+        breadcrumbEl.innerHTML = `<i class="${info.icon}"></i> ${info.title}`;
+      }
+
+      // Close mobile drawer if open
+      const sidebar = document.getElementById('appSidebar');
+      const backdrop = document.getElementById('sidebarBackdrop');
+      if (sidebar) sidebar.classList.remove('mobile-open');
+      if (backdrop) backdrop.classList.remove('active');
 
       if (targetId === 'tabSearch') {
         // For Smart meter & MSN search: keep it simple, only search bar, no cards required
         document.body.classList.add('search-tab-active');
+        document.body.classList.remove('inventory-focus-mode');
+      } else if (targetId === 'tabUnsync' || targetId === 'tabMeterAvailable') {
+        document.body.classList.remove('search-tab-active');
+        document.body.classList.add('inventory-focus-mode');
       } else {
         document.body.classList.remove('search-tab-active');
+        document.body.classList.remove('inventory-focus-mode');
         // Dynamically update the 6 KPI cards for the active tab
         updateKpiCardsForActiveTab();
       }
@@ -356,15 +778,9 @@ function setupNavigation() {
   if (btnResetUnsyncFilters) {
     btnResetUnsyncFilters.addEventListener('click', () => {
       state.unsyncFilters = { circle: 'ALL', division: 'ALL', vendor: 'ALL', status_vendor: 'ALL', aging: 'ALL', match_status: 'ALL', comm_type: 'ALL', meter_type: 'ALL', phase: 'ALL' };
-      if (filterUnsyncStatusVendor) filterUnsyncStatusVendor.value = 'ALL';
-      if (filterUnsyncCircle) filterUnsyncCircle.value = 'ALL';
-      if (filterUnsyncDivision) filterUnsyncDivision.value = 'ALL';
-      if (filterUnsyncVendor) filterUnsyncVendor.value = 'ALL';
-      if (filterUnsyncAging) filterUnsyncAging.value = 'ALL';
-      if (filterUnsyncMatch) filterUnsyncMatch.value = 'ALL';
-      if (filterUnsyncCommType) filterUnsyncCommType.value = 'ALL';
-      if (filterUnsyncMeterType) filterUnsyncMeterType.value = 'ALL';
-      if (filterUnsyncPhase) filterUnsyncPhase.value = 'ALL';
+      Object.keys(inventoryMultiSelects).forEach(k => {
+        if (k.startsWith('filterUnsync')) inventoryMultiSelects[k].clear();
+      });
       const s = document.getElementById('searchUnsync');
       if (s) s.value = '';
       state.searchFilters.unsync = '';
@@ -373,101 +789,13 @@ function setupNavigation() {
     });
   }
 
-  // --- METER AVAILABLE FILTER CONTROLS ---
-  const filterMeterAvailStatusVendor = document.getElementById('filterMeterAvailStatusVendor');
-  if (filterMeterAvailStatusVendor) {
-    filterMeterAvailStatusVendor.addEventListener('change', (e) => {
-      state.meterAvailFilters.status_vendor = e.target.value;
-      state.meterAvailPage = 1;
-      loadMeterAvailDashboard();
-    });
-  }
-
-  const filterMeterAvailCircle = document.getElementById('filterMeterAvailCircle');
-  if (filterMeterAvailCircle) {
-    filterMeterAvailCircle.addEventListener('change', (e) => {
-      state.meterAvailFilters.circle = e.target.value;
-      state.meterAvailPage = 1;
-      loadMeterAvailDashboard();
-    });
-  }
-
-  const filterMeterAvailDivision = document.getElementById('filterMeterAvailDivision');
-  if (filterMeterAvailDivision) {
-    filterMeterAvailDivision.addEventListener('change', (e) => {
-      state.meterAvailFilters.division = e.target.value;
-      state.meterAvailPage = 1;
-      loadMeterAvailDashboard();
-    });
-  }
-
-  const filterMeterAvailVendor = document.getElementById('filterMeterAvailVendor');
-  if (filterMeterAvailVendor) {
-    filterMeterAvailVendor.addEventListener('change', (e) => {
-      state.meterAvailFilters.vendor = e.target.value;
-      state.meterAvailPage = 1;
-      loadMeterAvailDashboard();
-    });
-  }
-
-  const filterMeterAvailAging = document.getElementById('filterMeterAvailAging');
-  if (filterMeterAvailAging) {
-    filterMeterAvailAging.addEventListener('change', (e) => {
-      state.meterAvailFilters.aging = e.target.value;
-      state.meterAvailPage = 1;
-      loadMeterAvailDashboard();
-    });
-  }
-
-  const filterMeterAvailMatch = document.getElementById('filterMeterAvailMatch');
-  if (filterMeterAvailMatch) {
-    filterMeterAvailMatch.addEventListener('change', (e) => {
-      state.meterAvailFilters.match_status = e.target.value;
-      state.meterAvailPage = 1;
-      loadMeterAvailDashboard();
-    });
-  }
-
-  const filterMeterAvailCommType = document.getElementById('filterMeterAvailCommType');
-  if (filterMeterAvailCommType) {
-    filterMeterAvailCommType.addEventListener('change', (e) => {
-      state.meterAvailFilters.comm_type = e.target.value;
-      state.meterAvailPage = 1;
-      loadMeterAvailDashboard();
-    });
-  }
-
-  const filterMeterAvailMeterType = document.getElementById('filterMeterAvailMeterType');
-  if (filterMeterAvailMeterType) {
-    filterMeterAvailMeterType.addEventListener('change', (e) => {
-      state.meterAvailFilters.meter_type = e.target.value;
-      state.meterAvailPage = 1;
-      loadMeterAvailDashboard();
-    });
-  }
-
-  const filterMeterAvailPhase = document.getElementById('filterMeterAvailPhase');
-  if (filterMeterAvailPhase) {
-    filterMeterAvailPhase.addEventListener('change', (e) => {
-      state.meterAvailFilters.phase = e.target.value;
-      state.meterAvailPage = 1;
-      loadMeterAvailDashboard();
-    });
-  }
-
   const btnResetMeterAvailFilters = document.getElementById('btnResetMeterAvailFilters');
   if (btnResetMeterAvailFilters) {
     btnResetMeterAvailFilters.addEventListener('click', () => {
       state.meterAvailFilters = { circle: 'ALL', division: 'ALL', vendor: 'ALL', status_vendor: 'ALL', aging: 'ALL', match_status: 'ALL', comm_type: 'ALL', meter_type: 'ALL', phase: 'ALL' };
-      if (filterMeterAvailStatusVendor) filterMeterAvailStatusVendor.value = 'ALL';
-      if (filterMeterAvailCircle) filterMeterAvailCircle.value = 'ALL';
-      if (filterMeterAvailDivision) filterMeterAvailDivision.value = 'ALL';
-      if (filterMeterAvailVendor) filterMeterAvailVendor.value = 'ALL';
-      if (filterMeterAvailAging) filterMeterAvailAging.value = 'ALL';
-      if (filterMeterAvailMatch) filterMeterAvailMatch.value = 'ALL';
-      if (filterMeterAvailCommType) filterMeterAvailCommType.value = 'ALL';
-      if (filterMeterAvailMeterType) filterMeterAvailMeterType.value = 'ALL';
-      if (filterMeterAvailPhase) filterMeterAvailPhase.value = 'ALL';
+      Object.keys(inventoryMultiSelects).forEach(k => {
+        if (k.startsWith('filterMeterAvail')) inventoryMultiSelects[k].clear();
+      });
       const s = document.getElementById('searchMeterAvail');
       if (s) s.value = '';
       state.searchFilters.meter_available = '';
@@ -2309,28 +2637,537 @@ function renderUlaCharts() {
 
 // --- TAB: UNSYNC & METER AVAILABLE DASHBOARDS ---
 
+// --- TAB: UNSYNC & METER AVAILABLE DASHBOARDS (MODERN EXECUTIVE MULTI-SELECT & WORKBENCH) ---
+
+const inventoryMultiSelects = {};
+
+class ModernMultiSelect {
+  constructor({ id, placeholder, searchPlaceholder, options, onSelectionChange }) {
+    this.id = id;
+    this.selectEl = document.getElementById(id);
+    if (!this.selectEl) return;
+    this.placeholder = placeholder || 'All';
+    this.searchPlaceholder = searchPlaceholder || 'Search...';
+    this.onSelectionChange = onSelectionChange;
+    this.options = [];
+    this.selected = [];
+
+    this.init();
+    if (options && options.length > 0) {
+      this.setOptions(options);
+    } else {
+      this.syncFromSelect();
+    }
+  }
+
+  init() {
+    this.selectEl.style.display = 'none';
+
+    const parent = this.selectEl.parentElement;
+    const oldWrap = parent.querySelector(`.inv-ms-wrapper[data-ms-for="${this.id}"]`);
+    if (oldWrap) oldWrap.remove();
+
+    this.wrapper = document.createElement('div');
+    this.wrapper.className = 'inv-ms-wrapper';
+    this.wrapper.setAttribute('data-ms-for', this.id);
+
+    this.btn = document.createElement('button');
+    this.btn.type = 'button';
+    this.btn.className = 'inv-ms-btn';
+    this.btn.innerHTML = `
+      <span class="inv-ms-label">${this.placeholder}</span>
+      <span class="inv-ms-badge" style="display:none;"></span>
+      <span class="inv-ms-clear-btn" style="display:none;" title="Clear filter">&times;</span>
+      <i class="fa-solid fa-chevron-down inv-ms-arrow"></i>
+    `;
+    this.labelEl = this.btn.querySelector('.inv-ms-label');
+    this.badgeEl = this.btn.querySelector('.inv-ms-badge');
+    this.clearEl = this.btn.querySelector('.inv-ms-clear-btn');
+
+    this.dropdown = document.createElement('div');
+    this.dropdown.className = 'inv-ms-dropdown';
+    this.dropdown.innerHTML = `
+      <div class="inv-ms-header">
+        <input type="text" class="inv-ms-search-input" placeholder="${this.searchPlaceholder}">
+        <div class="inv-ms-toolbar">
+          <button type="button" class="inv-ms-quick-btn ms-select-all">Select All</button>
+          <span style="color:var(--text-muted); font-size:0.65rem;">|</span>
+          <button type="button" class="inv-ms-quick-btn ms-clear-all">Clear</button>
+        </div>
+      </div>
+      <div class="inv-ms-options-list"></div>
+    `;
+
+    this.dropdown.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+
+    this.searchInput = this.dropdown.querySelector('.inv-ms-search-input');
+    this.listContainer = this.dropdown.querySelector('.inv-ms-options-list');
+    this.selectAllBtn = this.dropdown.querySelector('.ms-select-all');
+    this.clearAllBtn = this.dropdown.querySelector('.ms-clear-all');
+
+    this.wrapper.appendChild(this.btn);
+    this.wrapper.appendChild(this.dropdown);
+    parent.appendChild(this.wrapper);
+
+    this.btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const wasOpen = this.wrapper.classList.contains('open');
+      document.querySelectorAll('.inv-ms-wrapper.open').forEach(w => w.classList.remove('open'));
+      if (!wasOpen) {
+        this.wrapper.classList.add('open');
+        this.searchInput.value = '';
+        this.filterOptions('');
+        setTimeout(() => this.searchInput.focus(), 50);
+      }
+    });
+
+    this.clearEl.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.clear();
+      if (this.onSelectionChange) this.onSelectionChange(this.getSelected());
+    });
+
+    this.searchInput.addEventListener('input', (e) => {
+      this.filterOptions(e.target.value);
+    });
+
+    this.selectAllBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.selectAll();
+      if (this.onSelectionChange) this.onSelectionChange(this.getSelected());
+    });
+
+    this.clearAllBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.clear();
+      if (this.onSelectionChange) this.onSelectionChange(this.getSelected());
+    });
+  }
+
+  syncFromSelect() {
+    const opts = [];
+    for (let i = 0; i < this.selectEl.options.length; i++) {
+      const opt = this.selectEl.options[i];
+      if (opt.value !== 'ALL') {
+        opts.push({ value: opt.value, label: opt.textContent.trim() });
+      }
+    }
+    if (opts.length > 0) this.setOptions(opts);
+  }
+
+  setOptions(opts) {
+    this.options = opts.map(o => typeof o === 'string' ? { value: o, label: o } : o);
+    const validVals = new Set(this.options.map(o => o.value));
+    this.selected = this.selected.filter(v => validVals.has(v));
+    this.renderOptionsList();
+    this.updateButtonUI();
+  }
+
+  renderOptionsList() {
+    this.listContainer.innerHTML = '';
+    if (this.options.length === 0) {
+      this.listContainer.innerHTML = '<div style="padding: 10px; text-align: center; color: var(--text-muted); font-size: 0.72rem;">No options available</div>';
+      return;
+    }
+
+    this.options.forEach(opt => {
+      const label = document.createElement('label');
+      label.className = 'inv-ms-option';
+      label.setAttribute('data-val', String(opt.value || '').toLowerCase());
+
+      const isChecked = this.selected.includes(opt.value);
+      label.innerHTML = `
+        <input type="checkbox" value="${escapeAttr(opt.value)}" ${isChecked ? 'checked' : ''}>
+        <span>${escapeAttr(opt.label)}</span>
+      `;
+
+      const chk = label.querySelector('input');
+      chk.addEventListener('change', (e) => {
+        const val = opt.value;
+        if (e.target.checked) {
+          if (!this.selected.includes(val)) this.selected.push(val);
+        } else {
+          this.selected = this.selected.filter(v => v !== val);
+        }
+        this.updateButtonUI();
+        if (this.onSelectionChange) this.onSelectionChange(this.getSelected());
+      });
+
+      this.listContainer.appendChild(label);
+    });
+  }
+
+  filterOptions(query) {
+    const q = (query || '').toLowerCase().trim();
+    this.listContainer.querySelectorAll('.inv-ms-option').forEach(el => {
+      const val = el.getAttribute('data-val') || '';
+      const txt = el.textContent.toLowerCase();
+      if (!q || val.includes(q) || txt.includes(q)) {
+        el.style.display = 'flex';
+      } else {
+        el.style.display = 'none';
+      }
+    });
+  }
+
+  selectAll() {
+    this.selected = this.options.map(o => o.value);
+    this.listContainer.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = true);
+    this.updateButtonUI();
+  }
+
+  clear() {
+    this.selected = [];
+    this.listContainer.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
+    this.updateButtonUI();
+  }
+
+  setSelected(vals) {
+    if (!vals || vals === 'ALL') {
+      this.selected = [];
+    } else if (Array.isArray(vals)) {
+      this.selected = vals.slice();
+    } else {
+      this.selected = [String(vals)];
+    }
+    this.listContainer.querySelectorAll('input[type="checkbox"]').forEach(c => {
+      c.checked = this.selected.includes(c.value);
+    });
+    this.updateButtonUI();
+  }
+
+  getSelected() {
+    if (this.selected.length === 0 || (this.options.length > 0 && this.selected.length === this.options.length)) {
+      return 'ALL';
+    }
+    return this.selected;
+  }
+
+  updateButtonUI() {
+    const total = this.options.length;
+    const count = this.selected.length;
+
+    if (count === 0 || (total > 0 && count === total)) {
+      this.labelEl.textContent = this.placeholder;
+      this.badgeEl.textContent = '';
+      this.badgeEl.style.display = 'none';
+      this.clearEl.style.display = 'none';
+      this.btn.classList.remove('active-filter');
+      this.selectEl.value = 'ALL';
+    } else if (count === 1) {
+      const opt = this.options.find(o => o.value === this.selected[0]);
+      this.labelEl.textContent = opt ? opt.label : this.selected[0];
+      this.badgeEl.textContent = '';
+      this.badgeEl.style.display = 'none';
+      this.clearEl.style.display = 'inline-block';
+      this.btn.classList.add('active-filter');
+      this.selectEl.value = this.selected[0];
+    } else if (count === 2) {
+      const opt0 = this.options.find(o => o.value === this.selected[0]);
+      const opt1 = this.options.find(o => o.value === this.selected[1]);
+      const l0 = opt0 ? opt0.label : this.selected[0];
+      const l1 = opt1 ? opt1.label : this.selected[1];
+      this.labelEl.textContent = `${l0}, ${l1}`;
+      this.badgeEl.textContent = '2';
+      this.badgeEl.style.display = 'inline-flex';
+      this.clearEl.style.display = 'inline-block';
+      this.btn.classList.add('active-filter');
+      this.selectEl.value = this.selected.join(',');
+    } else {
+      const opt0 = this.options.find(o => o.value === this.selected[0]);
+      const l0 = opt0 ? opt0.label : this.selected[0];
+      this.labelEl.textContent = `${l0} (+${count - 1})`;
+      this.badgeEl.textContent = String(count);
+      this.badgeEl.style.display = 'inline-flex';
+      this.clearEl.style.display = 'inline-block';
+      this.btn.classList.add('active-filter');
+      this.selectEl.value = this.selected.join(',');
+    }
+  }
+}
+
+function setupInventoryMultiSelects() {
+  // 1. Unsync Filters
+  inventoryMultiSelects.filterUnsyncCircle = new ModernMultiSelect({
+    id: 'filterUnsyncCircle',
+    placeholder: 'All Circles (SBPDCL Excl.)',
+    searchPlaceholder: 'Search Circle...',
+    onSelectionChange: (val) => {
+      state.unsyncFilters.circle = val;
+      state.unsyncPage = 1;
+      loadUnsyncDashboard();
+    }
+  });
+
+  inventoryMultiSelects.filterUnsyncDivision = new ModernMultiSelect({
+    id: 'filterUnsyncDivision',
+    placeholder: 'All HigherOffices',
+    searchPlaceholder: 'Search Division...',
+    onSelectionChange: (val) => {
+      state.unsyncFilters.division = val;
+      state.unsyncPage = 1;
+      loadUnsyncDashboard();
+    }
+  });
+
+  inventoryMultiSelects.filterUnsyncVendor = new ModernMultiSelect({
+    id: 'filterUnsyncVendor',
+    placeholder: 'All Vendors',
+    searchPlaceholder: 'Search Vendor...',
+    onSelectionChange: (val) => {
+      state.unsyncFilters.vendor = val;
+      state.unsyncPage = 1;
+      loadUnsyncDashboard();
+    }
+  });
+
+  inventoryMultiSelects.filterUnsyncStatusVendor = new ModernMultiSelect({
+    id: 'filterUnsyncStatusVendor',
+    placeholder: 'All Vendors',
+    searchPlaceholder: 'Search Status...',
+    options: [
+      { value: 'Active', label: '🟢 Active Only' },
+      { value: 'In Active', label: '⚪ In Active' }
+    ],
+    onSelectionChange: (val) => {
+      state.unsyncFilters.status_vendor = val;
+      state.unsyncPage = 1;
+      loadUnsyncDashboard();
+    }
+  });
+
+  inventoryMultiSelects.filterUnsyncMeterType = new ModernMultiSelect({
+    id: 'filterUnsyncMeterType',
+    placeholder: 'All Meter Types',
+    searchPlaceholder: 'Search Type...',
+    onSelectionChange: (val) => {
+      state.unsyncFilters.meter_type = val;
+      state.unsyncPage = 1;
+      loadUnsyncDashboard();
+    }
+  });
+
+  inventoryMultiSelects.filterUnsyncPhase = new ModernMultiSelect({
+    id: 'filterUnsyncPhase',
+    placeholder: 'All Phases',
+    searchPlaceholder: 'Search Phase...',
+    onSelectionChange: (val) => {
+      state.unsyncFilters.phase = val;
+      state.unsyncPage = 1;
+      loadUnsyncDashboard();
+    }
+  });
+
+  inventoryMultiSelects.filterUnsyncCommType = new ModernMultiSelect({
+    id: 'filterUnsyncCommType',
+    placeholder: 'All Comm Types',
+    searchPlaceholder: 'Search Comm...',
+    onSelectionChange: (val) => {
+      state.unsyncFilters.comm_type = val;
+      state.unsyncPage = 1;
+      loadUnsyncDashboard();
+    }
+  });
+
+  inventoryMultiSelects.filterUnsyncAging = new ModernMultiSelect({
+    id: 'filterUnsyncAging',
+    placeholder: 'All Aging',
+    searchPlaceholder: 'Search Aging...',
+    options: [
+      { value: '0-7 days', label: '⚡ 0-7 Days' },
+      { value: '8-15 days', label: '⏳ 8-15 Days' },
+      { value: '15-30 days', label: '⚠️ 15-30 Days' },
+      { value: '>30 days', label: '🚨 >30 Days (Critical)' }
+    ],
+    onSelectionChange: (val) => {
+      state.unsyncFilters.aging = val;
+      state.unsyncPage = 1;
+      loadUnsyncDashboard();
+    }
+  });
+
+  inventoryMultiSelects.filterUnsyncMatch = new ModernMultiSelect({
+    id: 'filterUnsyncMatch',
+    placeholder: 'All (Closed & Open)',
+    searchPlaceholder: 'Search Status...',
+    options: [
+      { value: 'Closed', label: '✅ Closed (Master)' },
+      { value: 'Unsync', label: '🔄 Unsync (Open)' }
+    ],
+    onSelectionChange: (val) => {
+      state.unsyncFilters.match_status = val;
+      state.unsyncPage = 1;
+      loadUnsyncDashboard();
+    }
+  });
+
+  // 2. Meter Available Filters
+  inventoryMultiSelects.filterMeterAvailCircle = new ModernMultiSelect({
+    id: 'filterMeterAvailCircle',
+    placeholder: 'All Circles (Incl. SBPDCL)',
+    searchPlaceholder: 'Search Circle...',
+    onSelectionChange: (val) => {
+      state.meterAvailFilters.circle = val;
+      state.meterAvailPage = 1;
+      loadMeterAvailDashboard();
+    }
+  });
+
+  inventoryMultiSelects.filterMeterAvailDivision = new ModernMultiSelect({
+    id: 'filterMeterAvailDivision',
+    placeholder: 'All HigherOffices',
+    searchPlaceholder: 'Search Division...',
+    onSelectionChange: (val) => {
+      state.meterAvailFilters.division = val;
+      state.meterAvailPage = 1;
+      loadMeterAvailDashboard();
+    }
+  });
+
+  inventoryMultiSelects.filterMeterAvailVendor = new ModernMultiSelect({
+    id: 'filterMeterAvailVendor',
+    placeholder: 'All Vendors',
+    searchPlaceholder: 'Search Vendor...',
+    onSelectionChange: (val) => {
+      state.meterAvailFilters.vendor = val;
+      state.meterAvailPage = 1;
+      loadMeterAvailDashboard();
+    }
+  });
+
+  inventoryMultiSelects.filterMeterAvailStatusVendor = new ModernMultiSelect({
+    id: 'filterMeterAvailStatusVendor',
+    placeholder: 'All Vendors',
+    searchPlaceholder: 'Search Status...',
+    options: [
+      { value: 'Active', label: '🟢 Active Only' },
+      { value: 'In Active', label: '⚪ In Active' }
+    ],
+    onSelectionChange: (val) => {
+      state.meterAvailFilters.status_vendor = val;
+      state.meterAvailPage = 1;
+      loadMeterAvailDashboard();
+    }
+  });
+
+  inventoryMultiSelects.filterMeterAvailMeterType = new ModernMultiSelect({
+    id: 'filterMeterAvailMeterType',
+    placeholder: 'All Meter Types',
+    searchPlaceholder: 'Search Type...',
+    onSelectionChange: (val) => {
+      state.meterAvailFilters.meter_type = val;
+      state.meterAvailPage = 1;
+      loadMeterAvailDashboard();
+    }
+  });
+
+  inventoryMultiSelects.filterMeterAvailPhase = new ModernMultiSelect({
+    id: 'filterMeterAvailPhase',
+    placeholder: 'All Phases',
+    searchPlaceholder: 'Search Phase...',
+    onSelectionChange: (val) => {
+      state.meterAvailFilters.phase = val;
+      state.meterAvailPage = 1;
+      loadMeterAvailDashboard();
+    }
+  });
+
+  inventoryMultiSelects.filterMeterAvailCommType = new ModernMultiSelect({
+    id: 'filterMeterAvailCommType',
+    placeholder: 'All Comm Types',
+    searchPlaceholder: 'Search Comm...',
+    onSelectionChange: (val) => {
+      state.meterAvailFilters.comm_type = val;
+      state.meterAvailPage = 1;
+      loadMeterAvailDashboard();
+    }
+  });
+
+  inventoryMultiSelects.filterMeterAvailAging = new ModernMultiSelect({
+    id: 'filterMeterAvailAging',
+    placeholder: 'All Aging',
+    searchPlaceholder: 'Search Aging...',
+    options: [
+      { value: '0-7 days', label: '⚡ 0-7 Days' },
+      { value: '8-15 days', label: '⏳ 8-15 Days' },
+      { value: '15-30 days', label: '⚠️ 15-30 Days' },
+      { value: '>30 days', label: '🚨 >30 Days (Critical)' }
+    ],
+    onSelectionChange: (val) => {
+      state.meterAvailFilters.aging = val;
+      state.meterAvailPage = 1;
+      loadMeterAvailDashboard();
+    }
+  });
+
+  inventoryMultiSelects.filterMeterAvailMatch = new ModernMultiSelect({
+    id: 'filterMeterAvailMatch',
+    placeholder: 'All (Installed & Avail)',
+    searchPlaceholder: 'Search Status...',
+    options: [
+      { value: 'Installed', label: '✅ Installed (Master)' },
+      { value: 'Available', label: '📦 Available (Stock)' }
+    ],
+    onSelectionChange: (val) => {
+      state.meterAvailFilters.match_status = val;
+      state.meterAvailPage = 1;
+      loadMeterAvailDashboard();
+    }
+  });
+}
+
+function appendInventoryParams(params, filters) {
+  Object.keys(filters).forEach(key => {
+    const val = filters[key];
+    if (!val || val === 'ALL') return;
+    if (Array.isArray(val)) {
+      if (val.length > 0) params.append(key, val.join(','));
+    } else {
+      params.append(key, String(val));
+    }
+  });
+}
+
+function renderUnsyncKpiRibbon(kpi) {
+  if (!kpi) return;
+  const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  setEl('unsyncKpiTotal', (kpi.total || 0).toLocaleString());
+  setEl('unsyncKpiClosed', (kpi.matched || 0).toLocaleString());
+  setEl('unsyncKpiOpen', (kpi.pending || 0).toLocaleString());
+  const pct = Number(kpi.matched_pct || 0);
+  setEl('unsyncKpiRate', `${pct.toFixed(2)}%`);
+  const bar = document.getElementById('unsyncKpiRateBar');
+  if (bar) bar.style.width = `${Math.min(100, pct)}%`;
+  setEl('unsyncKpiCritical', (kpi.aging_gt_30 || 0).toLocaleString());
+}
+
+function renderMeterAvailKpiRibbon(kpi) {
+  if (!kpi) return;
+  const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  setEl('meterAvailKpiTotal', (kpi.total || 0).toLocaleString());
+  setEl('meterAvailKpiInstalled', (kpi.matched || 0).toLocaleString());
+  setEl('meterAvailKpiAvailable', (kpi.pending || 0).toLocaleString());
+  const pct = Number(kpi.matched_pct || 0);
+  setEl('meterAvailKpiRate', `${pct.toFixed(2)}%`);
+  const bar = document.getElementById('meterAvailKpiRateBar');
+  if (bar) bar.style.width = `${Math.min(100, pct)}%`;
+  setEl('meterAvailKpiCritical', (kpi.aging_gt_30 || 0).toLocaleString());
+}
+
 async function loadUnsyncFilters() {
   try {
     const res = await fetch('/api/inventory/filters?dashboard=unsync');
     const json = await res.json();
     if (!json.success) return;
 
-    const fillSelect = (id, list, placeholder) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      const cur = el.value || 'ALL';
-      el.innerHTML = `<option value="ALL">${placeholder}</option>` +
-        list.map(v => `<option value="${v}">${v}</option>`).join('');
-      if (list.includes(cur)) el.value = cur;
-      else el.value = 'ALL';
-    };
-
-    fillSelect('filterUnsyncCircle', json.circles || [], 'All Circles (SBPDCL Excluded)');
-    fillSelect('filterUnsyncDivision', json.divisions || [], 'All HigherOffices');
-    fillSelect('filterUnsyncVendor', json.vendors || [], 'All Vendors');
-    fillSelect('filterUnsyncCommType', json.comm_types || [], 'All Comm Types');
-    fillSelect('filterUnsyncMeterType', json.meter_types || [], 'All Meter Types');
-    fillSelect('filterUnsyncPhase', json.phases || [], 'All Phases');
+    if (inventoryMultiSelects.filterUnsyncCircle) inventoryMultiSelects.filterUnsyncCircle.setOptions(json.circles || []);
+    if (inventoryMultiSelects.filterUnsyncDivision) inventoryMultiSelects.filterUnsyncDivision.setOptions(json.divisions || []);
+    if (inventoryMultiSelects.filterUnsyncVendor) inventoryMultiSelects.filterUnsyncVendor.setOptions(json.vendors || []);
+    if (inventoryMultiSelects.filterUnsyncCommType) inventoryMultiSelects.filterUnsyncCommType.setOptions(json.comm_types || []);
+    if (inventoryMultiSelects.filterUnsyncMeterType) inventoryMultiSelects.filterUnsyncMeterType.setOptions(json.meter_types || []);
+    if (inventoryMultiSelects.filterUnsyncPhase) inventoryMultiSelects.filterUnsyncPhase.setOptions(json.phases || []);
   } catch (err) {
     console.error('Error loading unsync filters:', err);
   }
@@ -2342,22 +3179,12 @@ async function loadMeterAvailFilters() {
     const json = await res.json();
     if (!json.success) return;
 
-    const fillSelect = (id, list, placeholder) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      const cur = el.value || 'ALL';
-      el.innerHTML = `<option value="ALL">${placeholder}</option>` +
-        list.map(v => `<option value="${v}">${v}</option>`).join('');
-      if (list.includes(cur)) el.value = cur;
-      else el.value = 'ALL';
-    };
-
-    fillSelect('filterMeterAvailCircle', json.circles || [], 'All Circles (Including SBPDCL)');
-    fillSelect('filterMeterAvailDivision', json.divisions || [], 'All HigherOffices');
-    fillSelect('filterMeterAvailVendor', json.vendors || [], 'All Vendors');
-    fillSelect('filterMeterAvailCommType', json.comm_types || [], 'All Comm Types');
-    fillSelect('filterMeterAvailMeterType', json.meter_types || [], 'All Meter Types');
-    fillSelect('filterMeterAvailPhase', json.phases || [], 'All Phases');
+    if (inventoryMultiSelects.filterMeterAvailCircle) inventoryMultiSelects.filterMeterAvailCircle.setOptions(json.circles || []);
+    if (inventoryMultiSelects.filterMeterAvailDivision) inventoryMultiSelects.filterMeterAvailDivision.setOptions(json.divisions || []);
+    if (inventoryMultiSelects.filterMeterAvailVendor) inventoryMultiSelects.filterMeterAvailVendor.setOptions(json.vendors || []);
+    if (inventoryMultiSelects.filterMeterAvailCommType) inventoryMultiSelects.filterMeterAvailCommType.setOptions(json.comm_types || []);
+    if (inventoryMultiSelects.filterMeterAvailMeterType) inventoryMultiSelects.filterMeterAvailMeterType.setOptions(json.meter_types || []);
+    if (inventoryMultiSelects.filterMeterAvailPhase) inventoryMultiSelects.filterMeterAvailPhase.setOptions(json.phases || []);
   } catch (err) {
     console.error('Error loading meter available filters:', err);
   }
@@ -2384,11 +3211,23 @@ function updateInventoryBreadcrumbs(dashboard) {
   const chipVendor = document.getElementById(isUnsync ? 'chipUnsyncVendor' : 'chipMeterAvailVendor');
   const hintEl = document.getElementById(isUnsync ? 'unsyncBreadcrumbHint' : 'meterAvailBreadcrumbHint');
 
+  const formatVal = (v) => {
+    if (!v || v === 'ALL') return '';
+    if (Array.isArray(v)) {
+      if (v.length === 0) return '';
+      if (v.length === 1) return v[0];
+      if (v.length === 2) return `${v[0]}, ${v[1]}`;
+      return `${v[0]} (+${v.length - 1})`;
+    }
+    return String(v);
+  };
+
   let hasAny = false;
 
   if (chipCircle) {
-    if (filters.circle && filters.circle !== 'ALL') {
-      chipCircle.innerHTML = `<i class="fa-solid fa-circle-dot" style="color: #6366f1;"></i> Circle: <strong>${filters.circle}</strong> <span class="chip-remove" onclick="window.clearInventoryFilter('${dashboard}', 'circle')" title="Remove Circle filter">&times;</span>`;
+    const txt = formatVal(filters.circle);
+    if (txt) {
+      chipCircle.innerHTML = `<i class="fa-solid fa-circle-dot" style="color: #6366f1;"></i> Circle: <strong>${txt}</strong> <span class="chip-remove" onclick="window.clearInventoryFilter('${dashboard}', 'circle')" title="Remove Circle filter">&times;</span>`;
       chipCircle.style.display = 'inline-flex';
       hasAny = true;
     } else {
@@ -2397,8 +3236,9 @@ function updateInventoryBreadcrumbs(dashboard) {
   }
 
   if (chipDivision) {
-    if (filters.division && filters.division !== 'ALL') {
-      chipDivision.innerHTML = `<i class="fa-solid fa-building" style="color: #8b5cf6;"></i> Division: <strong>${filters.division}</strong> <span class="chip-remove" onclick="window.clearInventoryFilter('${dashboard}', 'division')" title="Remove Division filter">&times;</span>`;
+    const txt = formatVal(filters.division);
+    if (txt) {
+      chipDivision.innerHTML = `<i class="fa-solid fa-building" style="color: #8b5cf6;"></i> Division: <strong>${txt}</strong> <span class="chip-remove" onclick="window.clearInventoryFilter('${dashboard}', 'division')" title="Remove Division filter">&times;</span>`;
       chipDivision.style.display = 'inline-flex';
       hasAny = true;
     } else {
@@ -2407,8 +3247,9 @@ function updateInventoryBreadcrumbs(dashboard) {
   }
 
   if (chipVendor) {
-    if (filters.vendor && filters.vendor !== 'ALL') {
-      chipVendor.innerHTML = `<i class="fa-solid fa-truck-field" style="color: #f59e0b;"></i> Agency: <strong>${filters.vendor}</strong> <span class="chip-remove" onclick="window.clearInventoryFilter('${dashboard}', 'vendor')" title="Remove Agency filter">&times;</span>`;
+    const txt = formatVal(filters.vendor);
+    if (txt) {
+      chipVendor.innerHTML = `<i class="fa-solid fa-truck-field" style="color: #f59e0b;"></i> Agency: <strong>${txt}</strong> <span class="chip-remove" onclick="window.clearInventoryFilter('${dashboard}', 'vendor')" title="Remove Agency filter">&times;</span>`;
       chipVendor.style.display = 'inline-flex';
       hasAny = true;
     } else {
@@ -2418,8 +3259,9 @@ function updateInventoryBreadcrumbs(dashboard) {
 
   const chipComm = document.getElementById(isUnsync ? 'chipUnsyncCommType' : 'chipMeterAvailCommType');
   if (chipComm) {
-    if (filters.comm_type && filters.comm_type !== 'ALL') {
-      chipComm.innerHTML = `<i class="fa-solid fa-satellite-dish" style="color: #0284c7;"></i> Comm: <strong>${filters.comm_type}</strong> <span class="chip-remove" onclick="window.clearInventoryFilter('${dashboard}', 'comm_type')" title="Remove Comm Type filter">&times;</span>`;
+    const txt = formatVal(filters.comm_type);
+    if (txt) {
+      chipComm.innerHTML = `<i class="fa-solid fa-satellite-dish" style="color: #0284c7;"></i> Comm: <strong>${txt}</strong> <span class="chip-remove" onclick="window.clearInventoryFilter('${dashboard}', 'comm_type')" title="Remove Comm Type filter">&times;</span>`;
       chipComm.style.display = 'inline-flex';
       hasAny = true;
     } else {
@@ -2429,8 +3271,9 @@ function updateInventoryBreadcrumbs(dashboard) {
 
   const chipMeterType = document.getElementById(isUnsync ? 'chipUnsyncMeterType' : 'chipMeterAvailMeterType');
   if (chipMeterType) {
-    if (filters.meter_type && filters.meter_type !== 'ALL') {
-      chipMeterType.innerHTML = `<i class="fa-solid fa-gauge" style="color: #8b5cf6;"></i> Type: <strong>${filters.meter_type}</strong> <span class="chip-remove" onclick="window.clearInventoryFilter('${dashboard}', 'meter_type')" title="Remove Meter Type filter">&times;</span>`;
+    const txt = formatVal(filters.meter_type);
+    if (txt) {
+      chipMeterType.innerHTML = `<i class="fa-solid fa-gauge" style="color: #8b5cf6;"></i> Type: <strong>${txt}</strong> <span class="chip-remove" onclick="window.clearInventoryFilter('${dashboard}', 'meter_type')" title="Remove Meter Type filter">&times;</span>`;
       chipMeterType.style.display = 'inline-flex';
       hasAny = true;
     } else {
@@ -2440,8 +3283,9 @@ function updateInventoryBreadcrumbs(dashboard) {
 
   const chipPhase = document.getElementById(isUnsync ? 'chipUnsyncPhase' : 'chipMeterAvailPhase');
   if (chipPhase) {
-    if (filters.phase && filters.phase !== 'ALL') {
-      chipPhase.innerHTML = `<i class="fa-solid fa-bolt" style="color: #f59e0b;"></i> Phase: <strong>${filters.phase}</strong> <span class="chip-remove" onclick="window.clearInventoryFilter('${dashboard}', 'phase')" title="Remove Phase filter">&times;</span>`;
+    const txt = formatVal(filters.phase);
+    if (txt) {
+      chipPhase.innerHTML = `<i class="fa-solid fa-bolt" style="color: #f59e0b;"></i> Phase: <strong>${txt}</strong> <span class="chip-remove" onclick="window.clearInventoryFilter('${dashboard}', 'phase')" title="Remove Phase filter">&times;</span>`;
       chipPhase.style.display = 'inline-flex';
       hasAny = true;
     } else {
@@ -2461,60 +3305,48 @@ window.drilldownInventory = function(dashboard, level, val, parentCircle) {
   const filters = isUnsync ? state.unsyncFilters : state.meterAvailFilters;
 
   if (level === 'circle') {
-    filters.circle = val;
-    const cSel = document.getElementById(isUnsync ? 'filterUnsyncCircle' : 'filterMeterAvailCircle');
-    if (cSel) cSel.value = val;
+    filters.circle = [val];
+    const ms = inventoryMultiSelects[isUnsync ? 'filterUnsyncCircle' : 'filterMeterAvailCircle'];
+    if (ms) ms.setSelected([val]);
     if (isUnsync) {
       state.activeUnsyncType = 'division';
-      const s = document.getElementById('selectUnsyncType');
-      if (s) s.value = 'division';
       updateInventoryPills('unsync', 'division');
       loadUnsyncDashboard();
     } else {
       state.activeMeterAvailType = 'division';
-      const s = document.getElementById('selectMeterAvailType');
-      if (s) s.value = 'division';
       updateInventoryPills('meter_available', 'division');
       loadMeterAvailDashboard();
     }
   } else if (level === 'division') {
-    filters.division = val;
-    if (parentCircle && filters.circle === 'ALL') {
-      filters.circle = parentCircle;
-      const cSel = document.getElementById(isUnsync ? 'filterUnsyncCircle' : 'filterMeterAvailCircle');
-      if (cSel) cSel.value = parentCircle;
+    filters.division = [val];
+    const msDiv = inventoryMultiSelects[isUnsync ? 'filterUnsyncDivision' : 'filterMeterAvailDivision'];
+    if (msDiv) msDiv.setSelected([val]);
+    if (parentCircle && (!filters.circle || filters.circle === 'ALL' || (Array.isArray(filters.circle) && filters.circle.length === 0))) {
+      filters.circle = [parentCircle];
+      const msCirc = inventoryMultiSelects[isUnsync ? 'filterUnsyncCircle' : 'filterMeterAvailCircle'];
+      if (msCirc) msCirc.setSelected([parentCircle]);
     }
-    const dSel = document.getElementById(isUnsync ? 'filterUnsyncDivision' : 'filterMeterAvailDivision');
-    if (dSel) dSel.value = val;
     if (isUnsync) {
       state.activeUnsyncType = 'vendor';
-      const s = document.getElementById('selectUnsyncType');
-      if (s) s.value = 'vendor';
       updateInventoryPills('unsync', 'vendor');
       loadUnsyncDashboard();
     } else {
       state.activeMeterAvailType = 'vendor';
-      const s = document.getElementById('selectMeterAvailType');
-      if (s) s.value = 'vendor';
       updateInventoryPills('meter_available', 'vendor');
       loadMeterAvailDashboard();
     }
   } else if (level === 'vendor') {
-    filters.vendor = val;
-    const vSel = document.getElementById(isUnsync ? 'filterUnsyncVendor' : 'filterMeterAvailVendor');
-    if (vSel) vSel.value = val;
+    filters.vendor = [val];
+    const msVen = inventoryMultiSelects[isUnsync ? 'filterUnsyncVendor' : 'filterMeterAvailVendor'];
+    if (msVen) msVen.setSelected([val]);
     if (isUnsync) {
       state.activeUnsyncType = 'meters';
       state.unsyncPage = 1;
-      const s = document.getElementById('selectUnsyncType');
-      if (s) s.value = 'meters';
       updateInventoryPills('unsync', 'meters');
       loadUnsyncDashboard();
     } else {
       state.activeMeterAvailType = 'meters';
       state.meterAvailPage = 1;
-      const s = document.getElementById('selectMeterAvailType');
-      if (s) s.value = 'meters';
       updateInventoryPills('meter_available', 'meters');
       loadMeterAvailDashboard();
     }
@@ -2524,52 +3356,36 @@ window.drilldownInventory = function(dashboard, level, val, parentCircle) {
 window.clearInventoryFilter = function(dashboard, level) {
   const isUnsync = (dashboard === 'unsync');
   const filters = isUnsync ? state.unsyncFilters : state.meterAvailFilters;
-  if (level === 'circle') {
-    filters.circle = 'ALL';
-    const cSel = document.getElementById(isUnsync ? 'filterUnsyncCircle' : 'filterMeterAvailCircle');
-    if (cSel) cSel.value = 'ALL';
-  } else if (level === 'division') {
-    filters.division = 'ALL';
-    const dSel = document.getElementById(isUnsync ? 'filterUnsyncDivision' : 'filterMeterAvailDivision');
-    if (dSel) dSel.value = 'ALL';
-  } else if (level === 'vendor') {
-    filters.vendor = 'ALL';
-    const vSel = document.getElementById(isUnsync ? 'filterUnsyncVendor' : 'filterMeterAvailVendor');
-    if (vSel) vSel.value = 'ALL';
-  } else if (level === 'comm_type') {
-    filters.comm_type = 'ALL';
-    const sel = document.getElementById(isUnsync ? 'filterUnsyncCommType' : 'filterMeterAvailCommType');
-    if (sel) sel.value = 'ALL';
-  } else if (level === 'meter_type') {
-    filters.meter_type = 'ALL';
-    const sel = document.getElementById(isUnsync ? 'filterUnsyncMeterType' : 'filterMeterAvailMeterType');
-    if (sel) sel.value = 'ALL';
-  } else if (level === 'phase') {
-    filters.phase = 'ALL';
-    const sel = document.getElementById(isUnsync ? 'filterUnsyncPhase' : 'filterMeterAvailPhase');
-    if (sel) sel.value = 'ALL';
-  }
+  filters[level] = 'ALL';
+  const prefix = isUnsync ? 'filterUnsync' : 'filterMeterAvail';
+  const keyMap = {
+    circle: prefix + 'Circle',
+    division: prefix + 'Division',
+    vendor: prefix + 'Vendor',
+    status_vendor: prefix + 'StatusVendor',
+    comm_type: prefix + 'CommType',
+    meter_type: prefix + 'MeterType',
+    phase: prefix + 'Phase',
+    aging: prefix + 'Aging',
+    match_status: prefix + 'Match'
+  };
+  const ms = inventoryMultiSelects[keyMap[level]];
+  if (ms) ms.clear();
+
   if (isUnsync) loadUnsyncDashboard();
   else loadMeterAvailDashboard();
 };
 
 window.clearInventoryAllFilters = function(dashboard) {
   const isUnsync = (dashboard === 'unsync');
-  if (isUnsync) {
-    state.unsyncFilters = { circle: 'ALL', division: 'ALL', vendor: 'ALL', status_vendor: 'ALL', aging: 'ALL', match_status: 'ALL', comm_type: 'ALL', meter_type: 'ALL', phase: 'ALL' };
-    ['filterUnsyncCircle', 'filterUnsyncDivision', 'filterUnsyncVendor', 'filterUnsyncStatusVendor', 'filterUnsyncAging', 'filterUnsyncMatch', 'filterUnsyncCommType', 'filterUnsyncMeterType', 'filterUnsyncPhase'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.value = 'ALL';
-    });
-    loadUnsyncDashboard();
-  } else {
-    state.meterAvailFilters = { circle: 'ALL', division: 'ALL', vendor: 'ALL', status_vendor: 'ALL', aging: 'ALL', match_status: 'ALL', comm_type: 'ALL', meter_type: 'ALL', phase: 'ALL' };
-    ['filterMeterAvailCircle', 'filterMeterAvailDivision', 'filterMeterAvailVendor', 'filterMeterAvailStatusVendor', 'filterMeterAvailAging', 'filterMeterAvailMatch', 'filterMeterAvailCommType', 'filterMeterAvailMeterType', 'filterMeterAvailPhase'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.value = 'ALL';
-    });
-    loadMeterAvailDashboard();
-  }
+  const prefix = isUnsync ? 'filterUnsync' : 'filterMeterAvail';
+  const targetFilters = isUnsync ? state.unsyncFilters : state.meterAvailFilters;
+  Object.keys(targetFilters).forEach(k => targetFilters[k] = 'ALL');
+  Object.keys(inventoryMultiSelects).forEach(k => {
+    if (k.startsWith(prefix)) inventoryMultiSelects[k].clear();
+  });
+  if (isUnsync) loadUnsyncDashboard();
+  else loadMeterAvailDashboard();
 };
 
 function escapeAttr(s) {
@@ -2596,22 +3412,14 @@ async function loadUnsyncDashboard() {
 
   try {
     const params = new URLSearchParams({ dashboard: 'unsync' });
-    if (state.unsyncFilters.circle !== 'ALL') params.append('circle', state.unsyncFilters.circle);
-    if (state.unsyncFilters.division !== 'ALL') params.append('division', state.unsyncFilters.division);
-    if (state.unsyncFilters.vendor !== 'ALL') params.append('vendor', state.unsyncFilters.vendor);
-    if (state.unsyncFilters.status_vendor !== 'ALL') params.append('status_vendor', state.unsyncFilters.status_vendor);
-    if (state.unsyncFilters.aging !== 'ALL') params.append('aging', state.unsyncFilters.aging);
-    if (state.unsyncFilters.match_status !== 'ALL') params.append('match_status', state.unsyncFilters.match_status);
-    if (state.unsyncFilters.comm_type !== 'ALL') params.append('comm_type', state.unsyncFilters.comm_type);
-    if (state.unsyncFilters.meter_type !== 'ALL') params.append('meter_type', state.unsyncFilters.meter_type);
-    if (state.unsyncFilters.phase !== 'ALL') params.append('phase', state.unsyncFilters.phase);
+    appendInventoryParams(params, state.unsyncFilters);
 
     const res = await fetch(`/api/inventory/summary?${params.toString()}`);
     const json = await res.json();
     if (json.success) {
       state.unsyncData = json;
+      renderUnsyncKpiRibbon(json.kpi);
       renderUnsyncTable(json);
-      renderUnsyncCharts(json);
     } else {
       if (container) container.innerHTML = `<div style="color: #f43f5e; padding: 1rem;">Failed to load unsync summary: ${json.error}</div>`;
     }
@@ -2640,22 +3448,14 @@ async function loadMeterAvailDashboard() {
 
   try {
     const params = new URLSearchParams({ dashboard: 'meter_available' });
-    if (state.meterAvailFilters.circle !== 'ALL') params.append('circle', state.meterAvailFilters.circle);
-    if (state.meterAvailFilters.division !== 'ALL') params.append('division', state.meterAvailFilters.division);
-    if (state.meterAvailFilters.vendor !== 'ALL') params.append('vendor', state.meterAvailFilters.vendor);
-    if (state.meterAvailFilters.status_vendor !== 'ALL') params.append('status_vendor', state.meterAvailFilters.status_vendor);
-    if (state.meterAvailFilters.aging !== 'ALL') params.append('aging', state.meterAvailFilters.aging);
-    if (state.meterAvailFilters.match_status !== 'ALL') params.append('match_status', state.meterAvailFilters.match_status);
-    if (state.meterAvailFilters.comm_type !== 'ALL') params.append('comm_type', state.meterAvailFilters.comm_type);
-    if (state.meterAvailFilters.meter_type !== 'ALL') params.append('meter_type', state.meterAvailFilters.meter_type);
-    if (state.meterAvailFilters.phase !== 'ALL') params.append('phase', state.meterAvailFilters.phase);
+    appendInventoryParams(params, state.meterAvailFilters);
 
     const res = await fetch(`/api/inventory/summary?${params.toString()}`);
     const json = await res.json();
     if (json.success) {
       state.meterAvailData = json;
+      renderMeterAvailKpiRibbon(json.kpi);
       renderMeterAvailTable(json);
-      renderMeterAvailCharts(json);
     } else {
       if (container) container.innerHTML = `<div style="color: #f43f5e; padding: 1rem;">Failed to load meter available summary: ${json.error}</div>`;
     }
@@ -2741,7 +3541,7 @@ function renderUnsyncTable(data) {
           <th class="text-right">Total Scope</th>
           <th class="text-right">Closed (Installed)</th>
           <th class="text-right">Open Unsync</th>
-          <th class="text-right">Closure Rate (%)</th>
+          <th class="text-right" style="min-width: 140px;">Closure Rate (%)</th>
           ${!isVendor ? '<th class="text-right">Active Vendor</th><th class="text-right">In Active</th>' : ''}
           <th class="text-right">0-7 Days</th>
           <th class="text-right">8-15 Days</th>
@@ -2765,6 +3565,10 @@ function renderUnsyncTable(data) {
             actionBtn = `<td class="text-center"><button type="button" class="btn-table-action" onclick="event.stopPropagation(); window.drilldownInventory('unsync', 'vendor', '${escapeAttr(r.vendor)}')"><i class="fa-solid fa-list-check"></i> Meters &rarr;</button></td>`;
           }
 
+          const mPct = Number(r.matched_pct || 0);
+          const mBadge = mPct >= 75 ? 'badge-emerald' : (mPct >= 35 ? 'badge-amber' : 'badge-cyan');
+          const mBarColor = mPct >= 75 ? '#10b981' : (mPct >= 35 ? '#f59e0b' : '#0284c7');
+
           return `
             <tr class="${(isCircle || isDivision || isVendor) ? 'interactive-row' : ''}" ${rowClick}>
               <td>
@@ -2778,7 +3582,14 @@ function renderUnsyncTable(data) {
               <td class="text-right" style="color: var(--brand-cyan); font-weight:700;">${(r.total || 0).toLocaleString()}</td>
               <td class="text-right" style="color: #10b981; font-weight:700;">${(r.matched || 0).toLocaleString()}</td>
               <td class="text-right" style="color: #f59e0b; font-weight:700;">${(r.pending || 0).toLocaleString()}</td>
-              <td class="text-right"><span class="badge ${Number(r.matched_pct || 0) > 10 ? 'badge-emerald' : 'badge-cyan'}">${Number(r.matched_pct || 0).toFixed(2)}%</span></td>
+              <td class="text-right">
+                <div class="rate-progress-wrapper">
+                  <span class="badge ${mBadge}" style="font-weight:700; min-width:50px; text-align:center;">${mPct.toFixed(2)}%</span>
+                  <div class="rate-progress-track">
+                    <div class="rate-progress-bar" style="width: ${Math.min(100, mPct)}%; background: ${mBarColor};"></div>
+                  </div>
+                </div>
+              </td>
               ${!isVendor ? `<td class="text-right" style="color: #6366f1;">${(r.active_count || 0).toLocaleString()}</td><td class="text-right" style="color: var(--text-muted);">${(r.inactive_count || 0).toLocaleString()}</td>` : ''}
               <td class="text-right">${(r.aging_0_7 || 0).toLocaleString()}</td>
               <td class="text-right">${(r.aging_8_15 || 0).toLocaleString()}</td>
@@ -2797,7 +3608,14 @@ function renderUnsyncTable(data) {
           <td class="text-right"><strong>${totalScope.toLocaleString()}</strong></td>
           <td class="text-right"><strong>${totalClosed.toLocaleString()}</strong></td>
           <td class="text-right"><strong>${totalOpen.toLocaleString()}</strong></td>
-          <td class="text-right"><strong>${avgClosureRate}%</strong></td>
+          <td class="text-right">
+            <div class="rate-progress-wrapper">
+              <strong style="color: #0284c7; min-width: 50px; text-align: right;">${avgClosureRate}%</strong>
+              <div class="rate-progress-track">
+                <div class="rate-progress-bar" style="width: ${Math.min(100, Number(avgClosureRate))}%; background: linear-gradient(90deg, #0284c7, #10b981);"></div>
+              </div>
+            </div>
+          </td>
           ${!isVendor ? `<td class="text-right"><strong>${totalActive.toLocaleString()}</strong></td><td class="text-right"><strong>${totalInactive.toLocaleString()}</strong></td>` : ''}
           <td class="text-right"><strong>${totalAging07.toLocaleString()}</strong></td>
           <td class="text-right"><strong>${totalAging815.toLocaleString()}</strong></td>
@@ -2887,7 +3705,7 @@ function renderMeterAvailTable(data) {
           <th class="text-right">Total Available Stock</th>
           <th class="text-right">Installed in Master</th>
           <th class="text-right">Available (Not Installed)</th>
-          <th class="text-right">Installed Rate (%)</th>
+          <th class="text-right" style="min-width: 140px;">Installed Rate (%)</th>
           ${!isVendor ? '<th class="text-right">Active Vendor</th><th class="text-right">In Active</th>' : ''}
           <th class="text-right">0-7 Days</th>
           <th class="text-right">8-15 Days</th>
@@ -2911,6 +3729,10 @@ function renderMeterAvailTable(data) {
             actionBtn = `<td class="text-center"><button type="button" class="btn-table-action" onclick="event.stopPropagation(); window.drilldownInventory('meter_available', 'vendor', '${escapeAttr(r.vendor)}')"><i class="fa-solid fa-list-check"></i> Meters &rarr;</button></td>`;
           }
 
+          const mPct = Number(r.matched_pct || 0);
+          const mBadge = mPct >= 1 ? 'badge-emerald' : 'badge-amber';
+          const mBarColor = mPct >= 1 ? '#10b981' : '#f59e0b';
+
           return `
             <tr class="${(isCircle || isDivision || isVendor) ? 'interactive-row' : ''}" ${rowClick}>
               <td>
@@ -2925,7 +3747,14 @@ function renderMeterAvailTable(data) {
               <td class="text-right" style="color: var(--brand-cyan); font-weight:700;">${(r.total || 0).toLocaleString()}</td>
               <td class="text-right" style="color: #10b981; font-weight:700;">${(r.matched || 0).toLocaleString()}</td>
               <td class="text-right" style="color: #f59e0b; font-weight:700;">${(r.pending || 0).toLocaleString()}</td>
-              <td class="text-right"><span class="badge ${Number(r.matched_pct || 0) > 1 ? 'badge-emerald' : 'badge-amber'}">${Number(r.matched_pct || 0).toFixed(2)}%</span></td>
+              <td class="text-right">
+                <div class="rate-progress-wrapper">
+                  <span class="badge ${mBadge}" style="font-weight:700; min-width:50px; text-align:center;">${mPct.toFixed(2)}%</span>
+                  <div class="rate-progress-track">
+                    <div class="rate-progress-bar" style="width: ${Math.min(100, mPct)}%; background: ${mBarColor};"></div>
+                  </div>
+                </div>
+              </td>
               ${!isVendor ? `<td class="text-right" style="color: #6366f1;">${(r.active_count || 0).toLocaleString()}</td><td class="text-right" style="color: var(--text-muted);">${(r.inactive_count || 0).toLocaleString()}</td>` : ''}
               <td class="text-right">${(r.aging_0_7 || 0).toLocaleString()}</td>
               <td class="text-right">${(r.aging_8_15 || 0).toLocaleString()}</td>
@@ -2944,7 +3773,14 @@ function renderMeterAvailTable(data) {
           <td class="text-right"><strong>${totalScope.toLocaleString()}</strong></td>
           <td class="text-right"><strong>${totalInstalled.toLocaleString()}</strong></td>
           <td class="text-right"><strong>${totalAvailable.toLocaleString()}</strong></td>
-          <td class="text-right"><strong>${avgInstRate}%</strong></td>
+          <td class="text-right">
+            <div class="rate-progress-wrapper">
+              <strong style="color: #10b981; min-width: 50px; text-align: right;">${avgInstRate}%</strong>
+              <div class="rate-progress-track">
+                <div class="rate-progress-bar" style="width: ${Math.min(100, Number(avgInstRate))}%; background: linear-gradient(90deg, #10b981, #0284c7);"></div>
+              </div>
+            </div>
+          </td>
           ${!isVendor ? `<td class="text-right"><strong>${totalActive.toLocaleString()}</strong></td><td class="text-right"><strong>${totalInactive.toLocaleString()}</strong></td>` : ''}
           <td class="text-right"><strong>${totalAging07.toLocaleString()}</strong></td>
           <td class="text-right"><strong>${totalAging815.toLocaleString()}</strong></td>
@@ -2971,15 +3807,7 @@ async function renderUnsyncMetersTable() {
       limit: state.unsyncPageLimit,
       search: state.searchFilters.unsync || ''
     });
-    if (state.unsyncFilters.circle !== 'ALL') params.append('circle', state.unsyncFilters.circle);
-    if (state.unsyncFilters.division !== 'ALL') params.append('division', state.unsyncFilters.division);
-    if (state.unsyncFilters.vendor !== 'ALL') params.append('vendor', state.unsyncFilters.vendor);
-    if (state.unsyncFilters.status_vendor !== 'ALL') params.append('status_vendor', state.unsyncFilters.status_vendor);
-    if (state.unsyncFilters.aging !== 'ALL') params.append('aging', state.unsyncFilters.aging);
-    if (state.unsyncFilters.match_status !== 'ALL') params.append('match_status', state.unsyncFilters.match_status);
-    if (state.unsyncFilters.comm_type !== 'ALL') params.append('comm_type', state.unsyncFilters.comm_type);
-    if (state.unsyncFilters.meter_type !== 'ALL') params.append('meter_type', state.unsyncFilters.meter_type);
-    if (state.unsyncFilters.phase !== 'ALL') params.append('phase', state.unsyncFilters.phase);
+    appendInventoryParams(params, state.unsyncFilters);
 
     const res = await fetch(`/api/inventory/table?${params.toString()}`);
     const json = await res.json();
@@ -3068,15 +3896,7 @@ async function renderMeterAvailMetersTable() {
       limit: state.meterAvailPageLimit,
       search: state.searchFilters.meter_available || ''
     });
-    if (state.meterAvailFilters.circle !== 'ALL') params.append('circle', state.meterAvailFilters.circle);
-    if (state.meterAvailFilters.division !== 'ALL') params.append('division', state.meterAvailFilters.division);
-    if (state.meterAvailFilters.vendor !== 'ALL') params.append('vendor', state.meterAvailFilters.vendor);
-    if (state.meterAvailFilters.status_vendor !== 'ALL') params.append('status_vendor', state.meterAvailFilters.status_vendor);
-    if (state.meterAvailFilters.aging !== 'ALL') params.append('aging', state.meterAvailFilters.aging);
-    if (state.meterAvailFilters.match_status !== 'ALL') params.append('match_status', state.meterAvailFilters.match_status);
-    if (state.meterAvailFilters.comm_type !== 'ALL') params.append('comm_type', state.meterAvailFilters.comm_type);
-    if (state.meterAvailFilters.meter_type !== 'ALL') params.append('meter_type', state.meterAvailFilters.meter_type);
-    if (state.meterAvailFilters.phase !== 'ALL') params.append('phase', state.meterAvailFilters.phase);
+    appendInventoryParams(params, state.meterAvailFilters);
 
     const res = await fetch(`/api/inventory/table?${params.toString()}`);
     const json = await res.json();
@@ -3152,259 +3972,24 @@ async function renderMeterAvailMetersTable() {
 }
 
 function renderUnsyncCharts(data) {
-  if (!data) return;
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  const textColor = isDark ? '#94a3b8' : '#475569';
-  const gridColor = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)';
-
-  // 1. Aging Stacked Bar Chart
-  const agingCanvas = document.getElementById('chartUnsyncAging');
-  if (agingCanvas && data.aging) {
-    if (state.charts.unsyncAging) state.charts.unsyncAging.destroy();
-    const ctx = agingCanvas.getContext('2d');
-    const buckets = data.aging;
-    state.charts.unsyncAging = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: buckets.map(b => b.aging_bucket),
-        datasets: [
-          { label: 'Closed in Master', data: buckets.map(b => b.matched), backgroundColor: '#10b981', borderRadius: 4 },
-          { label: 'Open Unsync', data: buckets.map(b => b.pending), backgroundColor: '#f43f5e', borderRadius: 4 }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          x: { stacked: true, ticks: { color: textColor }, grid: { display: false } },
-          y: { stacked: true, ticks: { color: textColor, callback: v => (v >= 1000 ? (v/1000).toFixed(0) + 'k' : v) }, grid: { color: gridColor } }
-        },
-        plugins: { legend: { position: 'top', labels: { color: textColor } } }
-      }
-    });
-  }
-
-  // 2. Top Divisions Bar Chart
-  const divCanvas = document.getElementById('chartUnsyncDivisions');
-  if (divCanvas && data.divisions) {
-    if (state.charts.unsyncDivs) state.charts.unsyncDivs.destroy();
-    const topDivs = (data.divisions || []).slice(0, 10);
-    const ctx = divCanvas.getContext('2d');
-    state.charts.unsyncDivs = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: topDivs.map(d => d.division),
-        datasets: [
-          { label: 'Closed', data: topDivs.map(d => d.matched), backgroundColor: '#10b981' },
-          { label: 'Open Unsync', data: topDivs.map(d => d.pending), backgroundColor: '#8b5cf6' }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        indexAxis: 'y',
-        scales: {
-          x: { stacked: true, ticks: { color: textColor }, grid: { color: gridColor } },
-          y: { stacked: true, ticks: { color: textColor, font: { size: 11 } }, grid: { display: false } }
-        },
-        plugins: { legend: { position: 'top', labels: { color: textColor } } }
-      }
-    });
-  }
-
-  // 3. Circle Share Donut (Excludes SBPDCL)
-  const circleCanvas = document.getElementById('chartUnsyncCircles');
-  if (circleCanvas && data.circles) {
-    if (state.charts.unsyncCircles) state.charts.unsyncCircles.destroy();
-    const ctx = circleCanvas.getContext('2d');
-    state.charts.unsyncCircles = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: data.circles.map(c => `${c.circle} (${c.total.toLocaleString()})`),
-        datasets: [{
-          data: data.circles.map(c => c.total),
-          backgroundColor: PALETTES.circles,
-          borderColor: isDark ? '#0d1b2e' : '#ffffff',
-          borderWidth: 2
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { position: 'right', labels: { color: textColor, font: { size: 10 } } } }
-      }
-    });
-  }
-
-  // 4. Vendor Breakdown Chart
-  const vendorCanvas = document.getElementById('chartUnsyncVendors');
-  if (vendorCanvas && data.vendors) {
-    if (state.charts.unsyncVendors) state.charts.unsyncVendors.destroy();
-    const topVendors = (data.vendors || []).slice(0, 8);
-    const ctx = vendorCanvas.getContext('2d');
-    state.charts.unsyncVendors = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: topVendors.map(v => v.vendor),
-        datasets: [
-          { label: 'Closed', data: topVendors.map(v => v.matched), backgroundColor: '#10b981' },
-          { label: 'Open Unsync', data: topVendors.map(v => v.pending), backgroundColor: '#f59e0b' }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          x: { stacked: true, ticks: { color: textColor, maxRotation: 45 }, grid: { display: false } },
-          y: { stacked: true, ticks: { color: textColor }, grid: { color: gridColor } }
-        },
-        plugins: { legend: { position: 'top', labels: { color: textColor } } }
-      }
-    });
-  }
+  // Focus mode: charts removed in favor of clean, beautiful tables
+  return;
 }
 
 function renderMeterAvailCharts(data) {
-  if (!data) return;
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  const textColor = isDark ? '#94a3b8' : '#475569';
-  const gridColor = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)';
-
-  // 1. Available Aging Bar Chart
-  const agingCanvas = document.getElementById('chartMeterAvailAging');
-  if (agingCanvas && data.aging) {
-    if (state.charts.meterAvailAging) state.charts.meterAvailAging.destroy();
-    const ctx = agingCanvas.getContext('2d');
-    state.charts.meterAvailAging = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: data.aging.map(b => b.aging_bucket),
-        datasets: [{
-          label: 'Available Stock',
-          data: data.aging.map(b => b.pending),
-          backgroundColor: '#0284c7',
-          borderRadius: 4
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          x: { ticks: { color: textColor }, grid: { display: false } },
-          y: { ticks: { color: textColor, callback: v => (v >= 1000 ? (v/1000).toFixed(0) + 'k' : v) }, grid: { color: gridColor } }
-        },
-        plugins: { legend: { display: false } }
-      }
-    });
-  }
-
-  // 2. Circle Stock Donut (Includes SBPDCL)
-  const circleCanvas = document.getElementById('chartMeterAvailCircles');
-  if (circleCanvas && data.circles) {
-    if (state.charts.meterAvailCircles) state.charts.meterAvailCircles.destroy();
-    const ctx = circleCanvas.getContext('2d');
-    state.charts.meterAvailCircles = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: data.circles.map(c => `${c.circle} (${c.total.toLocaleString()})`),
-        datasets: [{
-          data: data.circles.map(c => c.total),
-          backgroundColor: [...PALETTES.circles, '#ec4899', '#6366f1', '#14b8a6'],
-          borderColor: isDark ? '#0d1b2e' : '#ffffff',
-          borderWidth: 2
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { position: 'right', labels: { color: textColor, font: { size: 10 } } } }
-      }
-    });
-  }
-
-  // 3. Top Divisions Stock
-  const divCanvas = document.getElementById('chartMeterAvailDivisions');
-  if (divCanvas && data.divisions) {
-    if (state.charts.meterAvailDivs) state.charts.meterAvailDivs.destroy();
-    const topDivs = (data.divisions || []).slice(0, 10);
-    const ctx = divCanvas.getContext('2d');
-    state.charts.meterAvailDivs = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: topDivs.map(d => d.division),
-        datasets: [{
-          label: 'Available Meters',
-          data: topDivs.map(d => d.total),
-          backgroundColor: '#8b5cf6',
-          borderRadius: 4
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        indexAxis: 'y',
-        scales: {
-          x: { ticks: { color: textColor, callback: v => (v >= 1000 ? (v/1000).toFixed(0) + 'k' : v) }, grid: { color: gridColor } },
-          y: { ticks: { color: textColor, font: { size: 11 } }, grid: { display: false } }
-        },
-        plugins: { legend: { display: false } }
-      }
-    });
-  }
-
-  // 4. Top Vendors Available Allocation
-  const vendorCanvas = document.getElementById('chartMeterAvailVendors');
-  if (vendorCanvas && data.vendors) {
-    if (state.charts.meterAvailVendors) state.charts.meterAvailVendors.destroy();
-    const topVendors = (data.vendors || []).slice(0, 8);
-    const ctx = vendorCanvas.getContext('2d');
-    state.charts.meterAvailVendors = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: topVendors.map(v => v.vendor),
-        datasets: [
-          { label: 'Installed in Master', data: topVendors.map(v => v.matched), backgroundColor: '#0284c7' },
-          { label: 'Available (Not Installed)', data: topVendors.map(v => v.pending), backgroundColor: '#10b981' }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          x: { stacked: true, ticks: { color: textColor, maxRotation: 45 }, grid: { display: false } },
-          y: { stacked: true, ticks: { color: textColor, callback: v => (v >= 1000 ? (v/1000).toFixed(0) + 'k' : v) }, grid: { color: gridColor } }
-        },
-        plugins: { legend: { position: 'top', labels: { color: textColor } } }
-      }
-    });
-  }
+  // Focus mode: charts removed in favor of clean, beautiful tables
+  return;
 }
 
 function exportUnsyncCsv() {
   const params = new URLSearchParams({ dashboard: 'unsync' });
-  if (state.unsyncFilters.circle !== 'ALL') params.append('circle', state.unsyncFilters.circle);
-  if (state.unsyncFilters.division !== 'ALL') params.append('division', state.unsyncFilters.division);
-  if (state.unsyncFilters.vendor !== 'ALL') params.append('vendor', state.unsyncFilters.vendor);
-  if (state.unsyncFilters.status_vendor !== 'ALL') params.append('status_vendor', state.unsyncFilters.status_vendor);
-  if (state.unsyncFilters.aging !== 'ALL') params.append('aging', state.unsyncFilters.aging);
-  if (state.unsyncFilters.match_status !== 'ALL') params.append('match_status', state.unsyncFilters.match_status);
-  if (state.unsyncFilters.comm_type !== 'ALL') params.append('comm_type', state.unsyncFilters.comm_type);
-  if (state.unsyncFilters.meter_type !== 'ALL') params.append('meter_type', state.unsyncFilters.meter_type);
-  if (state.unsyncFilters.phase !== 'ALL') params.append('phase', state.unsyncFilters.phase);
+  appendInventoryParams(params, state.unsyncFilters);
   window.location.href = `/api/inventory/export?${params.toString()}`;
 }
 
 function exportMeterAvailCsv() {
   const params = new URLSearchParams({ dashboard: 'meter_available' });
-  if (state.meterAvailFilters.circle !== 'ALL') params.append('circle', state.meterAvailFilters.circle);
-  if (state.meterAvailFilters.division !== 'ALL') params.append('division', state.meterAvailFilters.division);
-  if (state.meterAvailFilters.vendor !== 'ALL') params.append('vendor', state.meterAvailFilters.vendor);
-  if (state.meterAvailFilters.status_vendor !== 'ALL') params.append('status_vendor', state.meterAvailFilters.status_vendor);
-  if (state.meterAvailFilters.aging !== 'ALL') params.append('aging', state.meterAvailFilters.aging);
-  if (state.meterAvailFilters.match_status !== 'ALL') params.append('match_status', state.meterAvailFilters.match_status);
-  if (state.meterAvailFilters.comm_type !== 'ALL') params.append('comm_type', state.meterAvailFilters.comm_type);
-  if (state.meterAvailFilters.meter_type !== 'ALL') params.append('meter_type', state.meterAvailFilters.meter_type);
-  if (state.meterAvailFilters.phase !== 'ALL') params.append('phase', state.meterAvailFilters.phase);
+  appendInventoryParams(params, state.meterAvailFilters);
   window.location.href = `/api/inventory/export?${params.toString()}`;
 }
 

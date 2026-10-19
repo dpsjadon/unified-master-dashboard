@@ -15,7 +15,8 @@
   
   <script src="chart.umd.min.js"></script>
   <script src="jszip.min.js"></script>
-  <link rel="stylesheet" href="style.css?v=20261012_v4">
+  <script src="html2canvas.min.js"></script>
+  <link rel="stylesheet" href="style.css?v=20261019_v5">
 
   <style id="minimalist-mobile-core">
 
@@ -425,12 +426,556 @@
       color: #38bdf8 !important;
     }
 
-    /* Smart Meter & MSN Search Mode: Simple layout, no KPI cards or circle filter */
+    /* Clean Focus Mode: When on Search, Unsync, or Meter Available tabs, hide clumsy cards & duplicate slicers */
     body.search-tab-active #kpiGridSection,
     body.search-tab-active .kpi-grid,
     body.search-tab-active #circleSlicerSection,
-    body.search-tab-active .circle-slicer-section {
+    body.search-tab-active .circle-slicer-section,
+    body.inventory-focus-mode #kpiGridSection,
+    body.inventory-focus-mode .kpi-grid,
+    body.inventory-focus-mode #circleSlicerSection,
+    body.inventory-focus-mode .circle-slicer-section {
       display: none !important;
+    }
+
+    /* =======================================================
+       MODERN EXECUTIVE INVENTORY DASHBOARD ARCHITECTURE
+       ======================================================= */
+    .inventory-command-bar {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      flex-wrap: wrap !important;
+      gap: 10px !important;
+      margin-bottom: 10px !important;
+      width: 100% !important;
+    }
+
+    .inventory-interactive-pills {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 4px !important;
+      background: #f1f5f9 !important;
+      padding: 4px !important;
+      border-radius: 10px !important;
+      border: 1px solid #cbd5e1 !important;
+      flex-wrap: wrap !important;
+    }
+    [data-theme="dark"] .inventory-interactive-pills {
+      background: #0f1d30 !important;
+      border-color: rgba(255, 255, 255, 0.08) !important;
+    }
+
+    .inv-pill-btn {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      padding: 6px 13px !important;
+      font-size: 0.78rem !important;
+      font-weight: 600 !important;
+      color: #475569 !important;
+      background: transparent !important;
+      border: none !important;
+      border-radius: 7px !important;
+      cursor: pointer !important;
+      transition: all 0.2s ease !important;
+      white-space: nowrap !important;
+      outline: none !important;
+    }
+    [data-theme="dark"] .inv-pill-btn {
+      color: #94a3b8 !important;
+    }
+    .inv-pill-btn:hover {
+      color: #0284c7 !important;
+      background: rgba(2, 132, 199, 0.08) !important;
+    }
+    .inv-pill-btn.active {
+      background: #ffffff !important;
+      color: #0284c7 !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+    }
+    [data-theme="dark"] .inv-pill-btn.active {
+      background: #1e293b !important;
+      color: #38bdf8 !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    .inventory-top-actions {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      flex-wrap: wrap !important;
+      margin-left: auto !important;
+    }
+
+    .inv-search-box {
+      position: relative !important;
+      display: inline-flex !important;
+      align-items: center !important;
+    }
+    .inv-search-box i {
+      position: absolute !important;
+      left: 10px !important;
+      font-size: 0.80rem !important;
+      color: #94a3b8 !important;
+      pointer-events: none !important;
+    }
+    .inv-search-input {
+      padding: 6px 12px 6px 30px !important;
+      font-size: 0.80rem !important;
+      font-weight: 500 !important;
+      border-radius: 8px !important;
+      border: 1px solid #cbd5e1 !important;
+      background: #ffffff !important;
+      color: #0f172a !important;
+      width: 220px !important;
+      outline: none !important;
+      transition: all 0.2s ease !important;
+      height: 34px !important;
+      box-sizing: border-box !important;
+    }
+    [data-theme="dark"] .inv-search-input {
+      background: #0f1d30 !important;
+      border-color: rgba(255, 255, 255, 0.12) !important;
+      color: #f1f5f9 !important;
+    }
+    .inv-search-input:focus {
+      border-color: #0284c7 !important;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15) !important;
+      width: 260px !important;
+    }
+
+    .inv-action-btn {
+      padding: 6px 13px !important;
+      font-size: 0.78rem !important;
+      font-weight: 600 !important;
+      border-radius: 8px !important;
+      height: 34px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      white-space: nowrap !important;
+      cursor: pointer !important;
+      transition: all 0.15s ease !important;
+    }
+
+    /* Modern Structured Filter Panel */
+    .inventory-filter-panel {
+      display: flex !important;
+      align-items: flex-end !important;
+      flex-wrap: wrap !important;
+      gap: 8px 10px !important;
+      background: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
+      border-radius: 12px !important;
+      padding: 10px 14px !important;
+      margin-bottom: 12px !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    [data-theme="dark"] .inventory-filter-panel {
+      background: #0f1d30 !important;
+      border-color: rgba(255, 255, 255, 0.08) !important;
+    }
+
+    .inv-filter-group {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 3px !important;
+      flex: 1 1 125px !important;
+      min-width: 120px !important;
+      max-width: 220px !important;
+    }
+
+    .inv-filter-label {
+      font-size: 0.68rem !important;
+      font-weight: 700 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.4px !important;
+      color: #64748b !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 4px !important;
+      user-select: none !important;
+    }
+    [data-theme="dark"] .inv-filter-label {
+      color: #94a3b8 !important;
+    }
+
+    .inv-select {
+      appearance: none !important;
+      -webkit-appearance: none !important;
+      background-color: #f8fafc !important;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%230284c7' stroke-width='2.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") !important;
+      background-repeat: no-repeat !important;
+      background-position: right 8px center !important;
+      background-size: 11px 11px !important;
+      border: 1px solid #cbd5e1 !important;
+      border-radius: 7px !important;
+      padding: 5px 24px 5px 8px !important;
+      font-size: 0.78rem !important;
+      font-weight: 600 !important;
+      color: #0f172a !important;
+      cursor: pointer !important;
+      outline: none !important;
+      transition: all 0.15s ease !important;
+      height: 32px !important;
+      width: 100% !important;
+      font-family: inherit !important;
+    }
+    [data-theme="dark"] .inv-select {
+      background-color: #13253e !important;
+      border-color: rgba(255, 255, 255, 0.14) !important;
+      color: #f1f5f9 !important;
+    }
+    .inv-select:hover {
+      border-color: #0284c7 !important;
+      background-color: #ffffff !important;
+    }
+    [data-theme="dark"] .inv-select:hover {
+      border-color: #38bdf8 !important;
+      background-color: #162c4b !important;
+    }
+    .inv-select:focus {
+      border-color: #0284c7 !important;
+      box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.2) !important;
+    }
+    .inv-select.active-filter {
+      background-color: #f0f9ff !important;
+      border-color: #0284c7 !important;
+      color: #0284c7 !important;
+      font-weight: 700 !important;
+    }
+    [data-theme="dark"] .inv-select.active-filter {
+      background-color: rgba(2, 132, 199, 0.18) !important;
+      border-color: #38bdf8 !important;
+      color: #38bdf8 !important;
+    }
+
+    /* Integrated Table KPI Ribbon */
+    .table-kpi-ribbon {
+      display: grid !important;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)) !important;
+      gap: 10px !important;
+      padding: 12px 16px !important;
+      background: #f8fafc !important;
+      border-bottom: 1px solid #e2e8f0 !important;
+      border-radius: 12px 12px 0 0 !important;
+    }
+    [data-theme="dark"] .table-kpi-ribbon {
+      background: #0d1b2e !important;
+      border-color: rgba(255, 255, 255, 0.08) !important;
+    }
+
+    .kpi-mini-pill {
+      display: flex !important;
+      flex-direction: column !important;
+      padding: 7px 11px !important;
+      background: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
+      border-radius: 8px !important;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+    }
+    [data-theme="dark"] .kpi-mini-pill {
+      background: #111f35 !important;
+      border-color: rgba(255, 255, 255, 0.06) !important;
+    }
+
+    .kpi-mini-label {
+      font-size: 0.68rem !important;
+      font-weight: 600 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.3px !important;
+      color: #64748b !important;
+      margin-bottom: 2px !important;
+    }
+    [data-theme="dark"] .kpi-mini-label {
+      color: #94a3b8 !important;
+    }
+
+    .kpi-mini-val {
+      font-size: 1.15rem !important;
+      font-weight: 800 !important;
+      color: #0f172a !important;
+      line-height: 1.1 !important;
+      font-family: var(--font-heading) !important;
+    }
+    [data-theme="dark"] .kpi-mini-val {
+      color: #f8fafc !important;
+    }
+    .kpi-mini-val.text-emerald { color: #10b981 !important; }
+    .kpi-mini-val.text-amber { color: #f59e0b !important; }
+    .kpi-mini-val.text-cyan { color: #0284c7 !important; }
+    .kpi-mini-val.text-rose { color: #f43f5e !important; }
+    .kpi-mini-val.text-indigo { color: #6366f1 !important; }
+
+    .kpi-mini-bar {
+      height: 4px !important;
+      background: #e2e8f0 !important;
+      border-radius: 2px !important;
+      overflow: hidden !important;
+      margin-top: 5px !important;
+    }
+    [data-theme="dark"] .kpi-mini-bar {
+      background: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .kpi-mini-bar-fill {
+      height: 100% !important;
+      background: linear-gradient(90deg, #0284c7, #10b981) !important;
+      border-radius: 2px !important;
+      transition: width 0.3s ease !important;
+    }
+
+    /* Rate Progress Column in Table */
+    .rate-progress-wrapper {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 7px !important;
+      min-width: 105px !important;
+    }
+    .rate-progress-text {
+      font-weight: 700 !important;
+      font-size: 0.78rem !important;
+      min-width: 42px !important;
+      text-align: right !important;
+    }
+    .rate-progress-track {
+      flex: 1 !important;
+      height: 6px !important;
+      background: rgba(0, 0, 0, 0.06) !important;
+      border-radius: 3px !important;
+      overflow: hidden !important;
+    }
+    [data-theme="dark"] .rate-progress-track {
+      background: rgba(255, 255, 255, 0.1) !important;
+    }
+    .rate-progress-bar {
+      height: 100% !important;
+      border-radius: 3px !important;
+      transition: width 0.3s ease !important;
+    }
+
+    /* Modern Multi-Select Dropdown Component */
+    .inv-ms-wrapper {
+      position: relative !important;
+      width: 100% !important;
+    }
+    .inv-ms-btn {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 6px !important;
+      width: 100% !important;
+      height: 32px !important;
+      padding: 4px 8px !important;
+      background: #f8fafc !important;
+      border: 1px solid #cbd5e1 !important;
+      border-radius: 7px !important;
+      font-size: 0.77rem !important;
+      font-weight: 600 !important;
+      color: #0f172a !important;
+      cursor: pointer !important;
+      outline: none !important;
+      transition: all 0.15s ease !important;
+      box-sizing: border-box !important;
+      text-align: left !important;
+      font-family: inherit !important;
+    }
+    [data-theme="dark"] .inv-ms-btn {
+      background: #13253e !important;
+      border-color: rgba(255, 255, 255, 0.14) !important;
+      color: #f1f5f9 !important;
+    }
+    .inv-ms-btn:hover {
+      border-color: #0284c7 !important;
+      background: #ffffff !important;
+    }
+    [data-theme="dark"] .inv-ms-btn:hover {
+      border-color: #38bdf8 !important;
+      background: #162c4b !important;
+    }
+    .inv-ms-btn.active-filter {
+      background: #f0f9ff !important;
+      border-color: #0284c7 !important;
+      color: #0284c7 !important;
+      box-shadow: 0 0 0 1px rgba(2, 132, 199, 0.3) !important;
+    }
+    [data-theme="dark"] .inv-ms-btn.active-filter {
+      background: rgba(2, 132, 199, 0.22) !important;
+      border-color: #38bdf8 !important;
+      color: #38bdf8 !important;
+    }
+    .inv-ms-label {
+      flex: 1 1 auto !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+    }
+    .inv-ms-badge {
+      display: none;
+      align-items: center !important;
+      justify-content: center !important;
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      font-size: 0.65rem !important;
+      font-weight: 700 !important;
+      padding: 1px 5px !important;
+      border-radius: 9999px !important;
+      flex-shrink: 0 !important;
+      line-height: 1 !important;
+    }
+    [data-theme="dark"] .inv-ms-badge {
+      background: #0ea5e9 !important;
+      color: #041221 !important;
+    }
+    .inv-ms-clear-btn {
+      color: #94a3b8 !important;
+      font-size: 0.9rem !important;
+      line-height: 1 !important;
+      cursor: pointer !important;
+      padding: 0 2px !important;
+      border-radius: 3px !important;
+      transition: color 0.15s ease !important;
+    }
+    .inv-ms-clear-btn:hover {
+      color: #f43f5e !important;
+    }
+    .inv-ms-arrow {
+      font-size: 0.62rem !important;
+      color: #94a3b8 !important;
+      transition: transform 0.2s ease !important;
+      flex-shrink: 0 !important;
+    }
+    .inv-ms-wrapper.open {
+      z-index: 1050 !important;
+    }
+    .inv-ms-wrapper.open .inv-ms-arrow {
+      transform: rotate(180deg) !important;
+      color: #0284c7 !important;
+    }
+    .inv-ms-dropdown {
+      position: absolute !important;
+      top: calc(100% + 4px) !important;
+      left: 0 !important;
+      min-width: 220px !important;
+      max-width: 280px !important;
+      background: #ffffff !important;
+      border: 1px solid #cbd5e1 !important;
+      border-radius: 9px !important;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.18), 0 8px 10px -6px rgba(0,0,0,0.1) !important;
+      z-index: 1050 !important;
+      overflow: hidden !important;
+      display: none;
+    }
+    [data-theme="dark"] .inv-ms-dropdown {
+      background: #0d1b2e !important;
+      border-color: rgba(255, 255, 255, 0.16) !important;
+      box-shadow: 0 12px 30px -4px rgba(0,0,0,0.6) !important;
+    }
+    .inv-ms-wrapper.open .inv-ms-dropdown {
+      display: block !important;
+      animation: msPopIn 0.15s ease-out !important;
+    }
+    @keyframes msPopIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .inv-ms-header {
+      padding: 6px 8px !important;
+      background: #f1f5f9 !important;
+      border-bottom: 1px solid #e2e8f0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 5px !important;
+    }
+    [data-theme="dark"] .inv-ms-header {
+      background: #13253e !important;
+      border-color: rgba(255, 255, 255, 0.08) !important;
+    }
+    .inv-ms-search-input {
+      width: 100% !important;
+      padding: 4px 8px !important;
+      font-size: 0.74rem !important;
+      font-weight: 500 !important;
+      border-radius: 5px !important;
+      border: 1px solid #cbd5e1 !important;
+      background: #ffffff !important;
+      color: #0f172a !important;
+      outline: none !important;
+      box-sizing: border-box !important;
+    }
+    [data-theme="dark"] .inv-ms-search-input {
+      background: #091322 !important;
+      border-color: rgba(255, 255, 255, 0.15) !important;
+      color: #f1f5f9 !important;
+    }
+    .inv-ms-search-input:focus {
+      border-color: #0284c7 !important;
+    }
+    .inv-ms-toolbar {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      font-size: 0.70rem !important;
+    }
+    .inv-ms-quick-btn {
+      background: transparent !important;
+      border: none !important;
+      color: #0284c7 !important;
+      font-weight: 700 !important;
+      font-size: 0.70rem !important;
+      cursor: pointer !important;
+      padding: 1px 4px !important;
+      border-radius: 3px !important;
+    }
+    [data-theme="dark"] .inv-ms-quick-btn {
+      color: #38bdf8 !important;
+    }
+    .inv-ms-quick-btn:hover {
+      background: rgba(2, 132, 199, 0.12) !important;
+    }
+    .inv-ms-options-list {
+      max-height: 200px !important;
+      overflow-y: auto !important;
+      padding: 4px !important;
+      scrollbar-width: thin !important;
+    }
+    .inv-ms-option {
+      display: flex !important;
+      align-items: center !important;
+      gap: 7px !important;
+      padding: 4px 7px !important;
+      border-radius: 5px !important;
+      font-size: 0.76rem !important;
+      font-weight: 500 !important;
+      color: #1e293b !important;
+      cursor: pointer !important;
+      user-select: none !important;
+      transition: background 0.12s ease !important;
+    }
+    [data-theme="dark"] .inv-ms-option {
+      color: #e2e8f0 !important;
+    }
+    .inv-ms-option:hover {
+      background: #f1f5f9 !important;
+    }
+    [data-theme="dark"] .inv-ms-option:hover {
+      background: #172a44 !important;
+    }
+    .inv-ms-option input[type="checkbox"] {
+      width: 13px !important;
+      height: 13px !important;
+      accent-color: #0284c7 !important;
+      cursor: pointer !important;
+      margin: 0 !important;
+    }
+    .inv-ms-option span {
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      flex: 1 !important;
     }
 
     .mobile-only { display: none !important; }
@@ -1281,90 +1826,158 @@
 
 </head>
 <body>
-  <!-- Header Bar -->
-  <header class="app-header">
-    <div class="header-container">
-      <div class="brand">
-        <div class="brand-logo">
-          <i class="fa-solid fa-bolt-lightning"></i>
+  <!-- App Shell Layout (Collapsible Sidebar + Main Viewport) -->
+  <div class="app-layout" id="appLayout">
+    <!-- Modern Collapsible Executive Sidebar -->
+    <aside class="app-sidebar" id="appSidebar">
+      <!-- Sidebar Header / Branding -->
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <div class="sidebar-logo">
+            <i class="fa-solid fa-bolt-lightning"></i>
+          </div>
+          <div class="sidebar-brand-text">
+            <span class="brand-title">IntelliSmart</span>
+            <span class="brand-subtitle">SBPDCL Operations</span>
+          </div>
         </div>
-        <div class="brand-info">
-          <h1>IntelliSmart SBPDCL <span class="mobile-live-dot" title="Live MDM Connected"></span></h1>
-          <p>Unified Smart Meter Intelligence & Executive Platform</p>
-        </div>
+        <button type="button" class="sidebar-toggle-btn" id="sidebarCollapseBtn" title="Collapse / Expand Sidebar (Ctrl+B)">
+          <i class="fa-solid fa-chevron-left" id="sidebarToggleIcon"></i>
+        </button>
       </div>
 
-      <div class="header-actions">
-        <!-- Live Data Reporting Timestamp in Header -->
-        <div class="header-reporting-badge desktop-only" id="headerReportingBadge" title="Timestamp of latest MDM data synchronization">
+      <!-- Live Connection Pill -->
+      <div class="sidebar-status-box">
+        <div class="status-indicator">
           <span class="pulse-dot"></span>
-          <i class="fa-solid fa-cloud-arrow-down"></i>
-          <span class="report-label">Data Synced:</span>
-          <strong id="scopeReportDownloadTime" class="report-time">2026-10-14 15:15:03 IST</strong>
+          <span class="status-text">LIVE MDM CONNECTED</span>
         </div>
-
-        <!-- Separate MDM Sync Buttons as requested -->
-        <button id="btnSyncDaily" class="btn btn-outline" title="Trigger Automated Download of Daily Reports from SBPDCL MDM">
-          <i class="fa-solid fa-calendar-day" id="iconSyncDaily"></i> <span class="btn-text-desktop">Sync Daily (MDM)</span><span class="btn-text-mobile">Daily</span>
-        </button>
-
-        <button id="btnSyncMaster" class="btn btn-primary" title="Trigger Automated Download & Compilation of Total Smart Meters Master Database">
-          <i class="fa-solid fa-database" id="iconSyncMaster"></i> <span class="btn-text-desktop">Sync Master (MDM)</span><span class="btn-text-mobile">Master</span>
-        </button>
-
-        <button id="btnSyncInventoryHeader" class="btn btn-primary" style="background: linear-gradient(135deg, #0284c7, #0369a1); border-color: #0284c7; color: #fff;" title="Reconcile and Sync Unsync & Meter Available Inventory immediately">
-          <i class="fa-solid fa-rotate" id="iconSyncInventory"></i> <span class="btn-text-desktop">Sync Inventory</span><span class="btn-text-mobile">Inventory</span>
-        </button>
-
-        <button id="btnSyncUlaHeader" class="btn btn-primary" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9); border-color: #8b5cf6; color: #fff;" title="Reconcile and Sync ULA Metering Scope immediately">
-          <i class="fa-solid fa-rotate" id="iconSyncUlaHeader"></i> <span class="btn-text-desktop">Sync ULA</span><span class="btn-text-mobile">ULA</span>
-        </button>
-
-        <!-- Theme Toggle (Accessible Day/Night switcher) -->
-        <button id="btnThemeToggle" class="btn-icon theme-toggle-btn" title="Toggle Light / Dark Mode" aria-label="Toggle Theme">
-          <i class="fa-solid fa-moon" id="themeIcon"></i>
-        </button>
+        <div class="status-time" id="sidebarSyncTime">1.12M Master Records</div>
       </div>
-    </div>
-  </header>
 
-  <!-- Minimalist Clean Mobile Scope Strip -->
-  <div class="mobile-scope-strip mobile-only">
-    <div class="scope-pill-tag"><i class="fa-solid fa-bolt"></i> <strong id="mobileScopeDiscomText">SBPDCL</strong> <span id="mobileScopeTotal">1.12M Meters</span></div>
-    <div class="mobile-scope-right">
-      <div class="scope-pill-tag date-tag"><i class="fa-solid fa-cloud-arrow-down"></i> <span id="mobileReportDownloadTime">Live IST</span></div>
-      <button id="btnMobileThemeToggle" class="mobile-theme-btn" title="Toggle Day / Night Mode" aria-label="Toggle Theme">
-        <i class="fa-solid fa-moon" id="mobileThemeIcon"></i>
-      </button>
-    </div>
-  </div>
+      <!-- Navigation Tree -->
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">EXECUTIVE ANALYTICS</div>
 
-  <!-- Primary Multi-Tab Navigation (World-Class Executive Tab Bar) -->
-  <nav class="main-nav-tabs">
-    <button class="main-tab-btn active" data-tab="tabCumulative">
-      <i class="fa-solid fa-chart-pie"></i> Cumulative Master Analytics
-      <span class="tab-badge">1.12M Records</span>
-    </button>
-    <button class="main-tab-btn" data-tab="tabDaily">
-      <i class="fa-solid fa-bolt-lightning"></i> Daily Installation & Field Status
-      <span class="tab-badge" id="tabDailyBadge">1,788 Daily</span>
-    </button>
-    <button class="main-tab-btn" data-tab="tabUla">
-      <i class="fa-solid fa-arrows-to-dot"></i> ULA Metering Tracker
-      <span class="tab-badge">91.0K Scope</span>
-    </button>
-    <button class="main-tab-btn" data-tab="tabUnsync">
-      <i class="fa-solid fa-arrows-rotate"></i> Unsync
-      <span class="tab-badge" id="tabUnsyncBadge">5,087 Unsync</span>
-    </button>
-    <button class="main-tab-btn" data-tab="tabMeterAvailable">
-      <i class="fa-solid fa-boxes-stacked"></i> Meter Available
-      <span class="tab-badge" id="tabMeterAvailBadge">123K Available</span>
-    </button>
-    <button class="main-tab-btn" data-tab="tabSearch">
-      <i class="fa-solid fa-magnifying-glass"></i> Smart Meter & MSN Search
-    </button>
-  </nav>
+        <button type="button" class="sidebar-nav-item main-tab-btn active" data-tab="tabCumulative" title="Cumulative Master Analytics (1.12M Scope)">
+          <div class="nav-icon-wrapper"><i class="fa-solid fa-chart-pie"></i></div>
+          <span class="nav-label">Cumulative Master</span>
+          <span class="tab-badge badge-cyan">1.12M</span>
+        </button>
+
+        <button type="button" class="sidebar-nav-item main-tab-btn" data-tab="tabDaily" title="Daily Installation Velocity & Field Status">
+          <div class="nav-icon-wrapper"><i class="fa-solid fa-bolt-lightning"></i></div>
+          <span class="nav-label">Daily Installation</span>
+          <span class="tab-badge badge-emerald" id="tabDailyBadge">1,788 Daily</span>
+        </button>
+
+        <button type="button" class="sidebar-nav-item main-tab-btn" data-tab="tabUla" title="ULA Metering Scope Tracker (91K Scope)">
+          <div class="nav-icon-wrapper"><i class="fa-solid fa-arrows-to-dot"></i></div>
+          <span class="nav-label">ULA Metering</span>
+          <span class="tab-badge badge-purple">91.0K</span>
+        </button>
+
+        <div class="nav-section-label">INVENTORY &amp; QUALITY</div>
+
+        <button type="button" class="sidebar-nav-item main-tab-btn" data-tab="tabUnsync" title="Unsync Report & Master Resolution">
+          <div class="nav-icon-wrapper"><i class="fa-solid fa-arrows-rotate"></i></div>
+          <span class="nav-label">Unsync Report</span>
+          <span class="tab-badge badge-amber" id="tabUnsyncBadge">5,087</span>
+        </button>
+
+        <button type="button" class="sidebar-nav-item main-tab-btn" data-tab="tabMeterAvailable" title="Meter Available Stock & Vendor Ledger">
+          <div class="nav-icon-wrapper"><i class="fa-solid fa-boxes-stacked"></i></div>
+          <span class="nav-label">Meter Available</span>
+          <span class="tab-badge badge-indigo" id="tabMeterAvailBadge">123K</span>
+        </button>
+
+        <div class="nav-section-label">ENTERPRISE TOOLS</div>
+
+        <button type="button" class="sidebar-nav-item main-tab-btn" data-tab="tabSearch" title="Smart Meter & MSN Master Search">
+          <div class="nav-icon-wrapper"><i class="fa-solid fa-magnifying-glass"></i></div>
+          <span class="nav-label">MSN &amp; Meter Search</span>
+        </button>
+      </nav>
+
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+        <div class="sidebar-theme-card">
+          <div class="theme-info">
+            <i class="fa-solid fa-circle-half-stroke"></i>
+            <span>Theme Mode</span>
+          </div>
+          <button type="button" id="btnThemeToggleSidebar" class="sidebar-theme-btn" title="Toggle Light / Dark Mode">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+        </div>
+        <div class="sidebar-collapse-hint">
+          <kbd>Ctrl+B</kbd> Toggle Sidebar
+        </div>
+      </div>
+    </aside>
+
+    <!-- Mobile Drawer Backdrop -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <!-- Main Viewport Column -->
+    <div class="app-main-viewport">
+      <!-- Top Sticky Cockpit Header -->
+      <header class="app-header">
+        <div class="header-container">
+          <div class="header-left">
+            <button type="button" id="btnSidebarToggle" class="sidebar-mobile-toggle" title="Toggle Sidebar Navigation" aria-label="Toggle Sidebar">
+              <i class="fa-solid fa-bars-staggered"></i>
+            </button>
+            <div class="header-breadcrumb">
+              <span class="breadcrumb-prefix">IntelliSmart SBPDCL</span>
+              <i class="fa-solid fa-chevron-right breadcrumb-separator"></i>
+              <span class="breadcrumb-active" id="headerActiveTabTitle">
+                <i class="fa-solid fa-chart-pie"></i> Cumulative Master Analytics
+              </span>
+            </div>
+          </div>
+
+          <div class="header-actions">
+            <!-- Live Data Reporting Timestamp in Header -->
+            <div class="header-reporting-badge desktop-only" id="headerReportingBadge" title="Timestamp of latest MDM data synchronization">
+              <span class="pulse-dot"></span>
+              <i class="fa-solid fa-cloud-arrow-down"></i>
+              <span class="report-label">Data Synced:</span>
+              <strong id="scopeReportDownloadTime" class="report-time">2026-10-14 15:15:03 IST</strong>
+            </div>
+
+            <!-- Separate MDM Sync Buttons as requested -->
+            <button id="btnSyncDaily" class="btn btn-outline" title="Trigger Automated Download of Daily Reports from SBPDCL MDM">
+              <i class="fa-solid fa-calendar-day" id="iconSyncDaily"></i> <span class="btn-text-desktop">Sync Daily</span><span class="btn-text-mobile">Daily</span>
+            </button>
+
+            <button id="btnSyncMaster" class="btn btn-primary" title="Trigger Automated Download & Compilation of Total Smart Meters Master Database">
+              <i class="fa-solid fa-database" id="iconSyncMaster"></i> <span class="btn-text-desktop">Sync Master</span><span class="btn-text-mobile">Master</span>
+            </button>
+
+            <button id="btnSyncInventoryHeader" class="btn btn-primary" style="background: linear-gradient(135deg, #0284c7, #0369a1); border-color: #0284c7; color: #fff;" title="Reconcile and Sync Unsync & Meter Available Inventory immediately">
+              <i class="fa-solid fa-rotate" id="iconSyncInventory"></i> <span class="btn-text-desktop">Sync Inventory</span><span class="btn-text-mobile">Inventory</span>
+            </button>
+
+            <button id="btnSyncUlaHeader" class="btn btn-primary" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9); border-color: #8b5cf6; color: #fff;" title="Reconcile and Sync ULA Metering Scope immediately">
+              <i class="fa-solid fa-rotate" id="iconSyncUlaHeader"></i> <span class="btn-text-desktop">Sync ULA</span><span class="btn-text-mobile">ULA</span>
+            </button>
+
+            <!-- Theme Toggle -->
+            <button id="btnThemeToggle" class="btn-icon theme-toggle-btn" title="Toggle Light / Dark Mode" aria-label="Toggle Theme">
+              <i class="fa-solid fa-moon" id="themeIcon"></i>
+            </button>
+
+            <!-- Fullscreen Toggle -->
+            <button id="btnFullscreenToggle" class="btn-icon desktop-only" title="Toggle Fullscreen Mode" aria-label="Toggle Fullscreen">
+              <i class="fa-solid fa-expand"></i>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- App Canvas Container -->
+      <div class="app-canvas-container">
 
   <!-- Universal Circle Wise Slicer Bar (Positioned Directly Above KPI Cards) -->
   <section class="circle-slicer-section" id="circleSlicerSection">
@@ -1546,15 +2159,21 @@
     </div>
 
     <!-- Active Summary Table Card -->
-    <div class="table-card">
+    <div class="table-card" id="cumulativeTableCard">
       <div class="table-header-row">
         <div class="table-title">
           <i class="fa-solid fa-table-list" style="color: var(--brand-cyan);"></i>
           <h3 id="cumulativeTableTitle">Circle Wise Summary Table</h3>
           <span class="badge badge-cyan" id="cumulativeTableRowCount">7 Rows</span>
         </div>
-        <div>
-          <input type="text" id="searchCumulative" class="styled-input" placeholder="Search table..." style="width: 260px;">
+        <div class="table-actions-cluster">
+          <input type="text" id="searchCumulative" class="styled-input table-search-input" placeholder="Search table...">
+          <button type="button" class="btn-action-pic" onclick="copyTableAsPicture('cumulativeTableCard', document.getElementById('cumulativeTableTitle')?.textContent || 'Cumulative Master Summary')" title="Copy Table as High-Resolution Picture directly to Clipboard">
+            <i class="fa-solid fa-camera"></i> Copy Picture
+          </button>
+          <button type="button" class="btn-action-icon" onclick="downloadTableAsPicture('cumulativeTableCard', document.getElementById('cumulativeTableTitle')?.textContent || 'Cumulative Master Summary')" title="Download High-Resolution PNG Picture">
+            <i class="fa-solid fa-download"></i>
+          </button>
         </div>
       </div>
 
@@ -1643,15 +2262,21 @@
     </div>
 
     <!-- Active Daily Table Card -->
-    <div class="table-card">
+    <div class="table-card" id="dailyTableCard">
       <div class="table-header-row">
         <div class="table-title">
           <i class="fa-solid fa-bolt-lightning" style="color: #10b981;"></i>
           <h3 id="dailyTableTitle">Division Wise Daily Installation Table</h3>
           <span class="badge badge-emerald" id="dailyTableRowCount">26 Divisions</span>
         </div>
-        <div>
-          <input type="text" id="searchDaily" class="styled-input" placeholder="Search daily table..." style="width: 260px;">
+        <div class="table-actions-cluster">
+          <input type="text" id="searchDaily" class="styled-input table-search-input" placeholder="Search daily table...">
+          <button type="button" class="btn-action-pic" onclick="copyTableAsPicture('dailyTableCard', document.getElementById('dailyTableTitle')?.textContent || 'Daily Installation Summary')" title="Copy Table as High-Resolution Picture directly to Clipboard">
+            <i class="fa-solid fa-camera"></i> Copy Picture
+          </button>
+          <button type="button" class="btn-action-icon" onclick="downloadTableAsPicture('dailyTableCard', document.getElementById('dailyTableTitle')?.textContent || 'Daily Installation Summary')" title="Download High-Resolution PNG Picture">
+            <i class="fa-solid fa-download"></i>
+          </button>
         </div>
       </div>
 
@@ -1722,15 +2347,21 @@
     </div>
 
     <!-- Active ULA Table Card -->
-    <div class="table-card">
+    <div class="table-card" id="ulaTableCard">
       <div class="table-header-row">
         <div class="table-title">
           <i class="fa-solid fa-arrows-to-dot" style="color: #8b5cf6;"></i>
           <h3 id="ulaTableTitle">Circle Wise ULA Progress Table</h3>
           <span class="badge badge-purple" id="ulaTableRowCount">7 Circles</span>
         </div>
-        <div>
-          <input type="text" id="searchUla" class="styled-input" placeholder="Search ULA table..." style="width: 260px;">
+        <div class="table-actions-cluster">
+          <input type="text" id="searchUla" class="styled-input table-search-input" placeholder="Search ULA table...">
+          <button type="button" class="btn-action-pic" onclick="copyTableAsPicture('ulaTableCard', document.getElementById('ulaTableTitle')?.textContent || 'ULA Progress Summary')" title="Copy Table as High-Resolution Picture directly to Clipboard">
+            <i class="fa-solid fa-camera"></i> Copy Picture
+          </button>
+          <button type="button" class="btn-action-icon" onclick="downloadTableAsPicture('ulaTableCard', document.getElementById('ulaTableTitle')?.textContent || 'ULA Progress Summary')" title="Download High-Resolution PNG Picture">
+            <i class="fa-solid fa-download"></i>
+          </button>
         </div>
       </div>
 
@@ -1765,190 +2396,170 @@
 
   <!-- TAB: UNSYNC DASHBOARD (Excludes Circle SBPDCL) -->
   <main id="tabUnsync" class="tab-content">
-    <!-- Unsync Analytics Toolbar & Filter Bar -->
-    <div class="executive-analytics-toolbar" style="flex-wrap: wrap; gap: 10px;">
-      <!-- Dimension Selector -->
-      <div class="toolbar-filter-item">
-        <label for="selectUnsyncType" class="toolbar-label">
-          <i class="fa-solid fa-layer-group" style="color: #0284c7;"></i> Dimension:
-        </label>
-        <div class="select-wrapper">
-          <select id="selectUnsyncType" class="executive-select" aria-label="Select Breakdown Dimension">
-            <option value="circle" selected>🌐 Circle Wise Summary (Excl. SBPDCL)</option>
-            <option value="division">🏛️ Division Wise (HigherOffice)</option>
-            <option value="vendor">🛡️ Agency / Vendor Wise</option>
-            <option value="aging">⏳ Aging Breakdown (0-7d, 8-15d, 15-30d, >30d)</option>
-            <option value="meter_type">📦 Meter Type (Consumer / DT / Feeder)</option>
-            <option value="phase">⚡ Phase Wise (1-Phase / 3-Phase)</option>
-            <option value="comm_type">📡 Communication Type (GPRS / RF)</option>
-            <option value="meters">🔍 Detailed Meters Inspection List</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Status-Vendor Filter (User Explicit Requirement!) -->
-      <div class="toolbar-filter-item">
-        <label for="filterUnsyncStatusVendor" class="toolbar-label">
-          <i class="fa-solid fa-user-check" style="color: #10b981;"></i> Status-Vendor:
-        </label>
-        <div class="select-wrapper">
-          <select id="filterUnsyncStatusVendor" class="executive-select">
-            <option value="ALL">All (Active & In Active)</option>
-            <option value="Active">🟢 Active Vendors Only</option>
-            <option value="In Active">⚪ In Active Vendors</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Circle Filter -->
-      <div class="toolbar-filter-item">
-        <label for="filterUnsyncCircle" class="toolbar-label">
-          <i class="fa-solid fa-circle-dot" style="color: #6366f1;"></i> Circle:
-        </label>
-        <div class="select-wrapper">
-          <select id="filterUnsyncCircle" class="executive-select">
-            <option value="ALL">All Circles (Excl. SBPDCL)</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Division Filter -->
-      <div class="toolbar-filter-item">
-        <label for="filterUnsyncDivision" class="toolbar-label">
-          <i class="fa-solid fa-building" style="color: #8b5cf6;"></i> HigherOffice:
-        </label>
-        <div class="select-wrapper">
-          <select id="filterUnsyncDivision" class="executive-select">
-            <option value="ALL">All HigherOffices</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Vendor Filter -->
-      <div class="toolbar-filter-item">
-        <label for="filterUnsyncVendor" class="toolbar-label">
-          <i class="fa-solid fa-truck-field" style="color: #f59e0b;"></i> Vendor:
-        </label>
-        <div class="select-wrapper">
-          <select id="filterUnsyncVendor" class="executive-select">
-            <option value="ALL">All Vendors</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Aging Filter -->
-      <div class="toolbar-filter-item">
-        <label for="filterUnsyncAging" class="toolbar-label">
-          <i class="fa-solid fa-clock" style="color: #f43f5e;"></i> Aging Bucket:
-        </label>
-        <div class="select-wrapper">
-          <select id="filterUnsyncAging" class="executive-select">
-            <option value="ALL">All Aging Buckets</option>
-            <option value="0-7 days">⚡ 0-7 Days (Fresh)</option>
-            <option value="8-15 days">⏳ 8-15 Days</option>
-            <option value="15-30 days">⚠️ 15-30 Days</option>
-            <option value=">30 days">🚨 >30 Days (Critical)</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Unsync Status Filter -->
-      <div class="toolbar-filter-item">
-        <label for="filterUnsyncMatch" class="toolbar-label">
-          <i class="fa-solid fa-flag" style="color: #06b6d4;"></i> Unsync Status:
-        </label>
-        <div class="select-wrapper">
-          <select id="filterUnsyncMatch" class="executive-select">
-            <option value="ALL">All (Closed & Open)</option>
-            <option value="Closed">✅ Closed (Matched in Master)</option>
-            <option value="Unsync">🔄 Unsync (Open)</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Communication Type Filter -->
-      <div class="toolbar-filter-item">
-        <label for="filterUnsyncCommType" class="toolbar-label">
-          <i class="fa-solid fa-satellite-dish" style="color: #0284c7;"></i> Comm Type:
-        </label>
-        <div class="select-wrapper">
-          <select id="filterUnsyncCommType" class="executive-select">
-            <option value="ALL">All Comm Types</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Meter Type Filter -->
-      <div class="toolbar-filter-item">
-        <label for="filterUnsyncMeterType" class="toolbar-label">
-          <i class="fa-solid fa-gauge" style="color: #8b5cf6;"></i> Meter Type:
-        </label>
-        <div class="select-wrapper">
-          <select id="filterUnsyncMeterType" class="executive-select">
-            <option value="ALL">All Meter Types</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Phase Filter -->
-      <div class="toolbar-filter-item">
-        <label for="filterUnsyncPhase" class="toolbar-label">
-          <i class="fa-solid fa-bolt" style="color: #f59e0b;"></i> Phase:
-        </label>
-        <div class="select-wrapper">
-          <select id="filterUnsyncPhase" class="executive-select">
-            <option value="ALL">All Phases</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="toolbar-actions-group" style="display: flex; gap: 8px; align-items: flex-end;">
-        <button id="btnSyncUnsync" class="btn btn-primary" style="background: linear-gradient(135deg, #0284c7, #0369a1); border-color: #0284c7; color: #fff; font-weight: 600;" title="Sync and reconcile Unsync data immediately with latest report">
-          <i class="fa-solid fa-rotate" id="iconSyncUnsync"></i> Sync Unsync Data
-        </button>
-        <button id="btnResetUnsyncFilters" class="btn btn-secondary" title="Reset all Unsync filters">
-          <i class="fa-solid fa-rotate-left"></i> Reset
-        </button>
-        <button id="btnExportUnsyncCsv" class="btn btn-export" title="Export Unsync data to CSV">
-          <i class="fa-solid fa-file-excel"></i> Export CSV
-        </button>
-      </div>
-    </div>
-
-    <!-- Active Unsync Table Card -->
-    <div class="table-card">
-      <!-- Interactive Segmented Pill Switcher (Circle / Division / Agency / Aging / Meters) -->
+    <!-- TOP COMMAND BAR: View Navigation Pills + Search & Action Controls -->
+    <div class="inventory-command-bar">
+      <!-- Interactive Segmented Pill Switcher -->
       <div class="inventory-interactive-pills" id="unsyncPillGroup">
         <button type="button" class="inv-pill-btn active" data-inv-tab="unsync" data-type="circle">
-          <i class="fa-solid fa-circle-notch"></i> Circle Wise Summary
+          <i class="fa-solid fa-circle-notch"></i> Circle Summary
         </button>
         <button type="button" class="inv-pill-btn" data-inv-tab="unsync" data-type="division">
-          <i class="fa-solid fa-building"></i> Division Wise (HigherOffice)
+          <i class="fa-solid fa-building"></i> Division Summary
         </button>
         <button type="button" class="inv-pill-btn" data-inv-tab="unsync" data-type="vendor">
-          <i class="fa-solid fa-truck-field"></i> Agency (Vendor) Wise
+          <i class="fa-solid fa-truck-field"></i> Agency Wise
         </button>
         <button type="button" class="inv-pill-btn" data-inv-tab="unsync" data-type="aging">
-          <i class="fa-solid fa-clock"></i> Aging Breakdown
+          <i class="fa-solid fa-clock"></i> Aging Analysis
         </button>
         <button type="button" class="inv-pill-btn" data-inv-tab="unsync" data-type="meters">
           <i class="fa-solid fa-list-check"></i> Detailed Meters Ledger
         </button>
       </div>
 
-      <!-- Interactive Hierarchy & Drilldown Breadcrumb Strip -->
-      <div class="interactive-breadcrumb-bar" id="unsyncBreadcrumbsBar">
-        <span class="breadcrumb-label"><i class="fa-solid fa-sitemap"></i> Active Drilldown:</span>
-        <span class="breadcrumb-chip" id="chipUnsyncCircle" style="display:none;"></span>
-        <span class="breadcrumb-chip" id="chipUnsyncDivision" style="display:none;"></span>
-        <span class="breadcrumb-chip" id="chipUnsyncVendor" style="display:none;"></span>
-        <span class="breadcrumb-chip" id="chipUnsyncCommType" style="display:none;"></span>
-        <span class="breadcrumb-chip" id="chipUnsyncMeterType" style="display:none;"></span>
-        <span class="breadcrumb-chip" id="chipUnsyncPhase" style="display:none;"></span>
-        <span class="breadcrumb-hint" id="unsyncBreadcrumbHint">
-          <i class="fa-solid fa-lightbulb"></i> Click any Circle, Division, or Agency row to instantly filter &amp; drill down!
-        </span>
+      <!-- Action Group -->
+      <div class="inventory-top-actions">
+        <div class="inv-search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="searchUnsync" class="inv-search-input" placeholder="Search table (MSN, Division, Agency)...">
+        </div>
+        <button id="btnSyncUnsync" class="btn btn-primary inv-action-btn" style="background: linear-gradient(135deg, #0284c7, #0369a1); border-color: #0284c7; color: #fff;" title="Reconcile and sync Unsync data immediately with latest report">
+          <i class="fa-solid fa-rotate" id="iconSyncUnsync"></i> Sync Data
+        </button>
+        <button id="btnExportUnsyncCsv" class="btn btn-export inv-action-btn" title="Export Unsync view to CSV">
+          <i class="fa-solid fa-file-excel"></i> Export CSV
+        </button>
+        <button id="btnResetUnsyncFilters" class="btn btn-secondary inv-action-btn" title="Reset all Unsync filters">
+          <i class="fa-solid fa-rotate-left"></i> Reset
+        </button>
+      </div>
+    </div>
+
+    <!-- MODERN STRUCTURED FILTER PANEL -->
+    <div class="inventory-filter-panel">
+      <!-- Hidden dimension select to preserve any legacy JS calls -->
+      <select id="selectUnsyncType" style="display: none;">
+        <option value="circle">circle</option>
+        <option value="division">division</option>
+        <option value="vendor">vendor</option>
+        <option value="aging">aging</option>
+        <option value="meter_type">meter_type</option>
+        <option value="phase">phase</option>
+        <option value="comm_type">comm_type</option>
+        <option value="meters">meters</option>
+      </select>
+
+      <div class="inv-filter-group">
+        <span class="inv-filter-label"><i class="fa-solid fa-location-dot" style="color: #6366f1;"></i> Circle</span>
+        <select id="filterUnsyncCircle" class="inv-select">
+          <option value="ALL">All Circles (Excl. SBPDCL)</option>
+        </select>
+      </div>
+
+      <div class="inv-filter-group">
+        <span class="inv-filter-label"><i class="fa-solid fa-building" style="color: #8b5cf6;"></i> HigherOffice / Division</span>
+        <select id="filterUnsyncDivision" class="inv-select">
+          <option value="ALL">All Divisions</option>
+        </select>
+      </div>
+
+      <div class="inv-filter-group">
+        <span class="inv-filter-label"><i class="fa-solid fa-truck-field" style="color: #f59e0b;"></i> Agency / Vendor</span>
+        <select id="filterUnsyncVendor" class="inv-select">
+          <option value="ALL">All Vendors</option>
+        </select>
+      </div>
+
+      <div class="inv-filter-group">
+        <span class="inv-filter-label"><i class="fa-solid fa-user-check" style="color: #10b981;"></i> Vendor Status</span>
+        <select id="filterUnsyncStatusVendor" class="inv-select">
+          <option value="ALL">All Vendors</option>
+          <option value="Active">🟢 Active Only</option>
+          <option value="In Active">⚪ In Active</option>
+        </select>
+      </div>
+
+      <div class="inv-filter-group">
+        <span class="inv-filter-label"><i class="fa-solid fa-gauge" style="color: #8b5cf6;"></i> Meter Type</span>
+        <select id="filterUnsyncMeterType" class="inv-select">
+          <option value="ALL">All Meter Types</option>
+        </select>
+      </div>
+
+      <div class="inv-filter-group">
+        <span class="inv-filter-label"><i class="fa-solid fa-bolt" style="color: #f59e0b;"></i> Phase</span>
+        <select id="filterUnsyncPhase" class="inv-select">
+          <option value="ALL">All Phases</option>
+        </select>
+      </div>
+
+      <div class="inv-filter-group">
+        <span class="inv-filter-label"><i class="fa-solid fa-satellite-dish" style="color: #0284c7;"></i> Comm Type</span>
+        <select id="filterUnsyncCommType" class="inv-select">
+          <option value="ALL">All Comm Types</option>
+        </select>
+      </div>
+
+      <div class="inv-filter-group">
+        <span class="inv-filter-label"><i class="fa-solid fa-clock" style="color: #f43f5e;"></i> Aging Bucket</span>
+        <select id="filterUnsyncAging" class="inv-select">
+          <option value="ALL">All Aging</option>
+          <option value="0-7 days">⚡ 0-7 Days</option>
+          <option value="8-15 days">⏳ 8-15 Days</option>
+          <option value="15-30 days">⚠️ 15-30 Days</option>
+          <option value=">30 days">🚨 >30 Days (Critical)</option>
+        </select>
+      </div>
+
+      <div class="inv-filter-group">
+        <span class="inv-filter-label"><i class="fa-solid fa-flag" style="color: #06b6d4;"></i> Unsync Status</span>
+        <select id="filterUnsyncMatch" class="inv-select">
+          <option value="ALL">All (Closed & Open)</option>
+          <option value="Closed">✅ Closed (Master)</option>
+          <option value="Unsync">🔄 Unsync (Open)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Interactive Hierarchy & Drilldown Breadcrumb Strip -->
+    <div class="interactive-breadcrumb-bar" id="unsyncBreadcrumbsBar">
+      <span class="breadcrumb-label"><i class="fa-solid fa-sitemap"></i> Active Drilldown:</span>
+      <span class="breadcrumb-chip" id="chipUnsyncCircle" style="display:none;"></span>
+      <span class="breadcrumb-chip" id="chipUnsyncDivision" style="display:none;"></span>
+      <span class="breadcrumb-chip" id="chipUnsyncVendor" style="display:none;"></span>
+      <span class="breadcrumb-chip" id="chipUnsyncCommType" style="display:none;"></span>
+      <span class="breadcrumb-chip" id="chipUnsyncMeterType" style="display:none;"></span>
+      <span class="breadcrumb-chip" id="chipUnsyncPhase" style="display:none;"></span>
+      <span class="breadcrumb-hint" id="unsyncBreadcrumbHint">
+        <i class="fa-solid fa-lightbulb"></i> Click any Circle, Division, or Agency row to instantly filter &amp; drill down!
+      </span>
+    </div>
+
+    <!-- Active Unsync Table Card -->
+    <div class="table-card" id="unsyncTableCard">
+      <!-- Integrated Mini KPI Ribbon (Directly Attached to Table) -->
+      <div class="table-kpi-ribbon" id="unsyncKpiRibbon">
+        <div class="kpi-mini-pill">
+          <span class="kpi-mini-label">Total Unsync Scope</span>
+          <strong class="kpi-mini-val text-cyan" id="unsyncKpiTotal">--</strong>
+        </div>
+        <div class="kpi-mini-pill">
+          <span class="kpi-mini-label">Closed in Master</span>
+          <strong class="kpi-mini-val text-emerald" id="unsyncKpiClosed">--</strong>
+        </div>
+        <div class="kpi-mini-pill">
+          <span class="kpi-mini-label">Open Unsync (Pending)</span>
+          <strong class="kpi-mini-val text-amber" id="unsyncKpiOpen">--</strong>
+        </div>
+        <div class="kpi-mini-pill">
+          <span class="kpi-mini-label">Closure Rate</span>
+          <strong class="kpi-mini-val text-indigo" id="unsyncKpiRate">--%</strong>
+          <div class="kpi-mini-bar"><div class="kpi-mini-bar-fill" id="unsyncKpiRateBar" style="width: 0%;"></div></div>
+        </div>
+        <div class="kpi-mini-pill">
+          <span class="kpi-mini-label">Critical Aging (&gt;30 Days)</span>
+          <strong class="kpi-mini-val text-rose" id="unsyncKpiCritical">--</strong>
+        </div>
       </div>
 
       <div class="table-header-row">
@@ -1958,8 +2569,13 @@
           <span class="badge badge-cyan" id="unsyncTableRowCount">9 Circles</span>
           <span class="badge badge-amber" style="font-size: 0.72rem;"><i class="fa-solid fa-circle-exclamation"></i> Circle 'SBPDCL' Excluded</span>
         </div>
-        <div style="display: flex; gap: 10px; align-items: center;">
-          <input type="text" id="searchUnsync" class="styled-input" placeholder="Search table (MSN, Division, Vendor)..." style="width: 280px;">
+        <div class="table-actions-cluster">
+          <button type="button" class="btn-action-pic" onclick="copyTableAsPicture('unsyncTableCard', document.getElementById('unsyncTableTitle')?.textContent || 'Unsync Report Summary')" title="Copy Table as High-Resolution Picture directly to Clipboard">
+            <i class="fa-solid fa-camera"></i> Copy Picture
+          </button>
+          <button type="button" class="btn-action-icon" onclick="downloadTableAsPicture('unsyncTableCard', document.getElementById('unsyncTableTitle')?.textContent || 'Unsync Report Summary')" title="Download High-Resolution PNG Picture">
+            <i class="fa-solid fa-download"></i>
+          </button>
         </div>
       </div>
 
@@ -1968,58 +2584,11 @@
       </div>
 
       <!-- Pagination for meters view -->
-      <div id="unsyncPagination" style="display: none; justify-content: space-between; align-items: center; padding: 10px 0 0; margin-top: 10px; border-top: 1px solid #e2e8f0; font-size: 0.82rem;">
-        <span id="unsyncPageInfo" style="color: var(--text-secondary);">Showing 1-50 of 0</span>
+      <div id="unsyncPagination" style="display: none; justify-content: space-between; align-items: center; padding: 10px 14px; border-top: 1px solid #e2e8f0; font-size: 0.82rem;">
+        <span id="unsyncPageInfo" style="color: var(--text-secondary); font-weight: 600;">Showing 1-50 of 0 Meters</span>
         <div style="display: flex; gap: 6px;">
-          <button id="btnPrevUnsyncPage" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.78rem;">&larr; Prev</button>
-          <button id="btnNextUnsyncPage" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.78rem;">Next &rarr;</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Unsync Visual Charts Grid -->
-    <div class="charts-grid">
-      <!-- Chart 1: Aging Distribution -->
-      <div class="chart-card">
-        <div class="chart-card-header">
-          <h4>Unsync Aging Distribution (Days Since First Comm)</h4>
-          <span class="badge badge-rose">Aging Buckets</span>
-        </div>
-        <div class="chart-wrapper">
-          <canvas id="chartUnsyncAging"></canvas>
-        </div>
-      </div>
-
-      <!-- Chart 2: Top Divisions -->
-      <div class="chart-card">
-        <div class="chart-card-header">
-          <h4>Top HigherOffices / Divisions by Unsync Count</h4>
-          <span class="badge badge-purple">HigherOffice</span>
-        </div>
-        <div class="chart-wrapper">
-          <canvas id="chartUnsyncDivisions"></canvas>
-        </div>
-      </div>
-
-      <!-- Chart 3: Circle Wise Share -->
-      <div class="chart-card">
-        <div class="chart-card-header">
-          <h4>Circle Wise Unsync Share</h4>
-          <span class="badge badge-indigo">Circles</span>
-        </div>
-        <div class="chart-wrapper donut-wrapper">
-          <canvas id="chartUnsyncCircles"></canvas>
-        </div>
-      </div>
-
-      <!-- Chart 4: Vendor / Agency Breakdown -->
-      <div class="chart-card">
-        <div class="chart-card-header">
-          <h4>Vendor Distribution (Closed vs Unsync)</h4>
-          <span class="badge badge-amber">Vendors</span>
-        </div>
-        <div class="chart-wrapper">
-          <canvas id="chartUnsyncVendors"></canvas>
+          <button id="btnPrevUnsyncPage" class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.78rem;">&larr; Prev</button>
+          <button id="btnNextUnsyncPage" class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.78rem;">Next &rarr;</button>
         </div>
       </div>
     </div>
@@ -2027,190 +2596,170 @@
 
   <!-- TAB: METER AVAILABLE DASHBOARD (Includes Circle SBPDCL) -->
   <main id="tabMeterAvailable" class="tab-content">
-    <!-- Meter Available Analytics Toolbar & Filter Bar -->
-    <div class="executive-analytics-toolbar" style="flex-wrap: wrap; gap: 10px;">
-      <!-- Dimension Selector -->
-      <div class="toolbar-filter-item">
-        <label for="selectMeterAvailType" class="toolbar-label">
-          <i class="fa-solid fa-layer-group" style="color: #10b981;"></i> Dimension:
-        </label>
-        <div class="select-wrapper">
-          <select id="selectMeterAvailType" class="executive-select" aria-label="Select Breakdown Dimension">
-            <option value="circle" selected>🌐 Circle Wise Summary (Incl. SBPDCL)</option>
-            <option value="division">🏛️ Division Wise (HigherOffice)</option>
-            <option value="vendor">🛡️ Agency / Vendor Wise</option>
-            <option value="aging">⏳ Aging Breakdown (0-7d, 8-15d, 15-30d, >30d)</option>
-            <option value="meter_type">📦 Meter Type (Consumer / DT / Feeder)</option>
-            <option value="phase">⚡ Phase Wise (1-Phase / 3-Phase)</option>
-            <option value="comm_type">📡 Communication Type (GPRS / RF)</option>
-            <option value="meters">🔍 Detailed Available Meters List</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Status-Vendor Filter (User Explicit Requirement!) -->
-      <div class="toolbar-filter-item">
-        <label for="filterMeterAvailStatusVendor" class="toolbar-label">
-          <i class="fa-solid fa-user-check" style="color: #10b981;"></i> Status-Vendor:
-        </label>
-        <div class="select-wrapper">
-          <select id="filterMeterAvailStatusVendor" class="executive-select">
-            <option value="ALL">All (Active & In Active)</option>
-            <option value="Active">🟢 Active Vendors Only</option>
-            <option value="In Active">⚪ In Active Vendors</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Circle Filter (Includes SBPDCL!) -->
-      <div class="toolbar-filter-item">
-        <label for="filterMeterAvailCircle" class="toolbar-label">
-          <i class="fa-solid fa-circle-dot" style="color: #6366f1;"></i> Circle:
-        </label>
-        <div class="select-wrapper">
-          <select id="filterMeterAvailCircle" class="executive-select">
-            <option value="ALL">All Circles (Including SBPDCL)</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Division Filter -->
-      <div class="toolbar-filter-item">
-        <label for="filterMeterAvailDivision" class="toolbar-label">
-          <i class="fa-solid fa-building" style="color: #8b5cf6;"></i> HigherOffice:
-        </label>
-        <div class="select-wrapper">
-          <select id="filterMeterAvailDivision" class="executive-select">
-            <option value="ALL">All HigherOffices</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Vendor Filter -->
-      <div class="toolbar-filter-item">
-        <label for="filterMeterAvailVendor" class="toolbar-label">
-          <i class="fa-solid fa-truck-field" style="color: #f59e0b;"></i> Vendor:
-        </label>
-        <div class="select-wrapper">
-          <select id="filterMeterAvailVendor" class="executive-select">
-            <option value="ALL">All Vendors</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Aging Filter -->
-      <div class="toolbar-filter-item">
-        <label for="filterMeterAvailAging" class="toolbar-label">
-          <i class="fa-solid fa-clock" style="color: #f43f5e;"></i> Aging Bucket:
-        </label>
-        <div class="select-wrapper">
-          <select id="filterMeterAvailAging" class="executive-select">
-            <option value="ALL">All Aging Buckets</option>
-            <option value="0-7 days">⚡ 0-7 Days (Fresh)</option>
-            <option value="8-15 days">⏳ 8-15 Days</option>
-            <option value="15-30 days">⚠️ 15-30 Days</option>
-            <option value=">30 days">🚨 >30 Days (Critical)</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Inventory Status Filter -->
-      <div class="toolbar-filter-item">
-        <label for="filterMeterAvailMatch" class="toolbar-label">
-          <i class="fa-solid fa-warehouse" style="color: #06b6d4;"></i> Inventory Status:
-        </label>
-        <div class="select-wrapper">
-          <select id="filterMeterAvailMatch" class="executive-select">
-            <option value="ALL">All (Installed & Available)</option>
-            <option value="Installed">✅ Installed (Matched in Master)</option>
-            <option value="Available">📦 Available (Not Installed)</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Communication Type Filter -->
-      <div class="toolbar-filter-item">
-        <label for="filterMeterAvailCommType" class="toolbar-label">
-          <i class="fa-solid fa-satellite-dish" style="color: #0284c7;"></i> Comm Type:
-        </label>
-        <div class="select-wrapper">
-          <select id="filterMeterAvailCommType" class="executive-select">
-            <option value="ALL">All Comm Types</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Meter Type Filter -->
-      <div class="toolbar-filter-item">
-        <label for="filterMeterAvailMeterType" class="toolbar-label">
-          <i class="fa-solid fa-gauge" style="color: #8b5cf6;"></i> Meter Type:
-        </label>
-        <div class="select-wrapper">
-          <select id="filterMeterAvailMeterType" class="executive-select">
-            <option value="ALL">All Meter Types</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Phase Filter -->
-      <div class="toolbar-filter-item">
-        <label for="filterMeterAvailPhase" class="toolbar-label">
-          <i class="fa-solid fa-bolt" style="color: #f59e0b;"></i> Phase:
-        </label>
-        <div class="select-wrapper">
-          <select id="filterMeterAvailPhase" class="executive-select">
-            <option value="ALL">All Phases</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="toolbar-actions-group" style="display: flex; gap: 8px; align-items: flex-end;">
-        <button id="btnSyncMeterAvail" class="btn btn-primary" style="background: linear-gradient(135deg, #10b981, #047857); border-color: #10b981; color: #fff; font-weight: 600;" title="Sync and reconcile Meter Available data immediately with latest report">
-          <i class="fa-solid fa-rotate" id="iconSyncMeterAvail"></i> Sync Available Data
+    <!-- TOP COMMAND BAR: View Navigation Pills + Search & Action Controls -->
+    <div class="inventory-command-bar">
+      <!-- Interactive Segmented Pill Switcher -->
+      <div class="inventory-interactive-pills" id="meterAvailPillGroup">
+        <button type="button" class="inv-pill-btn active" data-inv-tab="meter_available" data-type="circle">
+          <i class="fa-solid fa-circle-notch"></i> Circle Summary
         </button>
-        <button id="btnResetMeterAvailFilters" class="btn btn-secondary" title="Reset all filters">
-          <i class="fa-solid fa-rotate-left"></i> Reset
+        <button type="button" class="inv-pill-btn" data-inv-tab="meter_available" data-type="division">
+          <i class="fa-solid fa-building"></i> Division Summary
         </button>
-        <button id="btnExportMeterAvailCsv" class="btn btn-export" title="Export available meters to CSV">
+        <button type="button" class="inv-pill-btn" data-inv-tab="meter_available" data-type="vendor">
+          <i class="fa-solid fa-truck-field"></i> Agency Wise
+        </button>
+        <button type="button" class="inv-pill-btn" data-inv-tab="meter_available" data-type="aging">
+          <i class="fa-solid fa-clock"></i> Aging Analysis
+        </button>
+        <button type="button" class="inv-pill-btn" data-inv-tab="meter_available" data-type="meters">
+          <i class="fa-solid fa-list-check"></i> Detailed Available Meters
+        </button>
+      </div>
+
+      <!-- Action Group -->
+      <div class="inventory-top-actions">
+        <div class="inv-search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="searchMeterAvail" class="inv-search-input" placeholder="Search table (MSN, Division, Agency)...">
+        </div>
+        <button id="btnSyncMeterAvail" class="btn btn-primary inv-action-btn" style="background: linear-gradient(135deg, #10b981, #047857); border-color: #10b981; color: #fff;" title="Reconcile and sync Available Meter data immediately with latest report">
+          <i class="fa-solid fa-rotate" id="iconSyncMeterAvail"></i> Sync Data
+        </button>
+        <button id="btnExportMeterAvailCsv" class="btn btn-export inv-action-btn" title="Export available meters to CSV">
           <i class="fa-solid fa-file-excel"></i> Export CSV
+        </button>
+        <button id="btnResetMeterAvailFilters" class="btn btn-secondary inv-action-btn" title="Reset all filters">
+          <i class="fa-solid fa-rotate-left"></i> Reset
         </button>
       </div>
     </div>
 
-    <!-- Active Meter Available Table Card -->
-    <div class="table-card">
-      <!-- Interactive Segmented Pill Switcher (Circle / Division / Agency / Aging / Meters) -->
-      <div class="inventory-interactive-pills" id="meterAvailPillGroup">
-        <button type="button" class="inv-pill-btn active" data-inv-tab="meter_available" data-type="circle">
-          <i class="fa-solid fa-circle-notch"></i> Circle Wise Summary
-        </button>
-        <button type="button" class="inv-pill-btn" data-inv-tab="meter_available" data-type="division">
-          <i class="fa-solid fa-building"></i> Division Wise (HigherOffice)
-        </button>
-        <button type="button" class="inv-pill-btn" data-inv-tab="meter_available" data-type="vendor">
-          <i class="fa-solid fa-truck-field"></i> Agency (Vendor) Wise
-        </button>
-        <button type="button" class="inv-pill-btn" data-inv-tab="meter_available" data-type="aging">
-          <i class="fa-solid fa-clock"></i> Aging Breakdown
-        </button>
-        <button type="button" class="inv-pill-btn" data-inv-tab="meter_available" data-type="meters">
-          <i class="fa-solid fa-list-check"></i> Detailed Meters Ledger
-        </button>
+    <!-- MODERN STRUCTURED FILTER PANEL -->
+    <div class="inventory-filter-panel">
+      <!-- Hidden dimension select to preserve any legacy JS calls -->
+      <select id="selectMeterAvailType" style="display: none;">
+        <option value="circle">circle</option>
+        <option value="division">division</option>
+        <option value="vendor">vendor</option>
+        <option value="aging">aging</option>
+        <option value="meter_type">meter_type</option>
+        <option value="phase">phase</option>
+        <option value="comm_type">comm_type</option>
+        <option value="meters">meters</option>
+      </select>
+
+      <div class="inv-filter-group">
+        <span class="inv-filter-label"><i class="fa-solid fa-location-dot" style="color: #6366f1;"></i> Circle</span>
+        <select id="filterMeterAvailCircle" class="inv-select">
+          <option value="ALL">All Circles (Including SBPDCL)</option>
+        </select>
       </div>
 
-      <!-- Interactive Hierarchy & Drilldown Breadcrumb Strip -->
-      <div class="interactive-breadcrumb-bar" id="meterAvailBreadcrumbsBar">
-        <span class="breadcrumb-label"><i class="fa-solid fa-sitemap"></i> Active Drilldown:</span>
-        <span class="breadcrumb-chip" id="chipMeterAvailCircle" style="display:none;"></span>
-        <span class="breadcrumb-chip" id="chipMeterAvailDivision" style="display:none;"></span>
-        <span class="breadcrumb-chip" id="chipMeterAvailVendor" style="display:none;"></span>
-        <span class="breadcrumb-chip" id="chipMeterAvailCommType" style="display:none;"></span>
-        <span class="breadcrumb-chip" id="chipMeterAvailMeterType" style="display:none;"></span>
-        <span class="breadcrumb-chip" id="chipMeterAvailPhase" style="display:none;"></span>
-        <span class="breadcrumb-hint" id="meterAvailBreadcrumbHint">
-          <i class="fa-solid fa-lightbulb"></i> Click any Circle, Division, or Agency row to instantly filter &amp; drill down!
-        </span>
+      <div class="inv-filter-group">
+        <span class="inv-filter-label"><i class="fa-solid fa-building" style="color: #8b5cf6;"></i> HigherOffice / Division</span>
+        <select id="filterMeterAvailDivision" class="inv-select">
+          <option value="ALL">All Divisions</option>
+        </select>
+      </div>
+
+      <div class="inv-filter-group">
+        <span class="inv-filter-label"><i class="fa-solid fa-truck-field" style="color: #f59e0b;"></i> Agency / Vendor</span>
+        <select id="filterMeterAvailVendor" class="inv-select">
+          <option value="ALL">All Vendors</option>
+        </select>
+      </div>
+
+      <div class="inv-filter-group">
+        <span class="inv-filter-label"><i class="fa-solid fa-user-check" style="color: #10b981;"></i> Vendor Status</span>
+        <select id="filterMeterAvailStatusVendor" class="inv-select">
+          <option value="ALL">All Vendors</option>
+          <option value="Active">🟢 Active Only</option>
+          <option value="In Active">⚪ In Active</option>
+        </select>
+      </div>
+
+      <div class="inv-filter-group">
+        <span class="inv-filter-label"><i class="fa-solid fa-gauge" style="color: #8b5cf6;"></i> Meter Type</span>
+        <select id="filterMeterAvailMeterType" class="inv-select">
+          <option value="ALL">All Meter Types</option>
+        </select>
+      </div>
+
+      <div class="inv-filter-group">
+        <span class="inv-filter-label"><i class="fa-solid fa-bolt" style="color: #f59e0b;"></i> Phase</span>
+        <select id="filterMeterAvailPhase" class="inv-select">
+          <option value="ALL">All Phases</option>
+        </select>
+      </div>
+
+      <div class="inv-filter-group">
+        <span class="inv-filter-label"><i class="fa-solid fa-satellite-dish" style="color: #0284c7;"></i> Comm Type</span>
+        <select id="filterMeterAvailCommType" class="inv-select">
+          <option value="ALL">All Comm Types</option>
+        </select>
+      </div>
+
+      <div class="inv-filter-group">
+        <span class="inv-filter-label"><i class="fa-solid fa-clock" style="color: #f43f5e;"></i> Aging Bucket</span>
+        <select id="filterMeterAvailAging" class="inv-select">
+          <option value="ALL">All Aging</option>
+          <option value="0-7 days">⚡ 0-7 Days</option>
+          <option value="8-15 days">⏳ 8-15 Days</option>
+          <option value="15-30 days">⚠️ 15-30 Days</option>
+          <option value=">30 days">🚨 >30 Days (Critical)</option>
+        </select>
+      </div>
+
+      <div class="inv-filter-group">
+        <span class="inv-filter-label"><i class="fa-solid fa-warehouse" style="color: #06b6d4;"></i> Inventory Status</span>
+        <select id="filterMeterAvailMatch" class="inv-select">
+          <option value="ALL">All (Installed &amp; Available)</option>
+          <option value="Installed">✅ Installed (Master)</option>
+          <option value="Available">📦 Available (Stock)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Interactive Hierarchy & Drilldown Breadcrumb Strip -->
+    <div class="interactive-breadcrumb-bar" id="meterAvailBreadcrumbsBar">
+      <span class="breadcrumb-label"><i class="fa-solid fa-sitemap"></i> Active Drilldown:</span>
+      <span class="breadcrumb-chip" id="chipMeterAvailCircle" style="display:none;"></span>
+      <span class="breadcrumb-chip" id="chipMeterAvailDivision" style="display:none;"></span>
+      <span class="breadcrumb-chip" id="chipMeterAvailVendor" style="display:none;"></span>
+      <span class="breadcrumb-chip" id="chipMeterAvailCommType" style="display:none;"></span>
+      <span class="breadcrumb-chip" id="chipMeterAvailMeterType" style="display:none;"></span>
+      <span class="breadcrumb-chip" id="chipMeterAvailPhase" style="display:none;"></span>
+      <span class="breadcrumb-hint" id="meterAvailBreadcrumbHint">
+        <i class="fa-solid fa-lightbulb"></i> Click any Circle, Division, or Agency row to instantly filter &amp; drill down!
+      </span>
+    </div>
+
+    <!-- Active Meter Available Table Card -->
+    <div class="table-card" id="meterAvailTableCard">
+      <!-- Integrated Mini KPI Ribbon (Directly Attached to Table) -->
+      <div class="table-kpi-ribbon" id="meterAvailKpiRibbon">
+        <div class="kpi-mini-pill">
+          <span class="kpi-mini-label">Total Stock Scope</span>
+          <strong class="kpi-mini-val text-cyan" id="meterAvailKpiTotal">--</strong>
+        </div>
+        <div class="kpi-mini-pill">
+          <span class="kpi-mini-label">Installed in Master</span>
+          <strong class="kpi-mini-val text-emerald" id="meterAvailKpiInstalled">--</strong>
+        </div>
+        <div class="kpi-mini-pill">
+          <span class="kpi-mini-label">Net Available (In Stock)</span>
+          <strong class="kpi-mini-val text-amber" id="meterAvailKpiAvailable">--</strong>
+        </div>
+        <div class="kpi-mini-pill">
+          <span class="kpi-mini-label">Utilization Rate</span>
+          <strong class="kpi-mini-val text-indigo" id="meterAvailKpiRate">--%</strong>
+          <div class="kpi-mini-bar"><div class="kpi-mini-bar-fill" id="meterAvailKpiRateBar" style="width: 0%;"></div></div>
+        </div>
+        <div class="kpi-mini-pill">
+          <span class="kpi-mini-label">Aging (&gt;30 Days)</span>
+          <strong class="kpi-mini-val text-rose" id="meterAvailKpiCritical">--</strong>
+        </div>
       </div>
 
       <div class="table-header-row">
@@ -2220,8 +2769,13 @@
           <span class="badge badge-emerald" id="meterAvailTableRowCount">10 Circles</span>
           <span class="badge badge-cyan" style="font-size: 0.72rem;"><i class="fa-solid fa-circle-check"></i> Includes SBPDCL Circle</span>
         </div>
-        <div style="display: flex; gap: 10px; align-items: center;">
-          <input type="text" id="searchMeterAvail" class="styled-input" placeholder="Search table (MSN, Division, Vendor)..." style="width: 280px;">
+        <div class="table-actions-cluster">
+          <button type="button" class="btn-action-pic" onclick="copyTableAsPicture('meterAvailTableCard', document.getElementById('meterAvailTableTitle')?.textContent || 'Meter Available Summary')" title="Copy Table as High-Resolution Picture directly to Clipboard">
+            <i class="fa-solid fa-camera"></i> Copy Picture
+          </button>
+          <button type="button" class="btn-action-icon" onclick="downloadTableAsPicture('meterAvailTableCard', document.getElementById('meterAvailTableTitle')?.textContent || 'Meter Available Summary')" title="Download High-Resolution PNG Picture">
+            <i class="fa-solid fa-download"></i>
+          </button>
         </div>
       </div>
 
@@ -2230,58 +2784,11 @@
       </div>
 
       <!-- Pagination for meters view -->
-      <div id="meterAvailPagination" style="display: none; justify-content: space-between; align-items: center; padding: 10px 0 0; margin-top: 10px; border-top: 1px solid #e2e8f0; font-size: 0.82rem;">
-        <span id="meterAvailPageInfo" style="color: var(--text-secondary);">Showing 1-50 of 0</span>
+      <div id="meterAvailPagination" style="display: none; justify-content: space-between; align-items: center; padding: 10px 14px; border-top: 1px solid #e2e8f0; font-size: 0.82rem;">
+        <span id="meterAvailPageInfo" style="color: var(--text-secondary); font-weight: 600;">Showing 1-50 of 0 Meters</span>
         <div style="display: flex; gap: 6px;">
-          <button id="btnPrevMeterAvailPage" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.78rem;">&larr; Prev</button>
-          <button id="btnNextMeterAvailPage" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.78rem;">Next &rarr;</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Meter Available Visual Charts Grid -->
-    <div class="charts-grid">
-      <!-- Chart 1: Available Aging Distribution -->
-      <div class="chart-card">
-        <div class="chart-card-header">
-          <h4>Meter Available Aging Distribution</h4>
-          <span class="badge badge-rose">Aging Buckets</span>
-        </div>
-        <div class="chart-wrapper">
-          <canvas id="chartMeterAvailAging"></canvas>
-        </div>
-      </div>
-
-      <!-- Chart 2: Top Circles Stock -->
-      <div class="chart-card">
-        <div class="chart-card-header">
-          <h4>Circle Available Stock Distribution</h4>
-          <span class="badge badge-indigo">Circles</span>
-        </div>
-        <div class="chart-wrapper donut-wrapper">
-          <canvas id="chartMeterAvailCircles"></canvas>
-        </div>
-      </div>
-
-      <!-- Chart 3: Top HigherOffices / Divisions -->
-      <div class="chart-card">
-        <div class="chart-card-header">
-          <h4>Top HigherOffices Available Stock</h4>
-          <span class="badge badge-purple">HigherOffice</span>
-        </div>
-        <div class="chart-wrapper">
-          <canvas id="chartMeterAvailDivisions"></canvas>
-        </div>
-      </div>
-
-      <!-- Chart 4: Vendor Inventory Allocation -->
-      <div class="chart-card">
-        <div class="chart-card-header">
-          <h4>Top Vendors / Agencies Inventory Allocation</h4>
-          <span class="badge badge-amber">Vendors</span>
-        </div>
-        <div class="chart-wrapper">
-          <canvas id="chartMeterAvailVendors"></canvas>
+          <button id="btnPrevMeterAvailPage" class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.78rem;">&larr; Prev</button>
+          <button id="btnNextMeterAvailPage" class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.78rem;">Next &rarr;</button>
         </div>
       </div>
     </div>
@@ -2289,11 +2796,19 @@
 
   <!-- TAB 4: METER & CONSUMER SEARCH -->
   <main id="tabSearch" class="tab-content">
-    <div class="table-card">
+    <div class="table-card" id="searchTableCard">
       <div class="table-header-row">
         <div class="table-title">
           <i class="fa-solid fa-magnifying-glass" style="color: var(--brand-cyan);"></i>
           <h3>Smart Meter Consumer & MSN Direct Lookup</h3>
+        </div>
+        <div class="table-actions-cluster">
+          <button type="button" class="btn-action-pic" onclick="copyTableAsPicture('searchTableCard', 'Consumer & MSN Search Results')" title="Copy Table as High-Resolution Picture directly to Clipboard">
+            <i class="fa-solid fa-camera"></i> Copy Picture
+          </button>
+          <button type="button" class="btn-action-icon" onclick="downloadTableAsPicture('searchTableCard', 'Consumer & MSN Search Results')" title="Download High-Resolution PNG Picture">
+            <i class="fa-solid fa-download"></i>
+          </button>
         </div>
       </div>
       <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
@@ -2367,13 +2882,20 @@
     </div>
   </div>
 
-  <!-- Footer -->
-  <footer class="app-footer" style="padding: 1.5rem 1rem; text-align: center; border-top: 1px solid rgba(226, 232, 240, 0.8); margin-top: 2rem; background: var(--bg-card, #ffffff);">
-    <p style="margin: 0; font-size: 0.95rem; font-weight: 600; color: var(--text-primary, #334155); letter-spacing: 0.2px;">
-      Analytics Dashboard Prepared by <span style="color: #0284c7; font-weight: 700;">Dharmendra Singh, DGM-Operations</span>
-    </p>
-  </footer>
+      </div> <!-- /.app-canvas-container -->
 
-  <script src="app.js?v=20261012_v4"></script>
+      <!-- Footer -->
+      <footer class="app-footer" style="padding: 1.5rem 1rem; text-align: center; border-top: 1px solid rgba(226, 232, 240, 0.8); margin-top: 2rem; background: var(--bg-card, #ffffff);">
+        <p style="margin: 0; font-size: 0.95rem; font-weight: 600; color: var(--text-primary, #334155); letter-spacing: 0.2px;">
+          Analytics Dashboard Prepared by <span style="color: #0284c7; font-weight: 700;">Dharmendra Singh, DGM-Operations</span>
+        </p>
+      </footer>
+    </div> <!-- /.app-main-viewport -->
+  </div> <!-- /.app-layout -->
+
+  <!-- Toast Notification System -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="app.js?v=20261019_v5"></script>
 </body>
 </html>
