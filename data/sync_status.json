@@ -6,189 +6,189 @@
   "message": "Pushing updated data to Cloud Dashboard (Render)...",
   "steps": [
     {
-      "time": "18:59:16",
+      "time": "09:22:59",
       "stage": "STARTING",
-      "message": "Starting automated hourly sync from MDM Portal...",
+      "message": "Initiating automated download of fresh Daily Installation Reports from MDM Portal...",
       "percent": 5,
       "status": "ok"
     },
     {
-      "time": "18:59:16",
+      "time": "09:22:59",
       "stage": "CLEANUP",
       "message": "Purging previous temporary download files to ensure fresh report retrieval...",
       "percent": 6,
       "status": "ok"
     },
     {
-      "time": "18:59:16",
+      "time": "09:22:59",
       "stage": "BROWSER",
       "message": "Starting background Chrome automation engine (Headless Mode)...",
       "percent": 12,
       "status": "ok"
     },
     {
-      "time": "18:59:25",
+      "time": "09:23:01",
       "stage": "AUTH",
       "message": "Connecting to MDM Portal & authenticating as MNG_DHARMENDRA...",
       "percent": 18,
       "status": "ok"
     },
     {
-      "time": "18:59:30",
+      "time": "09:23:04",
       "stage": "DEBUG",
       "message": "Page URL: https://mdm.sbpdclinfra.in/SSO/LoginPage | Title: Login Page",
       "percent": 20,
       "status": "ok"
     },
     {
-      "time": "18:59:35",
+      "time": "09:23:11",
       "stage": "SESSION",
       "message": "Authentication successful! Portal session established.",
       "percent": 26,
       "status": "ok"
     },
     {
-      "time": "18:59:36",
+      "time": "09:23:11",
       "stage": "QUERY",
-      "message": "Checking installation reports for date: 20-10-2026...",
+      "message": "Checking installation reports for date: 21-10-2026...",
       "percent": 32,
       "status": "ok"
     },
     {
-      "time": "18:59:59",
+      "time": "09:23:20",
       "stage": "FOUND",
-      "message": "Found 2 batches for 20-10-2026. Requesting downloads from MDM...",
+      "message": "Found 2 batches for 21-10-2026. Requesting downloads from MDM...",
       "percent": 40,
       "status": "ok"
     },
     {
-      "time": "18:59:59",
+      "time": "09:23:20",
       "stage": "REQUEST",
-      "message": "Triggering Replacement Batch download request (108 meters)...",
+      "message": "Triggering Replacement Batch download request (34 meters)...",
       "percent": 45,
       "status": "ok"
     },
     {
-      "time": "19:00:16",
+      "time": "09:23:35",
       "stage": "REQUEST",
-      "message": "Generated MDM Request ID #312862 for Replacement (108 records).",
+      "message": "Generated MDM Request ID #312977 for Replacement (34 records).",
       "percent": 45,
       "status": "ok"
     },
     {
-      "time": "19:00:18",
+      "time": "09:23:37",
       "stage": "REQUEST",
-      "message": "Triggering NSC Batch download request (58 meters)...",
+      "message": "Triggering NSC Batch download request (46 meters)...",
       "percent": 55,
       "status": "ok"
     },
     {
-      "time": "19:00:29",
+      "time": "09:23:51",
       "stage": "REQUEST",
-      "message": "Generated MDM Request ID #312863 for NSC (58 records).",
+      "message": "Generated MDM Request ID #312978 for NSC (46 records).",
       "percent": 55,
       "status": "ok"
     },
     {
-      "time": "19:00:31",
+      "time": "09:23:53",
       "stage": "QUEUE",
       "message": "Navigating to Download Requests queue (MIS/DownloadRequest)...",
       "percent": 64,
       "status": "ok"
     },
     {
-      "time": "19:00:37",
+      "time": "09:23:59",
       "stage": "QUEUE",
-      "message": "Tracking MDM Queue for Request IDs: ['312862', '312863']",
+      "message": "Tracking MDM Queue for Request IDs: ['312977', '312978']",
       "percent": 67,
       "status": "ok"
     },
     {
-      "time": "19:00:37",
+      "time": "09:23:59",
       "stage": "QUEUE",
       "message": "All 2 requested report packages are PROCESSED and ready in MDM queue!",
       "percent": 74,
       "status": "ok"
     },
     {
-      "time": "19:00:37",
+      "time": "09:23:59",
       "stage": "DOWNLOAD",
       "message": "Queue ready! Downloading fresh processed ZIP packages to repository...",
       "percent": 76,
       "status": "ok"
     },
     {
-      "time": "19:00:37",
+      "time": "09:23:59",
       "stage": "DOWNLOAD",
-      "message": "Downloading report package for Request #312862...",
+      "message": "Downloading report package for Request #312977...",
       "percent": 78,
       "status": "ok"
     },
     {
-      "time": "19:00:39",
+      "time": "09:24:01",
       "stage": "DOWNLOAD",
-      "message": "Package saved: Day Wise Meter Installation - ConsumerCount_312862_20261020_190015.zip (6,680 bytes)",
+      "message": "Package saved: Day Wise Meter Installation - ConsumerCount_312977_20261021_092334.zip (2,553 bytes)",
       "percent": 80,
       "status": "ok"
     },
     {
-      "time": "19:00:39",
+      "time": "09:24:01",
       "stage": "DOWNLOAD",
-      "message": "Downloading report package for Request #312863...",
+      "message": "Downloading report package for Request #312978...",
       "percent": 78,
       "status": "ok"
     },
     {
-      "time": "19:00:41",
+      "time": "09:24:03",
       "stage": "DOWNLOAD",
-      "message": "Package saved: Day Wise Meter Installation - ConsumerCount_312863_20261020_190028.zip (4,391 bytes)",
+      "message": "Package saved: Day Wise Meter Installation - ConsumerCount_312978_20261021_092352.zip (3,763 bytes)",
       "percent": 80,
       "status": "ok"
     },
     {
-      "time": "19:00:41",
+      "time": "09:24:03",
       "stage": "VERIFY",
       "message": "Waiting for ZIP file downloads to finalize...",
       "percent": 84,
       "status": "ok"
     },
     {
-      "time": "19:00:44",
+      "time": "09:24:06",
       "stage": "DOWNLOAD",
       "message": "Successfully downloaded 2 report packages from MDM portal.",
       "percent": 86,
       "status": "ok"
     },
     {
-      "time": "19:00:47",
+      "time": "09:24:09",
       "stage": "ETL",
       "message": "Executing vectorized DuckDB ETL compilation on fresh reports...",
       "percent": 88,
       "status": "ok"
     },
     {
-      "time": "19:00:53",
+      "time": "09:24:09",
       "stage": "ULA",
-      "message": "Cross-referencing 166 installations (108 Replacement + 58 NSC) against ULA scope...",
+      "message": "Cross-referencing 81 installations (34 Replacement + 47 NSC) against ULA scope...",
       "percent": 94,
       "status": "ok"
     },
     {
-      "time": "19:00:56",
+      "time": "09:24:14",
       "stage": "INVENTORY",
       "message": "Auto-reconciling Unsync & Meter Available Inventory with fresh Daily installs...",
       "percent": 96,
       "status": "ok"
     },
     {
-      "time": "19:01:17",
+      "time": "09:24:43",
       "stage": "COMPLETE",
-      "message": "Daily Sync Complete! Downloaded & compiled 166 meters (108 Replacement + 58 NSC).",
+      "message": "Daily Sync Complete! Downloaded & compiled 81 meters (34 Replacement + 47 NSC).",
       "percent": 100,
       "status": "success"
     },
     {
-      "time": "19:01:17",
+      "time": "09:24:43",
       "stage": "CLOUD",
       "message": "Pushing updated data to Cloud Dashboard (Render)...",
       "percent": 100,
@@ -196,9 +196,9 @@
     }
   ],
   "error": null,
-  "records_count": 166,
-  "timestamp": "2026-10-20 19:01:17",
-  "next_auto_sync": "07:00 PM",
+  "records_count": 81,
+  "timestamp": "2026-10-21 09:24:43",
+  "next_auto_sync": "10:00 AM",
   "auto_sync_active": true,
-  "last_auto_sync_msg": "Daily MDM sync error: Message: invalid session id; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#invalidsessionidexception\nStacktrace:\nSymbols not available. Dumping unresolved backtrace:\n\t(No symbol) [0x7ff6317ce745]\n\t(No symbol) [0x7ff631383d00]\n\t(No symbol) [0x7ff6311b3d36]\n\t(No symbol) [0x7ff631200563]\n\t(No symbol) [0x7ff6312389e2]\n\t(No symbol) [0x7ff6312327a2]\n\t(No symbol) [0x7ff631231f23]\n\t(No symbol) [0x7ff63117c8eb]\n\t(No symbol) [0x7ff63117cf52]\n\t(No symbol) [0x7ff63117d585]\n\t(No symbol) [0x7ff6318717b1]\n\t(No symbol) [0x7ff6318a87c7]\n\t(No symbol) [0x7ff63189c85e]\n\t(No symbol) [0x7ff63154884e]\n\t(No symbol) [0x7ff631390415]\n\t(No symbol) [0x7ff63117bd1e]\n\t(No symbol) [0x7ff631924cff]\n\t(No symbol) [0x7ffbb7e6cd87]\n\t(No symbol) [0x7ffbb962caec]\n"
+  "last_auto_sync_msg": "Daily MDM sync error: Message: stale element reference: stale element not found\n  (Session info: chrome=155.0.8059.80); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#staleelementreferenceexception\nStacktrace:\nSymbols not available. Dumping unresolved backtrace:\n\t(No symbol) [0x7ff6c7fae745]\n\t(No symbol) [0x7ff6c7b63d00]\n\t(No symbol) [0x7ff6c7993f3d]\n\t(No symbol) [0x7ff6c79ab6cd]\n\t(No symbol) [0x7ff6c79aa120]\n\t(No symbol) [0x7ff6c799cc95]\n\t(No symbol) [0x7ff6c799cdf5]\n\t(No symbol) [0x7ff6c799aa95]\n\t(No symbol) [0x7ff6c799f128]\n\t(No symbol) [0x7ff6c7a45da8]\n\t(No symbol) [0x7ff6c7a18ada]\n\t(No symbol) [0x7ff6c7a44b5a]\n\t(No symbol) [0x7ff6c79e1462]\n\t(No symbol) [0x7ff6c79e2273]\n\t(No symbol) [0x7ff6c80517b1]\n\t(No symbol) [0x7ff6c80887c7]\n\t(No symbol) [0x7ff6c807c85e]\n\t(No symbol) [0x7ff6c7d2884e]\n\t(No symbol) [0x7ff6c7b70415]\n\t(No symbol) [0x7ff6c7b6bdf4]\n\t(No symbol) [0x7ff6c7b6bf84]\n\t(No symbol) [0x7ff6c7b57f7c]\n\t(No symbol) [0x7ffbb7e6cd87]\n\t(No symbol) [0x7ffbb962caec]\n"
 }
