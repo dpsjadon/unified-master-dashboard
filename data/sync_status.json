@@ -1,236 +1,194 @@
 {
   "running": false,
-  "type": "master",
+  "type": "daily",
   "stage": "CLOUD",
   "percent": 100,
   "message": "Pushing updated data to Cloud Dashboard (Render)...",
   "steps": [
     {
-      "time": "09:07:55",
+      "time": "10:04:41",
       "stage": "STARTING",
-      "message": "Initiating automated download of Total Smart Meters Installed (Master DB) from MDM Portal...",
+      "message": "Starting automated hourly sync from MDM Portal...",
       "percent": 5,
       "status": "ok"
     },
     {
-      "time": "09:07:55",
+      "time": "10:04:41",
       "stage": "CLEANUP",
-      "message": "Clearing previous temporary download directory...",
-      "percent": 5,
+      "message": "Purging previous temporary download files to ensure fresh report retrieval...",
+      "percent": 6,
       "status": "ok"
     },
     {
-      "time": "09:07:55",
+      "time": "10:04:42",
       "stage": "BROWSER",
-      "message": "Initializing background Headless Chrome automation engine...",
-      "percent": 10,
+      "message": "Starting background Chrome automation engine (Headless Mode)...",
+      "percent": 12,
       "status": "ok"
     },
     {
-      "time": "09:07:57",
+      "time": "10:04:47",
       "stage": "AUTH",
       "message": "Connecting to MDM Portal & authenticating as MNG_DHARMENDRA...",
       "percent": 18,
       "status": "ok"
     },
     {
-      "time": "09:08:00",
+      "time": "10:05:01",
       "stage": "DEBUG",
       "message": "Page URL: https://mdm.sbpdclinfra.in/SSO/LoginPage | Title: Login Page",
       "percent": 20,
       "status": "ok"
     },
     {
-      "time": "09:08:09",
+      "time": "10:05:07",
       "stage": "SESSION",
       "message": "Authentication successful! Portal session established.",
       "percent": 26,
       "status": "ok"
     },
     {
-      "time": "09:08:09",
-      "stage": "NAV",
-      "message": "Navigating to Meter Replacement Overview on MDM Portal...",
+      "time": "10:05:07",
+      "stage": "QUERY",
+      "message": "Checking installation reports for date: 22-10-2026...",
       "percent": 32,
       "status": "ok"
     },
     {
-      "time": "09:08:30",
-      "stage": "REQUEST",
-      "message": "Submitting fresh generation request for 'Total Smart Meters Installed'...",
-      "percent": 42,
+      "time": "10:05:24",
+      "stage": "FOUND",
+      "message": "Found 2 batches for 22-10-2026. Requesting downloads from MDM...",
+      "percent": 40,
       "status": "ok"
     },
     {
-      "time": "09:08:34",
+      "time": "10:05:24",
+      "stage": "REQUEST",
+      "message": "Triggering Replacement Batch download request (80 meters)...",
+      "percent": 45,
+      "status": "ok"
+    },
+    {
+      "time": "10:05:35",
+      "stage": "REQUEST",
+      "message": "Generated MDM Request ID #313407 for Replacement (80 records).",
+      "percent": 45,
+      "status": "ok"
+    },
+    {
+      "time": "10:05:37",
+      "stage": "REQUEST",
+      "message": "Triggering NSC Batch download request (61 meters)...",
+      "percent": 55,
+      "status": "ok"
+    },
+    {
+      "time": "10:05:49",
+      "stage": "REQUEST",
+      "message": "Generated MDM Request ID #313408 for NSC (61 records).",
+      "percent": 55,
+      "status": "ok"
+    },
+    {
+      "time": "10:05:51",
       "stage": "QUEUE",
       "message": "Navigating to Download Requests queue (MIS/DownloadRequest)...",
-      "percent": 54,
+      "percent": 64,
       "status": "ok"
     },
     {
-      "time": "09:08:39",
-      "stage": "DOWNLOAD",
-      "message": "Triggering download of 'Total Smart Meters Installed' ZIP package...",
-      "percent": 65,
+      "time": "10:05:56",
+      "stage": "QUEUE",
+      "message": "Tracking MDM Queue for Request IDs: ['313407', '313408']",
+      "percent": 67,
       "status": "ok"
     },
     {
-      "time": "09:08:40",
-      "stage": "PROGRESS",
-      "message": "Receiving report data stream from portal...",
-      "percent": 68,
-      "status": "ok"
-    },
-    {
-      "time": "09:08:42",
-      "stage": "PROGRESS",
-      "message": "Downloading Master Report: 9.0 MB received...",
-      "percent": 69,
-      "status": "ok"
-    },
-    {
-      "time": "09:08:44",
-      "stage": "PROGRESS",
-      "message": "Downloading Master Report: 17.9 MB received...",
-      "percent": 70,
-      "status": "ok"
-    },
-    {
-      "time": "09:08:46",
-      "stage": "PROGRESS",
-      "message": "Downloading Master Report: 20.5 MB received...",
-      "percent": 71,
-      "status": "ok"
-    },
-    {
-      "time": "09:08:50",
-      "stage": "PROGRESS",
-      "message": "Downloading Master Report: 27.0 MB received...",
-      "percent": 72,
-      "status": "ok"
-    },
-    {
-      "time": "09:08:52",
-      "stage": "PROGRESS",
-      "message": "Downloading Master Report: 31.9 MB received...",
-      "percent": 73,
-      "status": "ok"
-    },
-    {
-      "time": "09:08:54",
-      "stage": "PROGRESS",
-      "message": "Downloading Master Report: 38.1 MB received...",
+      "time": "10:05:57",
+      "stage": "QUEUE",
+      "message": "All 2 requested report packages are PROCESSED and ready in MDM queue!",
       "percent": 74,
       "status": "ok"
     },
     {
-      "time": "09:08:56",
-      "stage": "PROGRESS",
-      "message": "Downloading Master Report: 45.7 MB received...",
-      "percent": 75,
-      "status": "ok"
-    },
-    {
-      "time": "09:08:58",
-      "stage": "PROGRESS",
-      "message": "Downloading Master Report: 55.9 MB received...",
+      "time": "10:05:57",
+      "stage": "DOWNLOAD",
+      "message": "Queue ready! Downloading fresh processed ZIP packages to repository...",
       "percent": 76,
       "status": "ok"
     },
     {
-      "time": "09:09:00",
-      "stage": "PROGRESS",
-      "message": "Downloading Master Report: 63.6 MB received...",
+      "time": "10:05:57",
+      "stage": "DOWNLOAD",
+      "message": "Downloading report package for Request #313407...",
       "percent": 78,
       "status": "ok"
     },
     {
-      "time": "09:09:02",
-      "stage": "PROGRESS",
-      "message": "Downloading Master Report: 72.2 MB received...",
-      "percent": 79,
-      "status": "ok"
-    },
-    {
-      "time": "09:09:04",
-      "stage": "PROGRESS",
-      "message": "Downloading Master Report: 82.2 MB received...",
+      "time": "10:05:58",
+      "stage": "DOWNLOAD",
+      "message": "Package saved: Day Wise Meter Installation - ConsumerCount_313407_20261022_100537.zip (5,815 bytes)",
       "percent": 80,
       "status": "ok"
     },
     {
-      "time": "09:09:06",
-      "stage": "PROGRESS",
-      "message": "Downloading Master Report: 91.4 MB received...",
-      "percent": 82,
+      "time": "10:05:58",
+      "stage": "DOWNLOAD",
+      "message": "Downloading report package for Request #313408...",
+      "percent": 78,
       "status": "ok"
     },
     {
-      "time": "09:09:10",
-      "stage": "PROGRESS",
-      "message": "Downloading Master Report: 98.3 MB received...",
-      "percent": 83,
+      "time": "10:06:00",
+      "stage": "DOWNLOAD",
+      "message": "Package saved: Day Wise Meter Installation - ConsumerCount_313408_20261022_100550.zip (4,841 bytes)",
+      "percent": 80,
       "status": "ok"
     },
     {
-      "time": "09:09:12",
-      "stage": "PROGRESS",
-      "message": "Downloading Master Report: 103.2 MB received...",
+      "time": "10:06:00",
+      "stage": "VERIFY",
+      "message": "Waiting for ZIP file downloads to finalize...",
       "percent": 84,
       "status": "ok"
     },
     {
-      "time": "09:09:14",
-      "stage": "PROGRESS",
-      "message": "Downloading Master Report: 109.5 MB received...",
-      "percent": 85,
+      "time": "10:06:03",
+      "stage": "DOWNLOAD",
+      "message": "Successfully downloaded 2 report packages from MDM portal.",
+      "percent": 86,
       "status": "ok"
     },
     {
-      "time": "09:09:18",
-      "stage": "PROGRESS",
-      "message": "Master Report ZIP downloaded (110.5 MB).",
+      "time": "10:06:05",
+      "stage": "ETL",
+      "message": "Executing vectorized DuckDB ETL compilation on fresh reports...",
       "percent": 88,
       "status": "ok"
     },
     {
-      "time": "09:09:21",
-      "stage": "EXTRACT",
-      "message": "Extracting CSV batches into extracted_smart_meters repository...",
-      "percent": 90,
-      "status": "ok"
-    },
-    {
-      "time": "09:09:26",
-      "stage": "ETL",
-      "message": "Running Vectorized DuckDB ETL Pipeline (1.13M records)...",
-      "percent": 93,
-      "status": "ok"
-    },
-    {
-      "time": "09:15:20",
+      "time": "10:06:08",
       "stage": "ULA",
-      "message": "Auto-reconciling ULA Scope with latest Master data...",
-      "percent": 95,
+      "message": "Cross-referencing 141 installations (80 Replacement + 61 NSC) against ULA scope...",
+      "percent": 94,
       "status": "ok"
     },
     {
-      "time": "09:15:23",
+      "time": "10:06:09",
       "stage": "INVENTORY",
-      "message": "Auto-reconciling Unsync & Meter Available Inventory with latest Master data...",
+      "message": "Auto-reconciling Unsync & Meter Available Inventory with fresh Daily installs...",
       "percent": 96,
       "status": "ok"
     },
     {
-      "time": "09:15:48",
+      "time": "10:06:28",
       "stage": "COMPLETE",
-      "message": "Master Database (1,138,976 smart meters) synchronized successfully!",
+      "message": "Daily Sync Complete! Downloaded & compiled 141 meters (80 Replacement + 61 NSC).",
       "percent": 100,
       "status": "success"
     },
     {
-      "time": "09:15:49",
+      "time": "10:06:28",
       "stage": "CLOUD",
       "message": "Pushing updated data to Cloud Dashboard (Render)...",
       "percent": 100,
@@ -238,8 +196,8 @@
     }
   ],
   "error": null,
-  "records_count": 1138976,
-  "timestamp": "2026-10-22 09:15:49",
+  "records_count": 141,
+  "timestamp": "2026-10-22 10:06:28",
   "next_auto_sync": "07:00 PM",
   "auto_sync_active": true,
   "last_auto_sync_msg": "Cloud Dashboard updated successfully on Render!"
