@@ -319,12 +319,33 @@
       "message": "Pushing updated data to Cloud Dashboard (Render)...",
       "percent": 100,
       "status": "ok"
+    },
+    {
+      "time": "18:58:41",
+      "stage": "CLOUD",
+      "message": "Cloud Dashboard updated successfully on Render!",
+      "percent": 100,
+      "status": "ok"
+    },
+    {
+      "time": "18:59:04",
+      "stage": "COMPLETE",
+      "message": "Daily Sync Complete! Downloaded & compiled 3,174 meters (1,847 Replacement + 1,327 NSC).",
+      "percent": 100,
+      "status": "success"
+    },
+    {
+      "time": "18:59:04",
+      "stage": "CLOUD",
+      "message": "Pushing updated data to Cloud Dashboard (Render)...",
+      "percent": 100,
+      "status": "ok"
     }
   ],
   "error": null,
-  "records_count": 3169,
-  "timestamp": "2026-10-26 18:58:22",
-  "next_auto_sync": "04:00 PM",
+  "records_count": 3174,
+  "timestamp": "2026-10-26 18:59:04",
+  "next_auto_sync": "07:00 PM",
   "auto_sync_active": true,
   "last_auto_sync_msg": "Cloud Dashboard updated successfully on Render!"
 }
