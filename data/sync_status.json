@@ -6,189 +6,189 @@
   "message": "Pushing updated data to Cloud Dashboard (Render)...",
   "steps": [
     {
-      "time": "09:01:49",
+      "time": "13:19:25",
       "stage": "STARTING",
       "message": "Starting automated hourly sync from MDM Portal...",
       "percent": 5,
       "status": "ok"
     },
     {
-      "time": "09:01:49",
+      "time": "13:19:25",
       "stage": "CLEANUP",
       "message": "Purging previous temporary download files to ensure fresh report retrieval...",
       "percent": 6,
       "status": "ok"
     },
     {
-      "time": "09:01:49",
+      "time": "13:19:25",
       "stage": "BROWSER",
       "message": "Starting background Chrome automation engine (Headless Mode)...",
       "percent": 12,
       "status": "ok"
     },
     {
-      "time": "09:01:53",
+      "time": "13:19:33",
       "stage": "AUTH",
       "message": "Connecting to MDM Portal & authenticating as MNG_DHARMENDRA...",
       "percent": 18,
       "status": "ok"
     },
     {
-      "time": "09:01:57",
+      "time": "13:19:36",
       "stage": "DEBUG",
       "message": "Page URL: https://mdm.sbpdclinfra.in/SSO/LoginPage | Title: Login Page",
       "percent": 20,
       "status": "ok"
     },
     {
-      "time": "09:02:06",
+      "time": "13:19:42",
       "stage": "SESSION",
       "message": "Authentication successful! Portal session established.",
       "percent": 26,
       "status": "ok"
     },
     {
-      "time": "09:02:06",
+      "time": "13:19:42",
       "stage": "QUERY",
       "message": "Checking installation reports for date: 10-11-2026...",
       "percent": 32,
       "status": "ok"
     },
     {
-      "time": "09:02:36",
+      "time": "13:19:57",
       "stage": "FOUND",
       "message": "Found 2 batches for 10-11-2026. Requesting downloads from MDM...",
       "percent": 40,
       "status": "ok"
     },
     {
-      "time": "09:02:36",
+      "time": "13:19:57",
       "stage": "REQUEST",
-      "message": "Triggering Replacement Batch download request (42 meters)...",
+      "message": "Triggering Replacement Batch download request (106 meters)...",
       "percent": 45,
       "status": "ok"
     },
     {
-      "time": "09:02:56",
+      "time": "13:20:09",
       "stage": "REQUEST",
-      "message": "Generated MDM Request ID #319723 for Replacement (42 records).",
+      "message": "Generated MDM Request ID #319806 for Replacement (106 records).",
       "percent": 45,
       "status": "ok"
     },
     {
-      "time": "09:02:58",
+      "time": "13:20:11",
       "stage": "REQUEST",
-      "message": "Triggering NSC Batch download request (40 meters)...",
+      "message": "Triggering NSC Batch download request (161 meters)...",
       "percent": 55,
       "status": "ok"
     },
     {
-      "time": "09:03:10",
+      "time": "13:20:23",
       "stage": "REQUEST",
-      "message": "Generated MDM Request ID #319724 for NSC (40 records).",
+      "message": "Generated MDM Request ID #319807 for NSC (161 records).",
       "percent": 55,
       "status": "ok"
     },
     {
-      "time": "09:03:12",
+      "time": "13:20:25",
       "stage": "QUEUE",
       "message": "Navigating to Download Requests queue (MIS/DownloadRequest)...",
       "percent": 64,
       "status": "ok"
     },
     {
-      "time": "09:03:18",
+      "time": "13:20:30",
       "stage": "QUEUE",
-      "message": "Tracking MDM Queue for Request IDs: ['319723', '319724']",
+      "message": "Tracking MDM Queue for Request IDs: ['319806', '319807']",
       "percent": 67,
       "status": "ok"
     },
     {
-      "time": "09:03:18",
+      "time": "13:20:30",
       "stage": "QUEUE",
       "message": "All 2 requested report packages are PROCESSED and ready in MDM queue!",
       "percent": 74,
       "status": "ok"
     },
     {
-      "time": "09:03:18",
+      "time": "13:20:30",
       "stage": "DOWNLOAD",
       "message": "Queue ready! Downloading fresh processed ZIP packages to repository...",
       "percent": 76,
       "status": "ok"
     },
     {
-      "time": "09:03:18",
+      "time": "13:20:30",
       "stage": "DOWNLOAD",
-      "message": "Downloading report package for Request #319723...",
+      "message": "Downloading report package for Request #319806...",
       "percent": 78,
       "status": "ok"
     },
     {
-      "time": "09:03:20",
+      "time": "13:20:32",
       "stage": "DOWNLOAD",
-      "message": "Package saved: Day Wise Meter Installation - ConsumerCount_319723_20261110_090254.zip (3,746 bytes)",
+      "message": "Package saved: Day Wise Meter Installation - ConsumerCount_319806_20261110_132009.zip (9,706 bytes)",
       "percent": 80,
       "status": "ok"
     },
     {
-      "time": "09:03:20",
+      "time": "13:20:32",
       "stage": "DOWNLOAD",
-      "message": "Downloading report package for Request #319724...",
+      "message": "Downloading report package for Request #319807...",
       "percent": 78,
       "status": "ok"
     },
     {
-      "time": "09:03:21",
+      "time": "13:20:33",
       "stage": "DOWNLOAD",
-      "message": "Package saved: Day Wise Meter Installation - ConsumerCount_319724_20261110_090308.zip (3,053 bytes)",
+      "message": "Package saved: Day Wise Meter Installation - ConsumerCount_319807_20261110_132022.zip (9,753 bytes)",
       "percent": 80,
       "status": "ok"
     },
     {
-      "time": "09:03:21",
+      "time": "13:20:33",
       "stage": "VERIFY",
       "message": "Waiting for ZIP file downloads to finalize...",
       "percent": 84,
       "status": "ok"
     },
     {
-      "time": "09:03:24",
+      "time": "13:20:36",
       "stage": "DOWNLOAD",
       "message": "Successfully downloaded 2 report packages from MDM portal.",
       "percent": 86,
       "status": "ok"
     },
     {
-      "time": "09:03:27",
+      "time": "13:20:39",
       "stage": "ETL",
       "message": "Executing vectorized DuckDB ETL compilation on fresh reports...",
       "percent": 88,
       "status": "ok"
     },
     {
-      "time": "09:03:32",
+      "time": "13:20:41",
       "stage": "ULA",
-      "message": "Cross-referencing 84 installations (42 Replacement + 42 NSC) against ULA scope...",
+      "message": "Cross-referencing 268 installations (106 Replacement + 162 NSC) against ULA scope...",
       "percent": 94,
       "status": "ok"
     },
     {
-      "time": "09:04:00",
+      "time": "13:20:43",
       "stage": "INVENTORY",
       "message": "Auto-reconciling Unsync & Meter Available Inventory with fresh Daily installs...",
       "percent": 96,
       "status": "ok"
     },
     {
-      "time": "09:05:09",
+      "time": "13:21:07",
       "stage": "COMPLETE",
-      "message": "Daily Sync Complete! Downloaded & compiled 84 meters (42 Replacement + 42 NSC).",
+      "message": "Daily Sync Complete! Downloaded & compiled 268 meters (106 Replacement + 162 NSC).",
       "percent": 100,
       "status": "success"
     },
     {
-      "time": "09:05:09",
+      "time": "13:21:07",
       "stage": "CLOUD",
       "message": "Pushing updated data to Cloud Dashboard (Render)...",
       "percent": 100,
@@ -196,9 +196,9 @@
     }
   ],
   "error": null,
-  "records_count": 84,
-  "timestamp": "2026-11-10 09:05:09",
-  "next_auto_sync": "Tomorrow at 08:00 AM",
+  "records_count": 268,
+  "timestamp": "2026-11-10 13:21:07",
+  "next_auto_sync": "12:00 PM",
   "auto_sync_active": true,
-  "last_auto_sync_msg": "Cloud Dashboard updated successfully on Render!"
+  "last_auto_sync_msg": "Daily MDM sync error: Message: invalid session id: session deleted as the browser has closed the connection\nfrom disconnected: not connected to DevTools\n  (Session info: chrome=156.0.8078.80); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#invalidsessionidexception\nStacktrace:\nSymbols not available. Dumping unresolved backtrace:\n\t(No symbol) [0x7ff6fc2abe65]\n\t(No symbol) [0x7ff6fc1b35f0]\n\t(No symbol) [0x7ff6fc0226d3]\n\t(No symbol) [0x7ff6fc017b2f]\n\t(No symbol) [0x7ff6fc028859]\n\t(No symbol) [0x7ff6fc051fe6]\n\t(No symbol) [0x7ff6fc05639f]\n\t(No symbol) [0x7ff6fc03b969]\n\t(No symbol) [0x7ff6fc03cca3]\n\t(No symbol) [0x7ff6fc725af1]\n\t(No symbol) [0x7ff6fc7467f7]\n\t(No symbol) [0x7ff6fc73ce20]\n\t(No symbol) [0x7ff6fc3cff8e]\n\t(No symbol) [0x7ff6fc1c2865]\n\t(No symbol) [0x7ff6fc1bd1d4]\n\t(No symbol) [0x7ff6fc1bd364]\n\t(No symbol) [0x7ff6fc1a644c]\n\t(No symbol) [0x7ffda69acd87]\n\t(No symbol) [0x7ffda7bacaec]\n"
 }
